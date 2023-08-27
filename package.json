@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/cli": "^3.15.1",
+    "@sanity/image-url": "^1.0.2",
+    "@sanity/vision": "^3.15.1",
     "@types/node": "20.5.6",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -16,10 +19,16 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "next": "13.4.19",
+    "next-sanity": "^5.4.6",
     "postcss": "8.4.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sanity": "^3.15.1",
+    "styled-components": "5.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "prettier": "3.0.2"
   }
 }
