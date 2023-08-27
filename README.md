@@ -1,23 +1,17 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# VirtualAgents360
 
-First, run the development server:
+## Refactoring a WordPress web app into a much better stack and adding new features like: 
+- [ ] Send templated emails on pre-defined events
+- [ ] Admin dashboard to approve and reject agents' transactions
+- [ ] Auth for admins to have actions and shortcuts in the UI 
+- [ ] Improve form UI to track total progress per transaction and status updates
+  - Improve UI in general
+- [ ] CMS for marketing team to easily make revisions\
+-  [ ] Document (pdfs) management UI and functionality
+- [ ] Serverless architecture with SaaS database and backups to ensure data integrity
+- [ ] AI Chatbot to assist agents
+- [x] It's not wordpress
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-# Refactoring a WordPress Web App into a much better stack and adding new business logic
+Stack: Typescript, React/Nextjs, Nodejs, Sanity (cms)
