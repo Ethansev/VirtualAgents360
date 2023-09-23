@@ -3,7 +3,7 @@ import { transactionsServices } from '../api/transactions/transactions-services'
 import TransactionComponent from '../TransactionComponent';
 
 export default async function TransactionsPage() {
-  const transactions = await transactionsServices.getTransactions();
+  const transactions = await transactionsServices.getAllTransactions();
 
   return (
     <div>

@@ -4,7 +4,7 @@ import TextInputField from '../global-components/form-components/text-input-fiel
 import EmailInputField from '../global-components/form-components/email-input-field';
 // move forms into their own directory/components
 
-export default function RealEstatePage() {
+export default function RegisterPage() {
   return (
     <div className='mx-24 mt-8'>
       <div>Form Nagivation</div>

@@ -1,6 +1,6 @@
 // const inter = Inter({ subsets: ['latin'] });
 
-import NavBar from '../global_components/Navbar';
+import NavBar from '../global-components/Navbar';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
