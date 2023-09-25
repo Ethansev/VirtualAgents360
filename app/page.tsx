@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { transactionsServices } from './api/transactions/transactions-services';
 // import { Transactions } from '@/sanity/schema.types';
