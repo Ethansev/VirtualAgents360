@@ -1,5 +1,9 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { z } from 'zod';
+// transaction type - real estate or mortgage
+// created date
+// last updated date
+// agent
 
 export const transactions = defineType({
   name: 'transactions',

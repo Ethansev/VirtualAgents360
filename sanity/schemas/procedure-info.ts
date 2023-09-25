@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
-export const procedure_info = defineType({
+export const procedureInfo = defineType({
   name: 'procedure_info',
   title: 'Important Info & Procedures',
   type: 'document',
