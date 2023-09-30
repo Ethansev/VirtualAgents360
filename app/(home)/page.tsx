@@ -1,7 +1,6 @@
-import { transactionsServices } from './api/transactions/transactions-services';
+import { transactionsServices } from '../api/transactions/transactions-services';
 // import { Transactions } from '@/sanity/schema.types';
 import { PortableText } from '@portabletext/react';
-import TransactionComponent from './TransactionComponent';
 import { Metadata } from 'next';
 import Link from 'next/link';
 

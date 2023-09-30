@@ -9,9 +9,9 @@ export default function TransactionsModuleLayout({ children }: { children: React
         {/* <UserProvider /> is useContext for Auth0 */}
         <body>
           <NavBar />
-          {/* <div className={'flex min-h-screen flex-col items-center justify-between px-12 pt-12'}> */}
-          {children}
-          {/* </div> */}
+          <div className={'flex min-h-screen flex-col items-center justify-between px-12 pt-12'}>
+            {children}
+          </div>
         </body>
       </UserProvider>
     </html>
