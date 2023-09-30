@@ -1,12 +1,13 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import NavBar from './global-components/Navbar';
-
-const inter = Inter({ subsets: ['latin'] });
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
+      <UserProvider>
+        {/* <UserProvider /> is useContext for Auth0 */}
       <body>
         <NavBar />
         {/* <div
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div> */}
         {children}
       </body>
+      </UserProvider>
     </html>
   );
 }
