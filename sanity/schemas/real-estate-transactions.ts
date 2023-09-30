@@ -18,6 +18,11 @@ export const realEstateTransactions = defineType({
       type: 'string',
     }),
     defineField({
+      name: 'agent',
+      title: 'Agent',
+      type: 'string',
+    }),
+    defineField({
       name: 'subjectProperty',
       title: 'Subject Property',
       type: 'string',
@@ -45,6 +50,7 @@ export const realEstateTransactions = defineType({
 
 const realEstateTransactionSchema = z.object({
   title: z.string(),
+  agent: z.string(),
   subjectProperty: z.string(),
   status: z.union([z.literal('pending'), z.literal('approved'), z.literal('needsAttention')]),
   transactionStage: z.union([
