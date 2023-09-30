@@ -2,6 +2,7 @@
 import { transactionsServices } from '@/app/api/transactions/transactions-services';
 import { RealEstateTransactionSchema } from '@/sanity/schemas/real-estate-transactions';
 import { useEffect, useState } from 'react';
+import { realEstateTransactionStageViewMap } from './services';
 
 export default function RealEstateIndexPage() {
   const [transactions, setTransactions] = useState([] as RealEstateTransactionSchema[]);
@@ -20,7 +21,10 @@ export default function RealEstateIndexPage() {
         <div className='mt-8' key={transaction._id}>
           {transaction.title}
           {transaction.status === 'pending' && <div>Pending</div>}
-          {/* <div>{JSON.stringify(transaction.transactionStage.addPropertyInformation)}</div> */}
+          <div>
+            Here is transaction stage:{' '}
+            {realEstateTransactionStageViewMap[transaction.transactionStage]}
+          </div>
         </div>
       ))}
     </div>
