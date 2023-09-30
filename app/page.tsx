@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { transactionsServices } from './api/transactions/transactions-services';
 // import { Transactions } from '@/sanity/schema.types';
 import { PortableText } from '@portabletext/react';
@@ -11,9 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      this is a test
-    </main>
-  );
+  return <main className=''>this is a test</main>;
 }

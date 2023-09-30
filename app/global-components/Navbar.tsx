@@ -139,12 +139,12 @@ export default function Example() {
             </Transition>
           </Popover>
 
-          <a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
+          <Link href='/real-estate' className='text-sm font-semibold leading-6 text-gray-900'>
             Real Estate Center
-          </a>
-          <a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
+          </Link>
+          <Link href='/mortgage' className='text-sm font-semibold leading-6 text-gray-900'>
             Mortgage Center
-          </a>
+          </Link>
           <a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
             Smart-Buy Referral
           </a>
@@ -227,7 +227,7 @@ export default function Example() {
               </div>
               <div className='py-6'>
                 <a
-                  href='#'
+                  href=''
                   className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'>
                   Log in
                 </a>

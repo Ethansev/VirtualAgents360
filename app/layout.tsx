@@ -1,5 +1,4 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
 import NavBar from './global-components/Navbar';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 
@@ -8,14 +7,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en'>
       <UserProvider>
         {/* <UserProvider /> is useContext for Auth0 */}
-      <body>
-        <NavBar />
-        {/* <div
-          className={`${inter.className} flex min-h-screen flex-col items-center justify-between p-24'`}>
-          {children}
-        </div> */}
-        {children}
-      </body>
+        <body>
+          <NavBar />
+          <div className={'flex min-h-screen flex-col items-center justify-between px-24 pt-12'}>
+            {children}
+          </div>
+        </body>
       </UserProvider>
     </html>
   );

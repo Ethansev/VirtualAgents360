@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import NavBar from '../global-components/Navbar';
+import NavBar from '../../global-components/Navbar';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default function RealEstateTemplate({ children }: { children: React.React
   const pathname = usePathname();
 
   function renderImportantInfo() {
-    // handle dynamic transaction-ids?
+    // TODO: render each each component and handle dynamic transaction-ids
     switch (pathname) {
       case '/real-estate':
         return <div>Real Estate General</div>;
