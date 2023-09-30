@@ -12,4 +12,4 @@
 - [ ] AI Chatbot to assist agents
 - [x] It's not wordpress
 
-Stack: Typescript, React/Nextjs, Nodejs, Sanity (cms)
+Stack: Typescript, React/Nextjs, Nodejs, Sanity (cms), Vercel
