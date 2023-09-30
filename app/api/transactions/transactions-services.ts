@@ -1,10 +1,18 @@
 import { client } from '@/sanity/lib/client';
-import { TransactionSchema, transactionSchema } from '@/sanity/schemas/transactions';
+import { RealEstateTransactionSchema } from '@/sanity/schemas/real-estate-transactions';
+import { MortgageTransactionSchema } from '@/sanity/schemas/mortgage-transactions';
 
 export const transactionsServices = {
-  getAllTransactions: async () => {
-    const query = `*[_type == "transactions"]`;
-    const transactions: TransactionSchema[] = await client.fetch(query);
+  getAllRealEstateTransactions: async () => {
+    const query = `*[_type == "realEstateTransactions"]`;
+    const transactions: RealEstateTransactionSchema[] = await client.fetch(query);
     return transactions;
+  },
+
+  getAllMortgageTransactions: async () => {
+    // const query = `*[_type == "mortgageTransactions"]`;
+    // const transactions: MortgageTransactionSchema[] = await client.fetch(query);
+    // return transactions;
+    return await client.fetch('*[_type=="mortgageTransactions"]');
   },
 };

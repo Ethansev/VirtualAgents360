@@ -3,6 +3,7 @@ import { transactionsServices } from './api/transactions/transactions-services';
 import { PortableText } from '@portabletext/react';
 import TransactionComponent from './TransactionComponent';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'VirtualAgents360 Home Page',
@@ -10,5 +11,12 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <main className=''>this is a test</main>;
+  return (
+    <main className=''>
+      this is a test
+      <div>
+        <Link href='/admin'>Go to admin</Link>
+      </div>
+    </main>
+  );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import NavBar from '../../global-components/Navbar';
+import NavBar from '../../global-components/nav-bar';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

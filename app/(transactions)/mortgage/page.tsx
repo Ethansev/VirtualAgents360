@@ -1,4 +1,4 @@
-import Table from './components/MortgageTable';
+import Table from './components/mortgage-table';
 
 export default function MortgageIndexPage() {
   return (
