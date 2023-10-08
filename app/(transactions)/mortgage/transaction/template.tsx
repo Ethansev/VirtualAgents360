@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import NavBar from '../../../global-components/nav-bar';
 import { Metadata } from 'next';
+import TemplateComponent from '../../components/template-component';
 
 export const metadata: Metadata = {
   title: 'Home Page',
@@ -15,19 +16,19 @@ export default function MortgageTemplate({ children }: { children: React.ReactNo
   function renderImportantInfo() {
     // TODO: render each each component and handle dynamic transaction-ids
     switch (pathname) {
-      case '/real-estate':
-        return <div>Real Estate General</div>;
-      case '/real-estate/new-property-info':
+      case '/mortgage':
+        return <div>Mortgage General</div>;
+      case '/mortgage/new-property-info':
         return <div>New Property Info</div>;
-      case '/real-estate/transaction-registration':
+      case '/mortgage/transaction-registration':
         return <div>New Transaction Registration</div>;
-      case '/real-estate/add-change':
+      case '/mortgage/add-change':
         return <div>Add/Change</div>;
-      case '/real-estate/edm-document':
+      case '/mortgage/edm-document':
         return <div>EDM Document Upload</div>;
-      case '/real-estate/instruction-to-pay-commission':
+      case '/mortgage/instruction-to-pay-commission':
         return <div>Instruction to Pay Commission</div>;
-      case '/real-estate/commission-disbursement':
+      case '/mortgage/commission-disbursement':
         return <div>Commission Disbursement</div>;
     }
   }
@@ -35,20 +36,7 @@ export default function MortgageTemplate({ children }: { children: React.ReactNo
   return (
     <section>
       {/* <NavBar /> */}
-      <div className=''>
-        <div className='grid grid-cols-12 gap-x-8'>
-          <div className='col-span-2'>
-            <div>Side Form Nav</div>
-          </div>
-          <div className='col-span-8'>{children}</div>
-          <div className='col-span-2'>
-            <div>
-              <h1>Important Info & Procedures</h1>
-              <div>{renderImportantInfo()}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <TemplateComponent renderImportantInfo={renderImportantInfo}>{children}</TemplateComponent>
     </section>
   );
 }
