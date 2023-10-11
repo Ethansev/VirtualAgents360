@@ -40,7 +40,11 @@ export default function NewPropertyInformationForm() {
         <div className='border-b border-gray-900/10 pb-12'>
           <div className='mb-8 col-span-full'>
             <SectionHeader text={'LRFO Requirement'} />
-            <DropdownField name='agent_current_aor' label='Agent Current AOR' options={agent_aor} />
+            <DropdownField
+              inputName='agent_current_aor'
+              labelText='Agent Current AOR'
+              options={agent_aor}
+            />
           </div>
 
           <div className='mb-8'>
@@ -76,8 +80,8 @@ export default function NewPropertyInformationForm() {
 
               <div className='sm:col-span-2'>
                 <DropdownField
-                  name='Property Type'
-                  label='property_type'
+                  inputName='property_type'
+                  labelText='Property Type'
                   options={property_types}
                 />
               </div>
