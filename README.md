@@ -1,5 +1,7 @@
 # VirtualAgents360
 
+![Screenshot of a newly designed form](./public/form-client-view.jpg)
+
 ## Recreating a WordPress web app with NextJs and adding new features like: 
 - [ ] Send templated emails on pre-defined events
 - [ ] Admin dashboard to approve and reject agents' transactions
@@ -13,3 +15,6 @@
 - [x] It's not wordpress
 
 Stack: Typescript, React/Nextjs, Nodejs, Sanity (cms), Vercel
+
+NOT PRODUCTION READY but here ya go https://virtualagents360.ethanwin.com/
+
