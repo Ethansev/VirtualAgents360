@@ -18,3 +18,13 @@ Stack: Typescript, React/Nextjs, Nodejs, Sanity (cms), Vercel
 
 NOT PRODUCTION READY but here ya go https://virtualagents360.ethanwin.com/
 
+
+## Instructions:
+
+Docker Build
+`docker build -t va360 .`
+
+Docker run
+`docker run --env-file .env.local va360`
+
+or just simple `npm run dev`
