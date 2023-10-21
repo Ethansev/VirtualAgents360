@@ -1,4 +1,4 @@
-import Table from './components/mortgage-table';
+import MortgageTransactionsTable from './components/mortgage-table';
 
 export default function MortgageIndexPage() {
   return (
@@ -7,7 +7,7 @@ export default function MortgageIndexPage() {
       <p>Table should be filtered by user and LRU.</p>
       <p>breadcrumb goes in the top right</p>
       <div className='mt-8'>
-        <Table />
+        <MortgageTransactionsTable />
       </div>
     </div>
   );

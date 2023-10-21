@@ -1,7 +1,7 @@
 'use client';
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import TextInputField from '../../../global-components/form-components/text-input-field';
-import EmailInputField from '../../../global-components/form-components/email-input-field';
+import TextInputField from '../../../../global-components/form-components/text-input-field';
+import EmailInputField from '../../../../global-components/form-components/email-input-field';
 // move forms into their own directory/components
 
 export default function MortgageTransactionPage() {

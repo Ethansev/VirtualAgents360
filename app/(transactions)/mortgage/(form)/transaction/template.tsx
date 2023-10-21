@@ -1,9 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import NavBar from '../../../global-components/nav-bar';
+import NavBar from '../../../../global-components/nav-bar';
 import { Metadata } from 'next';
-import TransactionsViewComponent from '../../shared-components/transactions-view-component';
+import TransactionsViewComponent from '../../../shared-components/transactions-view-component';
 
 export const metadata: Metadata = {
   title: 'Home Page',
@@ -34,7 +34,7 @@ export default function MortgageTemplate({ children }: { children: React.ReactNo
   }
   console.log('printing usePathname', pathname);
   return (
-    <section>
+    <section className='mx-16'>
       {/* <NavBar /> */}
       <TransactionsViewComponent renderImportantInfo={renderImportantInfo}>
         {children}

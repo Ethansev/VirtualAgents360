@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 // import NavBar from '../../global-components/nav-bar';
 import { Metadata } from 'next';
-import TemplateComponent from '../../components/template-component';
+import TransactionsViewComponent from '../../shared-components/transactions-view-component';
 
 export const metadata: Metadata = {
   title: 'Home Page',
@@ -36,7 +36,9 @@ export default function RealEstateTemplate({ children }: { children: React.React
   return (
     <section>
       {/* <NavBar /> */}
-      <TemplateComponent renderImportantInfo={renderImportantInfo}>{children}</TemplateComponent>
+      <TransactionsViewComponent renderImportantInfo={renderImportantInfo}>
+        {children}
+      </TransactionsViewComponent>
     </section>
   );
 }
