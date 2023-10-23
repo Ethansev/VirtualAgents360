@@ -1,12 +1,12 @@
 'use client';
 import { transactionsServices } from '@/app/api/transactions/transactions-services';
-import { RealEstateTransactionSchema } from '@/sanity/schemas/real-estate-transactions';
+import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction';
 import { useEffect, useState } from 'react';
-import { realEstateTransactionStageViewMap } from './services';
 import Link from 'next/link';
+import { realEstateTransactionsStageDisplayMap } from './utils';
 
 export default function RealEstateIndexPage() {
-  const [transactions, setTransactions] = useState([] as RealEstateTransactionSchema[]);
+  const [transactions, setTransactions] = useState([] as RealEstateTransaction[]);
   useEffect(() => {
     getRealEstateTransactions();
   }, []);
@@ -24,11 +24,11 @@ export default function RealEstateIndexPage() {
       </Link>
       {transactions.map((transaction) => (
         <div className='mt-8' key={transaction._id}>
-          {transaction.title}
+          {transaction.agent}
           {transaction.status === 'pending' && <div>Pending</div>}
           <div>
             Here is transaction stage:{' '}
-            {realEstateTransactionStageViewMap[transaction.transactionStage]}
+            {realEstateTransactionsStageDisplayMap[transaction.transactionStage]}
           </div>
         </div>
       ))}

@@ -11,10 +11,12 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className=''>
-      this is a test
+    <main className='space-y-4'>
+      <div className=''>this is a test</div>
       <div>
-        <Link href='/admin'>Go to admin</Link>
+        <Link className='border-red-500 bg-red-500 p-2 rounded' href='/admin'>
+          Admin Tools
+        </Link>
       </div>
     </main>
   );
