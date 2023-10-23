@@ -1,4 +1,3 @@
-import { SanityValues } from '@/sanity.config';
 import { client } from '@/sanity/lib/client';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction';

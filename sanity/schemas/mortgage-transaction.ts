@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from '@sanity-typed/types';
+import { defineField, defineType } from '@sanity/types';
 import { z } from 'zod';
 
 const mortgageTransactionStageList = [

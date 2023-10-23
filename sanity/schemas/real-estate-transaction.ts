@@ -1,5 +1,5 @@
 // import { defineField, defineType } from 'sanity';
-import { defineType, defineField, defineArrayMember } from '@sanity-typed/types';
+import { defineType, defineField, defineArrayMember } from '@sanity/types';
 import { z } from 'zod';
 import {
   addPropertyInformationFields,

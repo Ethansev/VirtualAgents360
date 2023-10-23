@@ -9,5 +9,6 @@
   "htmlWhitespaceSensitivity": "css",
   "arrowParens": "always",
   "semi": true,
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "plugins": ["prettier-plugin-organize-imports"]
 }
