@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// TODO: find a better way to do this or figure out how to infer sanity types
+// TODO: move this and mortgage to separate transaction types 
 export const realEstateTransactionStageList = [
   'addPropertyInformation',
   'newTransactionRegistration',

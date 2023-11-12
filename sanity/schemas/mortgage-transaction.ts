@@ -1,4 +1,4 @@
-import { defineField, defineType } from '@sanity/types';
+import { defineField, defineType } from '@sanity-typed/types';
 import { z } from 'zod';
 
 const mortgageTransactionStageList = [
@@ -16,32 +16,38 @@ const transactionStatusList = ['pending', 'approved', 'needs_attention'] as cons
 const transactionStatus = z.enum(transactionStatusList);
 export type TransactionStatus = z.infer<typeof transactionStatus>;
 
-export const mortgageTransactions = defineType({
+export const mortgageTransactionsSchema = defineType({
   name: 'mortgageTransactions',
   title: 'Mortgage Transactions (Devs)',
   type: 'document',
   fields: [
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-    }),
     defineField({
       name: 'agent',
       title: 'Agent',
       type: 'string',
       validation: (Rule) => Rule.required().error('Agent is required'),
     }),
-    // defineField({
-    //   name: 'updatedAt',
-    //   title: 'Updated At',
-    //   type: 'datetime',
-    // }),
-    // defineField({
-    //   name: 'transactionTypes',
-    //   title: 'Transaction Types',
-    //   type: 'object',
-    // }),
+    defineField({
+      name: 'subjectProperty',
+      title: 'Subject Property',
+      type: 'string',
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: transactionStatusList.map((status) => status),
+      },
+    }),
+    defineField({
+      name: 'stage',
+      title: 'Stage',
+      type: 'string',
+      options: {
+        list: mortgageTransactionStageList.map((stage) => stage),
+      },
+    }),
     // defineField({
     //   name: 'body',
     //   title: 'Body',
@@ -74,14 +80,15 @@ export const mortgageTransactions = defineType({
   ],
 });
 
-export const mortgageTransactionSchema = z.object({
-  title: z.string(),
+const mortgageTransactionSchema = z.object({
   agent: z.string(),
+  subjectProperty: z.string(),
+  status: transactionStatus,
+  stage: mortgageTransactionStage,
   _id: z.string(),
   _rev: z.string(),
   _type: z.string(),
   _createdAt: z.string(),
   _updatedAt: z.string(),
 });
-
 export type MortgageTransaction = z.infer<typeof mortgageTransactionSchema>;

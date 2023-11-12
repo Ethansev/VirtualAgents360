@@ -1,12 +1,12 @@
-import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction';
+import { RealEstateTransaction } from '@/sanity.config';
 import Link from 'next/link';
 
 type Props = {
-  transactions: MortgageTransaction[];
+  transactions: RealEstateTransaction[];
 };
 
-export default function MortgageTransactionsTable(props: Props) {
-  const {transactions} = props;
+export default function RealEstateTransactionsTable(props: Props) {
+  const { transactions } = props;
   return (
     <div className='px-4 sm:px-6 lg:px-8'>
       <div className='sm:flex sm:items-center'>

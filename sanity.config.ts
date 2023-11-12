@@ -3,19 +3,23 @@
  */
 
 import { visionTool } from '@sanity/vision';
-import { defineConfig } from 'sanity';
 import { deskTool } from 'sanity/desk';
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
+import type { InferSchemaValues } from '@sanity-typed/types';
+import { defineConfig } from '@sanity-typed/types';
 import { apiVersion, dataset, projectId } from './sanity/env';
-import { schema } from './sanity/schema';
+import { mortgageTransactionsSchema } from './sanity/schemas/mortgage-transaction';
+import { realEstateTransactionsSchema } from './sanity/schemas/real-estate-transaction';
 
 const config = defineConfig({
   basePath: '/admin',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schema' folder
-  schema,
+  schema: {
+    types: [realEstateTransactionsSchema, mortgageTransactionsSchema],
+  },
   plugins: [
     deskTool(),
     // Vision is a tool that lets you query your content with GROQ in the studio
@@ -25,3 +29,8 @@ const config = defineConfig({
 });
 
 export default config;
+
+type SanityValues = InferSchemaValues<typeof config>;
+
+export type RealEstateTransaction = SanityValues['realEstateTransactions'];
+export type MortgageTransaction = SanityValues['mortgageTransactions'];

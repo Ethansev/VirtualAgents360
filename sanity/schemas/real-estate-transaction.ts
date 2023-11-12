@@ -1,17 +1,13 @@
 // import { defineField, defineType } from 'sanity';
-import { defineType, defineField, defineArrayMember } from '@sanity/types';
-import { z } from 'zod';
+import { defineField, defineType } from '@sanity-typed/types';
 import {
-  addPropertyInformationFields,
-  realEstateTransactionStage,
   realEstateTransactionStageList,
-  transactionStatus,
   transactionStatusList,
 } from './real-estate-transaction.types';
 
 // TODO: finish real estate transaction fields for each stage
 // sanity schema
-export const realEstateTransactions = defineType({
+export const realEstateTransactionsSchema = defineType({
   name: 'realEstateTransactions',
   title: 'Real Estate Transactions (Devs)',
   type: 'document',
@@ -31,20 +27,30 @@ export const realEstateTransactions = defineType({
       name: 'status',
       title: 'Status',
       type: 'string',
+      validation: (Rule) => Rule.required().error('Status is required'),
       options: {
         list: transactionStatusList.map((status) => status),
       },
     }),
     defineField({
-      name: 'transactionStage',
-      title: 'Transaction Stage',
+      name: 'stage',
+      title: 'Stage',
       type: 'string',
+      validation: (Rule) => Rule.required().error('Stage is required'),
       options: {
-        list: realEstateTransactionStageList.map((stage) => stage),
+        list: [...realEstateTransactionStageList],
+        // list: [
+        //   { title: 'Add Property Information', value: 'addPropertyInformation' },
+        //   { title: 'New Transaction Registration', value: 'newTransactionRegistration' },
+        //   { title: 'Add Change', value: 'addChange' },
+        //   { title: 'EDM Document Upload', value: 'edmDocumentUpload' },
+        //   { title: 'Instruction To Pay Commission', value: 'instructionToPayCommission' },
+        //   { title: 'Commission Disbursement', value: 'commissionDisbursement' },
+        // ],
       },
     }),
     defineField({
-      name: 'addProperty Information',
+      name: 'addPropertyInformation',
       title: 'Add Property Information',
       type: 'object',
       fields: [
@@ -60,30 +66,36 @@ export const realEstateTransactions = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'newTransactionRegistration',
+      title: 'New Transaction Registration',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+      ],
+    }),
   ],
 });
 
-// zod object and typescript type
-const realEstateTransactionSchema = z.object({
-  agent: z.string(),
-  subjectProperty: z.string(),
-  // status: z.union([z.literal('pending'), z.literal('approved'), z.literal('needsAttention')]),
-  status: transactionStatus,
-  // transactionStage: z.union([
-  //   z.literal('addPropertyInformation'),
-  //   z.literal('newTransactionRegistration'),
-  //   z.literal('addChange'),
-  //   z.literal('edmDocumentUpload'),
-  //   z.literal('instructionToPayCommission'),
-  //   z.literal('commissionDisbursement'),
-  // ]),
-  transactionStage: realEstateTransactionStage,
-  addPropertyInformation: addPropertyInformationFields,
-  _id: z.string(),
-  _rev: z.string(),
-  _type: z.string(),
-  _createdAt: z.string(),
-  _updatedAt: z.string(),
-});
-
-export type RealEstateTransaction = z.infer<typeof realEstateTransactionSchema>;
+// const realEstateTransactionSchema = z.object({
+//   agent: z.string(),
+//   subjectProperty: z.string(),
+//   status: transactionStatus,
+//   transactionStage: realEstateTransactionStage,
+//   addPropertyInformation: addPropertyInformationFields,
+//   _id: z.string(),
+//   _rev: z.string(),
+//   _type: z.string(),
+//   _createdAt: z.string(),
+//   _updatedAt: z.string(),
+// });
+// export type RealEstateTransaction = z.infer<typeof realEstateTransactionSchema>;

@@ -5,13 +5,13 @@ import MortgageTransactionsTable from './components/mortgage-table';
 
 export default async function MortgageIndexPage() {
   const transactions = await transactionsServices.getAllMortgageTransactions();
-
+  console.log(transactions)
   return (
     <div>
       <h1 className='flex justify-center'>All Mortgage Transactions</h1>
       <h1>here is transactions title: {transactions[0].agent}</h1>
       <div className='mt-8'>
-        <MortgageTransactionsTable />
+        <MortgageTransactionsTable transactions={transactions} />
       </div>
     </div>
   );
