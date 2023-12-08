@@ -5,8 +5,13 @@ import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction'
 export const transactionsServices = {
   getAllRealEstateTransactions: async () => {
     const query = `*[_type == "realEstateTransactions"]`;
-    const transactions: RealEstateTransaction[] = await client.fetch(query);
-    return transactions;
+    try {
+      const transactions: RealEstateTransaction[] = await client.fetch(query);
+      return transactions;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   },
 
   getAllMortgageTransactions: async () => {

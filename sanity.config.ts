@@ -30,7 +30,4 @@ const config = defineConfig({
 
 export default config;
 
-type SanityValues = InferSchemaValues<typeof config>;
-
-export type RealEstateTransaction = SanityValues['realEstateTransactions'];
-export type MortgageTransaction = SanityValues['mortgageTransactions'];
+export type SanityValues = InferSchemaValues<typeof config>;

@@ -1,4 +1,5 @@
 // import { defineField, defineType } from 'sanity';
+import { SanityValues } from '@/sanity.config';
 import { defineField, defineType } from '@sanity-typed/types';
 import {
   realEstateTransactionStageList,
@@ -99,3 +100,5 @@ export const realEstateTransactionsSchema = defineType({
 //   _updatedAt: z.string(),
 // });
 // export type RealEstateTransaction = z.infer<typeof realEstateTransactionSchema>;
+
+export type RealEstateTransaction = SanityValues['realEstateTransactions'];

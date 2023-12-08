@@ -1,3 +1,4 @@
+import { SanityValues } from '@/sanity.config';
 import { defineField, defineType } from '@sanity-typed/types';
 import { z } from 'zod';
 
@@ -91,4 +92,6 @@ const mortgageTransactionSchema = z.object({
   _createdAt: z.string(),
   _updatedAt: z.string(),
 });
-export type MortgageTransaction = z.infer<typeof mortgageTransactionSchema>;
+// export type MortgageTransaction = z.infer<typeof mortgageTransactionSchema>;
+
+export type MortgageTransaction = SanityValues['mortgageTransactions'];

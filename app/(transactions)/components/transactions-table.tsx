@@ -1,12 +1,14 @@
-import { RealEstateTransaction } from '@/sanity.config';
+import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction';
+import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction';
 import Link from 'next/link';
 
 type Props = {
-  transactions: RealEstateTransaction[];
+  transactions: RealEstateTransaction[] | MortgageTransaction[];
+  type: 'real-estate' | 'mortgage';
 };
 
-export default function RealEstateTransactionsTable(props: Props) {
-  const { transactions } = props;
+export default function TransactionsTable(props: Props) {
+  const { transactions, type } = props;
   return (
     <div className='px-4 sm:px-6 lg:px-8'>
       <div className='sm:flex sm:items-center'>
@@ -17,7 +19,7 @@ export default function RealEstateTransactionsTable(props: Props) {
           </p>
         </div>
         <div className='mt-4 sm:ml-16 sm:mt-0 sm:flex-none'>
-          <Link href='/mortgage/transaction'>
+          <Link href={`/${type}/transaction`}>
             <button
               type='button'
               className='block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
@@ -26,6 +28,7 @@ export default function RealEstateTransactionsTable(props: Props) {
           </Link>
         </div>
       </div>
+
       <div className='mt-8 flow-root'>
         <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
           <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
@@ -34,14 +37,14 @@ export default function RealEstateTransactionsTable(props: Props) {
                 <tr>
                   <th
                     scope='col'
-                    className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3'>
-                    Date
+                    className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>
+                    Subject Property
                   </th>
 
                   <th
                     scope='col'
-                    className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>
-                    Subject Property
+                    className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3'>
+                    Date
                   </th>
 
                   <th
@@ -67,14 +70,15 @@ export default function RealEstateTransactionsTable(props: Props) {
                   </th>
                 </tr>
               </thead>
+
               <tbody className='bg-white'>
                 {transactions.map((transaction) => (
                   <tr key={transaction._id} className='even:bg-gray-50'>
-                    <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3'>
-                      {transaction._createdAt}
-                    </td>
                     <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
                       {transaction.subjectProperty}
+                    </td>
+                    <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3'>
+                      {transaction._createdAt}
                     </td>
                     <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
                       {transaction.agent}
