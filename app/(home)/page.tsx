@@ -1,8 +1,8 @@
-import { transactionsServices } from '../api/transactions/transactions-services';
 // import { Transactions } from '@/sanity/schema.types';
-import { PortableText } from '@portabletext/react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import HeroSection from './components/hero-section';
+import SmartBuySection from './components/smart-buy-section';
 
 export const metadata: Metadata = {
   title: 'VirtualAgents360 Home Page',
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main className='space-y-4'>
-      <div className=''>this is a test</div>
+      {/* <div className=''>this is a test</div> */}
+      <HeroSection />
+      <SmartBuySection />
       <div>
         <Link className='border-red-500 bg-red-500 p-2 rounded' href='/admin'>
           Admin Tools

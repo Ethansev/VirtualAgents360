@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['cdn.sanity.io', 'tailwindui.com', 'lh3.googleusercontent.com'],
+    domains: [
+      'cdn.sanity.io',
+      'tailwindui.com',
+      'lh3.googleusercontent.com',
+      'images.unsplash.com',
+    ],
     dangerouslyAllowSVG: true,
   },
   compiler: {
