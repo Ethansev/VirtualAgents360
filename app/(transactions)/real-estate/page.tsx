@@ -1,8 +1,8 @@
-import { transactionsServices } from '@/app/api/transactions/transactions-services';
+import { transactionServices } from '@/app/api/transactions/transactions-services';
 import TransactionsTable from '../components/transactions-table';
 
 export default async function RealEstateIndexPage() {
-  const transactions = await transactionsServices.getAllRealEstateTransactions();
+  const transactions = await transactionServices.getAllRealEstateTransactions();
 
   return (
     <div>
