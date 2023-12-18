@@ -32,7 +32,7 @@ export default function RealEstateTemplate({ children }: { children: React.React
         return <div>Commission Disbursement</div>;
     }
   }
-  console.log('printing usePathname', pathname);
+  // console.log('printing usePathname', pathname);
   return (
     <section>
       {/* <NavBar /> */}

@@ -1,376 +1,257 @@
 'use client';
 
-import DropdownField from '@/app/global-components/form-components/dropdown-field';
-import EmailInputField from '@/app/global-components/form-components/email-input-field';
+import { transactionServices } from '@/app/api/transactions/transactions-services';
+import Form from '@/app/global-components/form-components/form';
 import SectionHeader from '@/app/global-components/form-components/section-header';
+import SelectField from '@/app/global-components/form-components/select-field';
 import TextInputField from '@/app/global-components/form-components/text-input-field';
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { AddPropertyInformation } from '@/sanity/schemas/real-estate-transaction.types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FieldValues, FormProvider, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-const agent_aor = [
-  'West San Gabriel Valley Association of Realtors',
-  'Orange County Association of Realtors',
-  'Beverly Hills / Greater LA Association of Realtors',
-  'Tri-Counties Association of Realtors',
-  'Rancho Southeasy Association of Realtors',
-  'Greater Antelope Valley Association of Realtors',
-  'Other',
+// TODO: move these to a util file
+const agentAOR = [
+  {
+    value: 'West San Gabriel Valley Association of Realtors',
+    label: 'West San Gabriel Valley Association of Realtors',
+  },
+  {
+    value: 'Orange County Association of Realtors',
+    label: 'Orange County Association of Realtors',
+  },
+  {
+    value: 'Beverly Hills / Greater LA Association of Realtors',
+    label: 'Beverly Hills / Greater LA Association of Realtors',
+  },
+  {
+    value: 'Tri-Counties Association of Realtors',
+    label: 'Tri-Counties Association of Realtors',
+  },
+  {
+    value: 'Rancho Southeasy Association of Realtors',
+    label: 'Rancho Southeasy Association of Realtors',
+  },
+  {
+    value: 'Greater Antelope Valley Association of Realtors',
+    label: 'Greater Antelope Valley Association of Realtors',
+  },
+  { value: 'Other', label: 'Other' },
 ];
 
-const property_types = [
-  'SFR',
-  'Condo',
-  'PUD',
-  'Town Home',
-  '2-4 Units',
-  'Residential Income',
-  'High Rise Condo',
-  'Commercial',
-  'Manufactured',
-  'Vacant Lot',
-  'Other',
+const propertyTypes = [
+  { value: 'SFR', label: 'SFR' },
+  { value: 'Condo', label: 'Condo' },
+  { value: 'PUD', label: 'PUD' },
+  { value: 'Town Home', label: 'Town Home' },
+  { value: '2-4 Units', label: '2-4 Units' },
+  { value: 'Residential Income', label: 'Residential Income' },
+  { value: 'High Rise Condo', label: 'High Rise Condo' },
+  { value: 'Commercial', label: 'Commercial' },
+  { value: 'Manufactured', label: 'Manufactured' },
+  { value: 'Vacant Lot', label: 'Vacant Lot' },
+  { value: 'Other', label: 'Other' },
 ];
+
+// Shares the same types from sanity schema, but we'll have to do this for each form which might get cumbersome
+// TODO: doesn't look like it handles validations
+const formSchema: z.ZodType<AddPropertyInformation> = z.object({
+  _type: z.string(),
+  agentAOR: z.string(),
+  propertyAddress: z.string(),
+  city: z.string(),
+  state: z.string(), // TODO: update this when I have list of all states
+  zipcode: z.string(),
+  clientEmail: z.string(),
+  clientFirstName: z.string(),
+  clientMiddleName: z.string().optional(),
+  clientLastName: z.string(),
+  propertyType: z.union([
+    z.literal('SFR'),
+    z.literal('Condo'),
+    z.literal('PUD'),
+    z.literal('Town home'),
+    z.literal('2-4 Units'),
+    z.literal('Residential Income'),
+    z.literal('High Rise Condo'),
+    z.literal('Commercial'),
+    z.literal('Manufactured'),
+    z.literal('Vacant Lot'),
+    z.literal('Other'),
+  ]),
+  primaryAgent: z.string(),
+  coopAgent1: z.string().optional(),
+  coopAgent2: z.string().optional(),
+  // _type: z.literal('addPropertyInformation'),
+});
+
+// refine for validations is really nice
+// .refine((data) => data.password === data.confirmPassword, {
+//   message: 'Passwords do not match',
+//   path: ['confirmPassword'],
+// })
+
+export type FormSchema = z.infer<typeof formSchema>;
 
 export default function NewPropertyInformationForm() {
-  const [] = useState();
+  // watch subscribes the value so that it will update on change
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+  });
+
+  // console.log('watch: ', watch('agentAOR'));
+  // console.log('watch: ', watch('propertyAddress'));
+  const methods = useForm();
+
+  function onSubmit(data: FieldValues) {
+    // data = {
+    //   ...data,
+    //   _type: 'addPropertyInformation',
+    // };
+    console.log('printing data: ', data as AddPropertyInformation);
+    console.log('submitting');
+    transactionServices.postRealEstateTrasaction(data as FormSchema);
+  }
 
   return (
-    <form>
-      <div className='space-y-12 bg-white'>
-        <div className='border-b border-gray-900/10 pb-12'>
-          <div className='mb-8 col-span-full'>
+    <FormProvider {...methods}>
+      <Form methods={methods} onSubmit={onSubmit}>
+        <div className='space-y-12 bg-white'>
+          {/* <div className='border-b border-gray-900/10 pb-8'> */}
+          <div className='col-span-full mb-8'>
             <SectionHeader text={'LRFO Requirement'} />
-            <DropdownField
-              inputName='agent_current_aor'
-              labelText='Agent Current AOR'
-              options={agent_aor}
+            <SelectField
+              // pass name like this to keep strict typing
+              name={register('agentAOR').name}
+              label='Agent Current AOR'
+              error={errors.agentAOR}
+              options={agentAOR}
             />
+          </div>
+          <div className='mb-8'>
+            <SectionHeader text={'Transaction Information'} />
+            <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+              <div className='col-span-full'>
+                <TextInputField
+                  name={register('propertyAddress').name}
+                  error={errors.propertyAddress}
+                  label='Property Address'
+                />
+              </div>
+
+              <div className='sm:col-span-2 sm:col-start-1'>
+                <TextInputField
+                  name={register('city').name}
+                  label='City'
+                  error={errors.city}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <TextInputField
+                  name={register('state').name}
+                  label='State'
+                  error={errors.state}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <TextInputField
+                  name={register('zipcode').name}
+                  label='Zipcode'
+                  error={errors.zipcode}
+                />
+              </div>
+
+              <div className='sm:col-span-2 sm:col-start-1'>
+                <TextInputField
+                  name={register('clientEmail').name}
+                  label='Client Email Address'
+                  error={errors.clientEmail}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <TextInputField
+                  name={register('clientFirstName').name}
+                  label='Client First Name'
+                  error={errors.clientFirstName}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <TextInputField
+                  name={register('clientLastName').name}
+                  label='Client Last Name'
+                  error={errors.clientLastName}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <SelectField
+                  name={register('propertyType').name}
+                  error={errors.propertyType}
+                  label='Property Type'
+                  options={propertyTypes}
+                />
+              </div>
+
+              <div className='sm:col-span-2'>
+                <SelectField
+                  name={register('transactionType').name}
+                  label='Transaction Type'
+                  error={errors.transactionType}
+                  options={propertyTypes}
+                />
+              </div>
+            </div>
           </div>
 
           <div className='mb-8'>
-            <SectionHeader text={'Transaction Information'} />
-            <div className='grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-              <div className='col-span-full'>
-                <TextInputField labelText='Property Address' inputName='property_address' />
-              </div>
-
-              <div className='sm:col-span-2 sm:col-start-1'>
-                <TextInputField labelText='City' inputName='city' />
-              </div>
-
+            <SectionHeader text={'Agent Information'} />{' '}
+            <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
               <div className='sm:col-span-2'>
-                <TextInputField labelText='State / Province' inputName='state' />
-              </div>
-
-              <div className='sm:col-span-2'>
-                <TextInputField labelText='ZIP / Postal' inputName='postal-code' />
-              </div>
-
-              <div className='sm:col-span-2 sm:col-start-1'>
-                <TextInputField labelText='Client Email Address' inputName='client_email_address' />
-              </div>
-
-              <div className='sm:col-span-2'>
-                <TextInputField labelText='Client First Name' inputName='client_first_name' />
-              </div>
-
-              <div className='sm:col-span-2'>
-                <TextInputField labelText='Client Last Name' inputName='client_last_name' />
-              </div>
-
-              <div className='sm:col-span-2'>
-                <DropdownField
-                  inputName='property_type'
-                  labelText='Property Type'
-                  options={property_types}
+                <TextInputField
+                  name={register('primaryAgent').name}
+                  error={errors.primaryAgent}
+                  label='Primary Agent'
                 />
               </div>
-            </div>
-          </div>
-
-          <SectionHeader text={'Agent Information'} />
-          <p className='mt-1 text-sm leading-6 text-gray-600'>your mom</p>
-
-          <div className='grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-4'>
-              <label
-                htmlFor='username'
-                className='block text-sm font-medium leading-6 text-gray-900'>
-                Username
-              </label>
-              <div className='mt-2'>
-                <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md'>
-                  <span className='flex select-none items-center pl-3 text-gray-500 sm:text-sm'>
-                    workcation.com/
-                  </span>
-                  <input
-                    type='text'
-                    name='username'
-                    id='username'
-                    autoComplete='username'
-                    className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
-                    placeholder='janesmith'
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className='col-span-full'>
-              <label htmlFor='about' className='block text-sm font-medium leading-6 text-gray-900'>
-                About
-              </label>
-              <div className='mt-2'>
-                <textarea
-                  id='about'
-                  name='about'
-                  rows={3}
-                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                  defaultValue={''}
+              <div className='sm:col-span-2'>
+                <TextInputField
+                  name={register('coopAgent1').name}
+                  error={errors.coopAgent1}
+                  label='Co-Op Agent'
                 />
               </div>
-              <p className='mt-3 text-sm leading-6 text-gray-600'>
-                Write a few sentences about yourself.
-              </p>
-            </div>
-
-            <div className='col-span-full'>
-              <label htmlFor='photo' className='block text-sm font-medium leading-6 text-gray-900'>
-                Photo
-              </label>
-              <div className='mt-2 flex items-center gap-x-3'>
-                <UserCircleIcon className='h-12 w-12 text-gray-300' aria-hidden='true' />
-                <button
-                  type='button'
-                  className='rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'>
-                  Change
-                </button>
-              </div>
-            </div>
-
-            <div className='col-span-full'>
-              <label
-                htmlFor='cover-photo'
-                className='block text-sm font-medium leading-6 text-gray-900'>
-                Cover photo
-              </label>
-              <div className='mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
-                <div className='text-center'>
-                  <PhotoIcon className='mx-auto h-12 w-12 text-gray-300' aria-hidden='true' />
-                  <div className='mt-4 flex text-sm leading-6 text-gray-600'>
-                    <label
-                      htmlFor='file-upload'
-                      className='relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'>
-                      <span>Upload a file</span>
-                      <input id='file-upload' name='file-upload' type='file' className='sr-only' />
-                    </label>
-                    <p className='pl-1'>or drag and drop</p>
-                  </div>
-                  <p className='text-xs leading-5 text-gray-600'>PNG, JPG, GIF up to 10MB</p>
-                </div>
+              <div className='col-span-2'>
+                <TextInputField
+                  name={register('coopAgent2').name}
+                  error={errors.coopAgent1}
+                  label='Co-Op Agent'
+                />
               </div>
             </div>
           </div>
         </div>
 
-        <div className='border-b border-gray-900/10 pb-12'>
-          <h2 className='text-base font-semibold leading-7 text-gray-900'>Personal Information</h2>
-          <p className='mt-1 text-sm leading-6 text-gray-600'>
-            Use a permanent address where you can receive mail.
-          </p>
-
-          <div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-3'>
-              <TextInputField labelText='First Name' inputName='first-name' />
-            </div>
-
-            <div className='sm:col-span-3'>
-              <TextInputField labelText='Last Name' inputName='last-name' />
-            </div>
-
-            <div className='sm:col-span-4'>
-              <EmailInputField labelText='Email Address' inputName='email' />
-            </div>
-
-            <div className='sm:col-span-3'>
-              <label
-                htmlFor='country'
-                className='block text-sm font-medium leading-6 text-gray-900'>
-                Country
-              </label>
-              <div className='mt-2'>
-                <select
-                  id='country'
-                  name='country'
-                  autoComplete='country-name'
-                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'>
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>Mexico</option>
-                </select>
-              </div>
-            </div>
-
-            <div className='col-span-full'>
-              <label
-                htmlFor='street-address'
-                className='block text-sm font-medium leading-6 text-gray-900'>
-                Street address
-              </label>
-              <div className='mt-2'>
-                <input
-                  type='text'
-                  name='street-address'
-                  id='street-address'
-                  autoComplete='street-address'
-                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                />
-              </div>
-            </div>
-
-            <div className='sm:col-span-2 sm:col-start-1'>
-              <TextInputField labelText='City' inputName='city' />
-            </div>
-
-            <div className='sm:col-span-2'>
-              <TextInputField labelText='State / Province' inputName='state' />
-            </div>
-
-            <div className='sm:col-span-2'>
-              <TextInputField labelText='ZIP / Postal' inputName='postal-code' />
-            </div>
-          </div>
+        <div className='mt-6 flex items-center justify-end gap-x-6'>
+          <button type='button' className='text-sm font-semibold leading-6 text-gray-900'>
+            Cancel
+          </button>
+          <button
+            type='submit'
+            className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+            Save
+          </button>
         </div>
-
-        <div className='border-b border-gray-900/10 pb-12'>
-          <h2 className='text-base font-semibold leading-7 text-gray-900'>Notifications</h2>
-          <p className='mt-1 text-sm leading-6 text-gray-600'>
-            We`&apos;`ll always let you know about important changes, but you pick what else you
-            want to hear about.
-          </p>
-
-          <div className='mt-10 space-y-10'>
-            <fieldset>
-              <legend className='text-sm font-semibold leading-6 text-gray-900'>By Email</legend>
-              <div className='mt-6 space-y-6'>
-                <div className='relative flex gap-x-3'>
-                  <div className='flex h-6 items-center'>
-                    <input
-                      id='comments'
-                      name='comments'
-                      type='checkbox'
-                      className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                    />
-                  </div>
-                  <div className='text-sm leading-6'>
-                    <label htmlFor='comments' className='font-medium text-gray-900'>
-                      Comments
-                    </label>
-                    <p className='text-gray-500'>
-                      Get notified when someones posts a comment on a posting.
-                    </p>
-                  </div>
-                </div>
-                <div className='relative flex gap-x-3'>
-                  <div className='flex h-6 items-center'>
-                    <input
-                      id='candidates'
-                      name='candidates'
-                      type='checkbox'
-                      className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                    />
-                  </div>
-                  <div className='text-sm leading-6'>
-                    <label htmlFor='candidates' className='font-medium text-gray-900'>
-                      Candidates
-                    </label>
-                    <p className='text-gray-500'>
-                      Get notified when a candidate applies for a job.
-                    </p>
-                  </div>
-                </div>
-                <div className='relative flex gap-x-3'>
-                  <div className='flex h-6 items-center'>
-                    <input
-                      id='offers'
-                      name='offers'
-                      type='checkbox'
-                      className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                    />
-                  </div>
-                  <div className='text-sm leading-6'>
-                    <label htmlFor='offers' className='font-medium text-gray-900'>
-                      Offers
-                    </label>
-                    <p className='text-gray-500'>
-                      Get notified when a candidate accepts or rejects an offer.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend className='text-sm font-semibold leading-6 text-gray-900'>
-                Push Notifications
-              </legend>
-              <p className='mt-1 text-sm leading-6 text-gray-600'>
-                These are delivered via SMS to your mobile phone.
-              </p>
-              <div className='mt-6 space-y-6'>
-                <div className='flex items-center gap-x-3'>
-                  <input
-                    id='push-everything'
-                    name='push-notifications'
-                    type='radio'
-                    className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                  />
-                  <label
-                    htmlFor='push-everything'
-                    className='block text-sm font-medium leading-6 text-gray-900'>
-                    Everything
-                  </label>
-                </div>
-                <div className='flex items-center gap-x-3'>
-                  <input
-                    id='push-email'
-                    name='push-notifications'
-                    type='radio'
-                    className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                  />
-                  <label
-                    htmlFor='push-email'
-                    className='block text-sm font-medium leading-6 text-gray-900'>
-                    Same as email
-                  </label>
-                </div>
-                <div className='flex items-center gap-x-3'>
-                  <input
-                    id='push-nothing'
-                    name='push-notifications'
-                    type='radio'
-                    className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
-                  />
-                  <label
-                    htmlFor='push-nothing'
-                    className='block text-sm font-medium leading-6 text-gray-900'>
-                    No push notifications
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-      </div>
-
-      <div className='mt-6 flex items-center justify-end gap-x-6'>
-        <button type='button' className='text-sm font-semibold leading-6 text-gray-900'>
-          Cancel
-        </button>
-        <button
-          type='submit'
-          className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
-          Save
-        </button>
-      </div>
-    </form>
+      </Form>
+    </FormProvider>
   );
 }

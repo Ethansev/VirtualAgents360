@@ -1,21 +1,6 @@
-import { SanityValues } from '@/sanity.config';
 import { defineField, defineType } from '@sanity-typed/types';
-import { z } from 'zod';
-
-const mortgageTransactionStageList = [
-  'addPropertyInformation',
-  'newTransactionRegistration',
-  'addChange',
-  'edmDocumentUpload',
-  'instructionToPayCommission',
-  'commissionDisbursement',
-] as const;
-const mortgageTransactionStage = z.enum(mortgageTransactionStageList);
-export type MortgageTransactionStage = z.infer<typeof mortgageTransactionStage>;
-
-const transactionStatusList = ['pending', 'approved', 'needs_attention'] as const;
-const transactionStatus = z.enum(transactionStatusList);
-export type TransactionStatus = z.infer<typeof transactionStatus>;
+import { mortgageTransactionStageList } from './mortgage-transaction.types';
+import { transactionStatusList } from './real-estate-transaction.types';
 
 export const mortgageTransactionsSchema = defineType({
   name: 'mortgageTransactions',
@@ -80,18 +65,3 @@ export const mortgageTransactionsSchema = defineType({
     // }),
   ],
 });
-
-const mortgageTransactionSchema = z.object({
-  agent: z.string(),
-  subjectProperty: z.string(),
-  status: transactionStatus,
-  stage: mortgageTransactionStage,
-  _id: z.string(),
-  _rev: z.string(),
-  _type: z.string(),
-  _createdAt: z.string(),
-  _updatedAt: z.string(),
-});
-// export type MortgageTransaction = z.infer<typeof mortgageTransactionSchema>;
-
-export type MortgageTransaction = SanityValues['mortgageTransactions'];

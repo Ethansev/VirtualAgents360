@@ -5,7 +5,7 @@ type Props = {
 export default function SectionHeader({ text }: Props) {
   // return <h2 className='text-base font-semibold leading-7 text-gray-900'>{text}</h2>;
   return (
-    <div className='relative my-4'>
+    <div className='relative mb-2 mt-4'>
       <div className='absolute inset-0 flex items-center' aria-hidden='true'>
         <div className='w-full border-t border-gray-300' />
       </div>

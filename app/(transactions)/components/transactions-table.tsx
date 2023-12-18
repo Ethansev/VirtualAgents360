@@ -1,5 +1,5 @@
-import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction';
-import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction';
+import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
+import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import Link from 'next/link';
 
 type Props = {
