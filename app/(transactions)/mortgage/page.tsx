@@ -1,4 +1,4 @@
-import { transactionServices } from '@/app/api/transactions/transactions-services';
+import { transactionServices } from '@/app/api/transactions/transaction-services';
 import TransactionsTable from '../components/transactions-table';
 // TODO: Add filters by user and LRU (last recently updated)
 // TODO: Add a breadcrumb that goes on the top right
