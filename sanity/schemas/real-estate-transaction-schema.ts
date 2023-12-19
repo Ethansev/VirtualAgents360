@@ -1,13 +1,15 @@
 import { defineField, defineType } from '@sanity-typed/types';
 import {
+  propertyType,
   realEstateTransactionStageList,
   transactionStatusList,
+  transactionType,
 } from './real-estate-transaction.types';
 
 // TODO: check if sanity will give me types for the option list
 // sanity schema
-export const realEstateTransactionsSchema = defineType({
-  name: 'realEstateTransactions',
+export const realEstateTransactionSchema = defineType({
+  name: 'realEstateTransaction',
   title: 'Real Estate Transactions (Devs)',
   type: 'document',
   fields: [
@@ -41,14 +43,6 @@ export const realEstateTransactionsSchema = defineType({
       validation: (Rule) => Rule.required().error('Stage is required'),
       options: {
         list: [...realEstateTransactionStageList],
-        // list: [
-        //   { title: 'Add Property Information', value: 'addPropertyInformation' },
-        //   { title: 'New Transaction Registration', value: 'newTransactionRegistration' },
-        //   { title: 'Add Change', value: 'addChange' },
-        //   { title: 'EDM Document Upload', value: 'edmDocumentUpload' },
-        //   { title: 'Instruction To Pay Commission', value: 'instructionToPayCommission' },
-        //   { title: 'Commission Disbursement', value: 'commissionDisbursement' },
-        // ],
       },
     }),
 
@@ -61,19 +55,19 @@ export const realEstateTransactionsSchema = defineType({
           name: 'agentAOR',
           title: 'Agent Current AOR',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Agent Current AOR is required'),
         }),
         defineField({
           name: 'propertyAddress',
-          title: 'propertyAddress',
+          title: 'Property Address',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Property Address is required'),
         }),
         defineField({
           name: 'city',
           title: 'City',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('City is required'),
         }),
         defineField({
           name: 'state',
@@ -88,19 +82,19 @@ export const realEstateTransactionsSchema = defineType({
           name: 'zipcode',
           title: 'Zipcode',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Zipcode is required'),
         }),
         defineField({
           name: 'clientEmail',
           title: 'Client Email Address',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Client Email Address is required'),
         }),
         defineField({
           name: 'clientFirstName',
           title: 'Client First Name',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Client First Name is required'),
         }),
         defineField({
           name: 'clientMiddleName',
@@ -110,48 +104,32 @@ export const realEstateTransactionsSchema = defineType({
         defineField({
           name: 'clientLastName',
           title: 'clientLastName',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Client Last Name is required'),
           type: 'string',
         }),
         defineField({
           name: 'propertyType',
           title: 'Property Type',
           type: 'string', // make a dropdown
+          validation: (Rule) => Rule.required().error('Property Type is required'),
           options: {
-            list: [
-              'SFR',
-              'Condo',
-              'PUD',
-              'Town home',
-              '2-4 Units',
-              'Residential Income',
-              'High Rise Condo',
-              'Commercial',
-              'Manufactured',
-              'Vacant Lot',
-              'Other',
-            ],
+            list: propertyType,
           },
         }),
         defineField({
           name: 'transactionType',
           title: 'Transaction Type',
           type: 'string',
+          validation: (Rule) => Rule.required().error('Transaction Type is required'),
           options: {
-            list: [
-              'Real Estate - Seller Representation',
-              'Real Estate - Buyer Representation',
-              'Lease - Landlord Represetation',
-              'Lease - Tenant Representation',
-              'Other',
-            ],
+            list: transactionType,
           },
         }),
         defineField({
           name: 'primaryAgent',
           title: 'Primary Agent',
           type: 'string',
-          validation: (Rule) => Rule.required().error('State is required'),
+          validation: (Rule) => Rule.required().error('Primary Agent is required'),
         }),
         defineField({
           name: 'coopAgent1',
@@ -166,37 +144,37 @@ export const realEstateTransactionsSchema = defineType({
       ],
     }),
 
-    defineField({
-      name: 'newTransactionRegistration',
-      title: 'New Transaction Registration',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'transactionType',
-          title: 'Transaction Type',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-      ],
-    }),
+    // defineField({
+    //   name: 'newTransactionRegistration',
+    //   title: 'New Transaction Registration',
+    //   type: 'object',
+    //   fields: [
+    //     defineField({
+    //       name: 'transactionType',
+    //       title: 'Transaction Type',
+    //       type: 'string',
+    //     }),
+    //     defineField({
+    //       name: '',
+    //       title: '',
+    //       type: 'string',
+    //     }),
+    //     defineField({
+    //       name: '',
+    //       title: '',
+    //       type: 'string',
+    //     }),
+    //     defineField({
+    //       name: '',
+    //       title: '',
+    //       type: 'string',
+    //     }),
+    //     defineField({
+    //       name: '',
+    //       title: '',
+    //       type: 'string',
+    //     }),
+    //   ],
+    // }),
   ],
 });

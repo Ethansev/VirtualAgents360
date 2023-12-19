@@ -10,7 +10,7 @@ import type { InferSchemaValues } from '@sanity-typed/types';
 import { defineConfig } from '@sanity-typed/types';
 import { apiVersion, dataset, projectId } from './sanity/env';
 import { mortgageTransactionsSchema } from './sanity/schemas/mortgage-transaction';
-import { realEstateTransactionsSchema } from './sanity/schemas/real-estate-transaction';
+import { realEstateTransactionSchema } from './sanity/schemas/real-estate-transaction-schema';
 
 const config = defineConfig({
   basePath: '/admin',
@@ -18,7 +18,7 @@ const config = defineConfig({
   dataset,
   // Add and edit the content schema in the './sanity/schema' folder
   schema: {
-    types: [realEstateTransactionsSchema, mortgageTransactionsSchema],
+    types: [realEstateTransactionSchema, mortgageTransactionsSchema],
   },
   plugins: [
     deskTool(),

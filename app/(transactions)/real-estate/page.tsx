@@ -1,4 +1,4 @@
-import { transactionServices } from '@/app/api/transactions/transactions-services';
+import { transactionServices } from '@/app/api/transactions/transaction-services';
 import TransactionsTable from '../components/transactions-table';
 
 export default async function RealEstateIndexPage() {

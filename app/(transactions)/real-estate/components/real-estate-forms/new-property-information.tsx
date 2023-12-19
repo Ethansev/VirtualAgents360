@@ -1,11 +1,15 @@
 'use client';
 
-import { transactionServices } from '@/app/api/transactions/transactions-services';
+import { transactionServices } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/global-components/form-components/form';
 import SectionHeader from '@/app/global-components/form-components/section-header';
 import SelectField from '@/app/global-components/form-components/select-field';
 import TextInputField from '@/app/global-components/form-components/text-input-field';
-import { AddPropertyInformation } from '@/sanity/schemas/real-estate-transaction.types';
+import {
+  AddPropertyInformation,
+  propertyTypeList,
+  transactionTypeList,
+} from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -56,33 +60,25 @@ const propertyTypes = [
 // Shares the same types from sanity schema, but we'll have to do this for each form which might get cumbersome
 // TODO: doesn't look like it handles validations
 const formSchema: z.ZodType<AddPropertyInformation> = z.object({
-  _type: z.string(),
-  agentAOR: z.string(),
-  propertyAddress: z.string(),
-  city: z.string(),
-  state: z.string(), // TODO: update this when I have list of all states
-  zipcode: z.string(),
-  clientEmail: z.string(),
-  clientFirstName: z.string(),
+  // _type: z.string(),
+  agentAOR: z.string({
+    required_error: 'Missing agent current AOR',
+    // invalid_type_error: 'Name must be a string'
+  }),
+  propertyAddress: z.string({ required_error: 'Missing property address' }),
+  // invalid_type_error: 'Name must be a string'),
+  city: z.string({ required_error: 'Missing city' }),
+  state: z.string({ required_error: 'Missing state' }), // TODO: update this when I have list of all states
+  zipcode: z.string({ required_error: 'Missing zipcode' }),
+  clientEmail: z.string({ required_error: 'Missing client email' }),
+  clientFirstName: z.string({ required_error: 'Missing client first name' }),
   clientMiddleName: z.string().optional(),
-  clientLastName: z.string(),
-  propertyType: z.union([
-    z.literal('SFR'),
-    z.literal('Condo'),
-    z.literal('PUD'),
-    z.literal('Town home'),
-    z.literal('2-4 Units'),
-    z.literal('Residential Income'),
-    z.literal('High Rise Condo'),
-    z.literal('Commercial'),
-    z.literal('Manufactured'),
-    z.literal('Vacant Lot'),
-    z.literal('Other'),
-  ]),
-  primaryAgent: z.string(),
+  clientLastName: z.string({ required_error: 'Missing client last name' }),
+  propertyType: z.enum(propertyTypeList),
+  transactionType: z.enum(transactionTypeList),
+  primaryAgent: z.string({ required_error: 'Missing primary agent' }),
   coopAgent1: z.string().optional(),
   coopAgent2: z.string().optional(),
-  // _type: z.literal('addPropertyInformation'),
 });
 
 // refine for validations is really nice
@@ -97,9 +93,6 @@ export default function NewPropertyInformationForm() {
   // watch subscribes the value so that it will update on change
   const {
     register,
-    handleSubmit,
-    watch,
-    control,
     formState: { errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -130,113 +123,103 @@ export default function NewPropertyInformationForm() {
               // pass name like this to keep strict typing
               name={register('agentAOR').name}
               label='Agent Current AOR'
-              error={errors.agentAOR}
+              validation={{ required: true }}
               options={agentAOR}
             />
           </div>
           <div className='mb-8'>
             <SectionHeader text={'Transaction Information'} />
             <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-              <div className='col-span-full'>
-                <TextInputField
-                  name={register('propertyAddress').name}
-                  error={errors.propertyAddress}
-                  label='Property Address'
-                />
-              </div>
+              <TextInputField
+                name={register('propertyAddress', { required: true }).name}
+                label='Property Address'
+                // validation={{ required: 'Missing property address' }}
+                validation={{ required: true }}
+                className='col-span-full'
+              />
 
-              <div className='sm:col-span-2 sm:col-start-1'>
-                <TextInputField
-                  name={register('city').name}
-                  label='City'
-                  error={errors.city}
-                />
-              </div>
+              <TextInputField
+                name={register('city').name}
+                label='City'
+                validation={{ required: true }}
+                className='sm:col-span-2 sm:col-start-1'
+              />
 
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('state').name}
-                  label='State'
-                  error={errors.state}
-                />
-              </div>
+              <TextInputField
+                name={register('state').name}
+                label='State'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
 
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('zipcode').name}
-                  label='Zipcode'
-                  error={errors.zipcode}
-                />
-              </div>
+              <TextInputField
+                name={register('zipcode').name}
+                label='Zipcode'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
 
-              <div className='sm:col-span-2 sm:col-start-1'>
-                <TextInputField
-                  name={register('clientEmail').name}
-                  label='Client Email Address'
-                  error={errors.clientEmail}
-                />
-              </div>
+              <TextInputField
+                name={register('clientFirstName').name}
+                label='Client First Name'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
 
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('clientFirstName').name}
-                  label='Client First Name'
-                  error={errors.clientFirstName}
-                />
-              </div>
+              <TextInputField
+                name={register('clientLastName').name}
+                label='Client Last Name'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
 
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('clientLastName').name}
-                  label='Client Last Name'
-                  error={errors.clientLastName}
-                />
-              </div>
+              <TextInputField
+                name={register('clientEmail').name}
+                label='Client Email Address'
+                validation={{ required: true }}
+                className='sm:col-span-2 sm:col-start-1'
+              />
+              <SelectField
+                name={register('propertyType').name}
+                label='Property Type'
+                options={propertyTypes}
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
 
-              <div className='sm:col-span-2'>
-                <SelectField
-                  name={register('propertyType').name}
-                  error={errors.propertyType}
-                  label='Property Type'
-                  options={propertyTypes}
-                />
-              </div>
-
-              <div className='sm:col-span-2'>
-                <SelectField
-                  name={register('transactionType').name}
-                  label='Transaction Type'
-                  error={errors.transactionType}
-                  options={propertyTypes}
-                />
-              </div>
+              <SelectField
+                name={register('transactionType').name}
+                label='Transaction Type'
+                validation={{ required: true }}
+                options={propertyTypes}
+                className='sm:col-span-2'
+              />
             </div>
           </div>
 
           <div className='mb-8'>
             <SectionHeader text={'Agent Information'} />{' '}
             <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('primaryAgent').name}
-                  error={errors.primaryAgent}
-                  label='Primary Agent'
-                />
-              </div>
-              <div className='sm:col-span-2'>
-                <TextInputField
-                  name={register('coopAgent1').name}
-                  error={errors.coopAgent1}
-                  label='Co-Op Agent'
-                />
-              </div>
-              <div className='col-span-2'>
-                <TextInputField
-                  name={register('coopAgent2').name}
-                  error={errors.coopAgent1}
-                  label='Co-Op Agent'
-                />
-              </div>
+              <TextInputField
+                name={register('primaryAgent').name}
+                label='Primary Agent'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
+
+              <TextInputField
+                name={register('coopAgent1').name}
+                label='Co-Op Agent'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
+
+              <TextInputField
+                name={register('coopAgent2').name}
+                label='Co-Op Agent'
+                validation={{ required: true }}
+                className='sm:col-span-2'
+              />
             </div>
           </div>
         </div>
