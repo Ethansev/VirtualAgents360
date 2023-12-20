@@ -177,7 +177,7 @@ export default function NewPropertyInformationForm() {
                 name={register('clientEmail').name}
                 label='Client Email Address'
                 validation={{ required: true }}
-                className='sm:col-span-2 sm:col-start-1'
+                className='sm:col-span-2'
               />
               <SelectField
                 name={register('propertyType').name}

@@ -9,6 +9,19 @@ type Props = {
   className?: string;
 };
 
+// function isError(errors: FieldErrors<FieldValues>, name: string) {
+//   return errors[name] ? true : false;
+// }
+
+function errorBorder(errors: FieldErrors<FieldValues>, name: string) {
+  const error = errors[name];
+  if (error) {
+    return 'ring-red-500';
+  } else {
+    return 'ring-gray-300';
+  }
+}
+
 function errorCondition(errors: FieldErrors<FieldValues>, name: string) {
   const error = errors[name];
   // TODO: move all error types and messages to a util file
@@ -28,13 +41,19 @@ const TextInputField = React.forwardRef<HTMLInputElement, Props>((props, ref) =>
     register,
     formState: { errors },
   } = useFormContext();
+  if (name === 'propertyAddress') {
+    console.log('printing errors[name]', errors[name]);
+  }
 
   return (
     <div className={twMerge('', className)}>
       <label className='block text-sm font-medium leading-6 text-gray-900'>{label}</label>
       <input
         {...register(name, validation)}
-        className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+        className={twMerge(
+          errorBorder(errors, name),
+          'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+        )}
         aria-invalid={errors[name] ? 'true' : 'false'}
       />
       {errors && <p className='text-red-500'>{errorCondition(errors, name)}</p>}
