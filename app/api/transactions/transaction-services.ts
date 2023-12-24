@@ -3,9 +3,9 @@ import { client } from '@/sanity/lib/client';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 
-export const transactionServices = {
+export const transactionService = {
   getAllRealEstateTransactions: async () => {
-    const query = `*[_type == "realEstateTransactions"]`;
+    const query = `*[_type == "realEstateTransaction"]`;
     try {
       const transactions: RealEstateTransaction[] = await client.fetch(query);
       return transactions;
@@ -15,8 +15,19 @@ export const transactionServices = {
     }
   },
 
+  getRealEstateTransactionById: async (id: string) => {
+    const query = `*[_type == "realEstateTransaction" && _id == $id]`;
+    try {
+      const transactions: RealEstateTransaction[] = await client.fetch(query, { id });
+      return transactions;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  },
+
   getAllMortgageTransactions: async () => {
-    const query = `*[_type == "mortgageTransactions"]`;
+    const query = `*[_type == "mortgageTransaction"]`;
     try {
       const transactions: MortgageTransaction[] = await client.fetch(query);
       return transactions;

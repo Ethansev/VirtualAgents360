@@ -14,16 +14,16 @@ export const realEstateTransactionSchema = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'subjectProperty',
+      title: 'Subject Property',
+      type: 'string',
+    }),
+
+    defineField({
       name: 'agent',
       title: 'Agent',
       type: 'string',
       validation: (Rule) => Rule.required().error('Agent is required'),
-    }),
-
-    defineField({
-      name: 'subjectProperty',
-      title: 'Subject Property',
-      type: 'string',
     }),
 
     defineField({

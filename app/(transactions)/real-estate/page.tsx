@@ -1,8 +1,10 @@
-import { transactionServices } from '@/app/api/transactions/transaction-services';
-import TransactionsTable from '../components/transactions-table';
+import { transactionService } from '@/app/api/transactions/transaction-services';
+import TransactionsTable from '../shared-components/transactions-table';
 
 export default async function RealEstateIndexPage() {
-  const transactions = await transactionServices.getAllRealEstateTransactions();
+  const transactions = await transactionService.getAllRealEstateTransactions();
+
+  console.log('printing transactions', transactions);
 
   return (
     <div>

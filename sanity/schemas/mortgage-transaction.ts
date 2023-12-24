@@ -2,8 +2,8 @@ import { defineField, defineType } from '@sanity-typed/types';
 import { mortgageTransactionStageList } from './mortgage-transaction.types';
 import { transactionStatusList } from './real-estate-transaction.types';
 
-export const mortgageTransactionsSchema = defineType({
-  name: 'mortgageTransactions',
+export const mortgageTransactionSchema = defineType({
+  name: 'mortgageTransaction',
   title: 'Mortgage Transactions (Devs)',
   type: 'document',
   fields: [

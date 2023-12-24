@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge';
 type Props = {
   name: string;
   label: string;
-  options: { label: string; value: string }[];
+  options: { title: string; value: string }[];
   validation?: {};
   className?: string;
 };
@@ -51,7 +51,9 @@ const SelectField = React.forwardRef<HTMLSelectElement, Props>((props, ref) => {
         )}>
         <option value=''>Please select</option>
         {options.map((option) => (
-          <option key={option.value}>{option.label}</option>
+          <option key={option.value} value={option.value}>
+            {option.title}
+          </option>
         ))}
       </select>
       {errors && <p className='text-red-500'>{errorCondition(errors, name)}</p>}

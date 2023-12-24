@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 // import NavBar from '../../global-components/nav-bar';
+import TransactionFormView from '@/app/(transactions)/shared-components/transaction-form-view';
 import { Metadata } from 'next';
-import TransactionsViewComponent from '../../../shared-components/transactions-view-component';
 
 export const metadata: Metadata = {
   title: 'Home Page',
@@ -13,32 +13,15 @@ export const metadata: Metadata = {
 export default function RealEstateTemplate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  function renderImportantInfo() {
-    // TODO: render each each component and handle dynamic transaction-ids
-    switch (pathname) {
-      case '/real-estate':
-        return <div>Real Estate General</div>;
-      case '/real-estate/new-property-info':
-        return <div>New Property Info</div>;
-      case '/real-estate/transaction-registration':
-        return <div>New Transaction Registration</div>;
-      case '/real-estate/add-change':
-        return <div>Add/Change</div>;
-      case '/real-estate/edm-document':
-        return <div>EDM Document Upload</div>;
-      case '/real-estate/instruction-to-pay-commission':
-        return <div>Instruction to Pay Commission</div>;
-      case '/real-estate/commission-disbursement':
-        return <div>Commission Disbursement</div>;
-    }
-  }
-  // console.log('printing usePathname', pathname);
+  // function renderImportantInfo() {
+  //   // TODO: render each each component and handle dynamic transaction-ids
+  //   console.log('printing pathname', pathname.split('/'));
+  // }
+
   return (
     <section>
       {/* <NavBar /> */}
-      <TransactionsViewComponent renderImportantInfo={renderImportantInfo}>
-        {children}
-      </TransactionsViewComponent>
+      <TransactionFormView type='real-estate'>{children}</TransactionFormView>
     </section>
   );
 }

@@ -1,9 +1,8 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import NavBar from '../../../../global-components/nav-bar';
 import { Metadata } from 'next';
-import TransactionsViewComponent from '../../../shared-components/transactions-view-component';
+import { usePathname } from 'next/navigation';
+import TransactionsViewComponent from '../../../shared-components/transaction-form-view';
 
 export const metadata: Metadata = {
   title: 'Home Page',

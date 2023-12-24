@@ -1,9 +1,5 @@
-'use client';
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import TextInputField from '@/app/global-components/form-components/text-input-field';
-import EmailInputField from '@/app/global-components/form-components/email-input-field';
 import NewPropertyInformationForm from '../../components/real-estate-forms/new-property-information';
-// move forms into their own directory/components
+// TODO: move forms into their own directory/components
 
 export default function RealEstateTransactionPage() {
   return (

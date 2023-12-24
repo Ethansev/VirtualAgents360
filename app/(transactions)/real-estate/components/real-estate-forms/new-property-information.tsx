@@ -1,64 +1,25 @@
 'use client';
 
-import { transactionServices } from '@/app/api/transactions/transaction-services';
+import { transactionService } from '@/app/api/transactions/transaction-services';
+import SuccessAlert from '@/app/global-components/alerts/success-alert';
 import Form from '@/app/global-components/form-components/form';
 import SectionHeader from '@/app/global-components/form-components/section-header';
 import SelectField from '@/app/global-components/form-components/select-field';
 import TextInputField from '@/app/global-components/form-components/text-input-field';
 import {
   AddPropertyInformation,
+  agentAOR,
+  propertyType,
   propertyTypeList,
+  transactionType,
   transactionTypeList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-// TODO: move these to a util file
-const agentAOR = [
-  {
-    value: 'West San Gabriel Valley Association of Realtors',
-    label: 'West San Gabriel Valley Association of Realtors',
-  },
-  {
-    value: 'Orange County Association of Realtors',
-    label: 'Orange County Association of Realtors',
-  },
-  {
-    value: 'Beverly Hills / Greater LA Association of Realtors',
-    label: 'Beverly Hills / Greater LA Association of Realtors',
-  },
-  {
-    value: 'Tri-Counties Association of Realtors',
-    label: 'Tri-Counties Association of Realtors',
-  },
-  {
-    value: 'Rancho Southeasy Association of Realtors',
-    label: 'Rancho Southeasy Association of Realtors',
-  },
-  {
-    value: 'Greater Antelope Valley Association of Realtors',
-    label: 'Greater Antelope Valley Association of Realtors',
-  },
-  { value: 'Other', label: 'Other' },
-];
-
-const propertyTypes = [
-  { value: 'SFR', label: 'SFR' },
-  { value: 'Condo', label: 'Condo' },
-  { value: 'PUD', label: 'PUD' },
-  { value: 'Town Home', label: 'Town Home' },
-  { value: '2-4 Units', label: '2-4 Units' },
-  { value: 'Residential Income', label: 'Residential Income' },
-  { value: 'High Rise Condo', label: 'High Rise Condo' },
-  { value: 'Commercial', label: 'Commercial' },
-  { value: 'Manufactured', label: 'Manufactured' },
-  { value: 'Vacant Lot', label: 'Vacant Lot' },
-  { value: 'Other', label: 'Other' },
-];
-
 // Shares the same types from sanity schema, but we'll have to do this for each form which might get cumbersome
-// TODO: doesn't look like it handles validations
+// TODO: doesn't look like it handles validations from sanity schema
 const formSchema: z.ZodType<AddPropertyInformation> = z.object({
   // _type: z.string(),
   agentAOR: z.string({
@@ -103,18 +64,22 @@ export default function NewPropertyInformationForm() {
   const methods = useForm();
 
   function onSubmit(data: FieldValues) {
-    // data = {
-    //   ...data,
-    //   _type: 'addPropertyInformation',
-    // };
+    // TODO: pass agent name, status, and stage
+    data = {
+      addPropertyInformation: {
+        ...data,
+      },
+      // _type: 'addPropertyInformation',
+    };
     console.log('printing data: ', data as AddPropertyInformation);
     console.log('submitting');
-    transactionServices.postRealEstateTrasaction(data as FormSchema);
+    transactionService.postRealEstateTrasaction(data as FormSchema);
   }
 
   return (
     <FormProvider {...methods}>
       <Form methods={methods} onSubmit={onSubmit}>
+        <SuccessAlert message='Successfully updated' />
         <div className='space-y-12 bg-white'>
           {/* <div className='border-b border-gray-900/10 pb-8'> */}
           <div className='col-span-full mb-8'>
@@ -182,7 +147,7 @@ export default function NewPropertyInformationForm() {
               <SelectField
                 name={register('propertyType').name}
                 label='Property Type'
-                options={propertyTypes}
+                options={propertyType}
                 validation={{ required: true }}
                 className='sm:col-span-2'
               />
@@ -191,7 +156,7 @@ export default function NewPropertyInformationForm() {
                 name={register('transactionType').name}
                 label='Transaction Type'
                 validation={{ required: true }}
-                options={propertyTypes}
+                options={transactionType}
                 className='sm:col-span-2'
               />
             </div>
@@ -210,14 +175,12 @@ export default function NewPropertyInformationForm() {
               <TextInputField
                 name={register('coopAgent1').name}
                 label='Co-Op Agent'
-                validation={{ required: true }}
                 className='sm:col-span-2'
               />
 
               <TextInputField
                 name={register('coopAgent2').name}
                 label='Co-Op Agent'
-                validation={{ required: true }}
                 className='sm:col-span-2'
               />
             </div>

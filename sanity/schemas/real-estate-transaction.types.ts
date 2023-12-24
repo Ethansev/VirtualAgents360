@@ -3,7 +3,7 @@ import { SanityValues } from '@/sanity.config';
 // TODO: move this and mortgage to separate transaction types
 export type RealEstateTransactionStage =
   | 'addPropertyInformation'
-  | 'newTransactionRegistration'
+  | 'transactionRegistration'
   | 'addChange'
   | 'edmDocumentUpload'
   | 'instructionToPayCommission'
@@ -13,7 +13,7 @@ export const realEstateTransactionStageList: {
   value: RealEstateTransactionStage;
 }[] = [
   { title: 'Add Property Information', value: 'addPropertyInformation' },
-  { title: 'New Transaction Registration', value: 'newTransactionRegistration' },
+  { title: 'New Transaction Registration', value: 'transactionRegistration' },
   { title: 'Add Change', value: 'addChange' },
   { title: 'EDM Document Upload', value: 'edmDocumentUpload' },
   { title: 'Instruction To Pay Commission', value: 'instructionToPayCommission' },
@@ -27,6 +27,7 @@ export const transactionStatusList: { title: string; value: TransactionStatus }[
   { title: 'Needs Attention', value: 'needsAttention' },
 ];
 
+// Add New Property Information
 export const propertyTypeList = [
   'sfr',
   'condo',
@@ -67,6 +68,34 @@ export const transactionType = [
   { title: 'Lease - Landlord Representation', value: 'leaseLandlordRepresentation' },
   { title: 'Lease - Tenant Representation', value: 'leaseTenantRepresentation' },
   { title: 'Other', value: 'other' },
+];
+
+export const agentAOR = [
+  {
+    value: 'West San Gabriel Valley Association of Realtors',
+    title: 'West San Gabriel Valley Association of Realtors',
+  },
+  {
+    value: 'Orange County Association of Realtors',
+    title: 'Orange County Association of Realtors',
+  },
+  {
+    value: 'Beverly Hills / Greater LA Association of Realtors',
+    title: 'Beverly Hills / Greater LA Association of Realtors',
+  },
+  {
+    value: 'Tri-Counties Association of Realtors',
+    title: 'Tri-Counties Association of Realtors',
+  },
+  {
+    value: 'Rancho Southeasy Association of Realtors',
+    title: 'Rancho Southeasy Association of Realtors',
+  },
+  {
+    value: 'Greater Antelope Valley Association of Realtors',
+    title: 'Greater Antelope Valley Association of Realtors',
+  },
+  { value: 'Other', title: 'Other' },
 ];
 
 export type RealEstateTransaction = SanityValues['realEstateTransaction'];

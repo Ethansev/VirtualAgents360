@@ -16,4 +16,4 @@ const transactionStatusList = ['pending', 'approved', 'needs_attention'] as cons
 const transactionStatus = z.enum(transactionStatusList);
 export type TransactionStatus = z.infer<typeof transactionStatus>;
 
-export type MortgageTransaction = SanityValues['mortgageTransactions'];
+export type MortgageTransaction = SanityValues['mortgageTransaction'];

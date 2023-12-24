@@ -9,7 +9,7 @@ import { deskTool } from 'sanity/desk';
 import type { InferSchemaValues } from '@sanity-typed/types';
 import { defineConfig } from '@sanity-typed/types';
 import { apiVersion, dataset, projectId } from './sanity/env';
-import { mortgageTransactionsSchema } from './sanity/schemas/mortgage-transaction';
+import { mortgageTransactionSchema } from './sanity/schemas/mortgage-transaction';
 import { realEstateTransactionSchema } from './sanity/schemas/real-estate-transaction-schema';
 
 const config = defineConfig({
@@ -18,7 +18,7 @@ const config = defineConfig({
   dataset,
   // Add and edit the content schema in the './sanity/schema' folder
   schema: {
-    types: [realEstateTransactionSchema, mortgageTransactionsSchema],
+    types: [realEstateTransactionSchema, mortgageTransactionSchema],
   },
   plugins: [
     deskTool(),
