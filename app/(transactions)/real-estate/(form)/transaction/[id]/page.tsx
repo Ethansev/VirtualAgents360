@@ -1,7 +1,6 @@
 'use client';
 
 import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 // import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import NewPropertyInformationForm from '../../../components/real-estate-forms/new-property-information';
@@ -13,10 +12,7 @@ import NewPropertyInformationForm from '../../../components/real-estate-forms/ne
 //   return paths;
 // }
 
-export default function Page({ params }: Params) {
-  console.log('params', params);
-  const { id } = params;
-  console.log('type of id', typeof id);
+export default function Page() {
   // const res = await transactionService.getRealEstateTransactionById(id);
   // console.log('printing result of getRealEstateTransactionById', res);
 

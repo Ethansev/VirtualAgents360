@@ -24,7 +24,6 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
   // _type: z.string(),
   agentAOR: z.string({
     required_error: 'Missing agent current AOR',
-    // invalid_type_error: 'Name must be a string'
   }),
   propertyAddress: z.string({ required_error: 'Missing property address' }),
   // invalid_type_error: 'Name must be a string'),
@@ -73,7 +72,8 @@ export default function NewPropertyInformationForm() {
     };
     console.log('printing data: ', data as AddPropertyInformation);
     console.log('submitting');
-    transactionService.postRealEstateTrasaction(data as FormSchema);
+    const res = transactionService.postRealEstateTrasaction(data as FormSchema);
+    console.log('printing result', res);
   }
 
   return (

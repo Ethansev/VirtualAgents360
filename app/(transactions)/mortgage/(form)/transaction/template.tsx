@@ -35,9 +35,7 @@ export default function MortgageTemplate({ children }: { children: React.ReactNo
   return (
     <section className='mx-16'>
       {/* <NavBar /> */}
-      <TransactionsViewComponent renderImportantInfo={renderImportantInfo}>
-        {children}
-      </TransactionsViewComponent>
+      <TransactionsViewComponent type='mortgage'>{children}</TransactionsViewComponent>
     </section>
   );
 }
