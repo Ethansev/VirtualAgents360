@@ -1,11 +1,11 @@
 'use client';
 
 import { transactionService } from '@/app/api/transactions/transaction-services';
-import SuccessAlert from '@/app/global-components/alerts/success-alert';
 import Form from '@/app/global-components/form-components/form';
 import SectionHeader from '@/app/global-components/form-components/section-header';
 import SelectField from '@/app/global-components/form-components/select-field';
 import TextInputField from '@/app/global-components/form-components/text-input-field';
+import { Toaster } from '@/components/ui/sonner';
 import {
   AddPropertyInformation,
   agentAOR,
@@ -15,7 +15,9 @@ import {
   transactionTypeList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 // Shares the same types from sanity schema, but we'll have to do this for each form which might get cumbersome
@@ -50,7 +52,9 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
 export type FormSchema = z.infer<typeof formSchema>;
 
 export default function NewPropertyInformationForm() {
-  // watch subscribes the value so that it will update on change
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     formState: { errors },
@@ -58,11 +62,31 @@ export default function NewPropertyInformationForm() {
     resolver: zodResolver(formSchema),
   });
 
+  // toast('test', {
+  //   action: {
+  //     label: 'Undo',
+  //     onClick: () => {
+  //       console.log('undo');
+  //     },
+  //   },
+  // });
+
   // console.log('watch: ', watch('agentAOR'));
   // console.log('watch: ', watch('propertyAddress'));
   const methods = useForm();
 
-  function onSubmit(data: FieldValues) {
+  function toastHandler() {
+    console.log('running toast handler');
+    if (success && !loading) {
+      toast.success('Successfully added');
+    } else if (loading && !success) {
+      toast.loading('Loading...');
+    }
+  }
+
+  async function onSubmit(data: FieldValues) {
+    setLoading(true);
+    setSuccess(false);
     // TODO: pass agent name, status, and stage
     data = {
       addPropertyInformation: {
@@ -72,14 +96,19 @@ export default function NewPropertyInformationForm() {
     };
     console.log('printing data: ', data as AddPropertyInformation);
     console.log('submitting');
-    const res = transactionService.postRealEstateTrasaction(data as FormSchema);
+    const res = await transactionService.postRealEstateTrasaction(data as FormSchema);
     console.log('printing result', res);
+
+    setLoading(false);
+    setSuccess(true);
+    toastHandler();
   }
 
   return (
     <FormProvider {...methods}>
       <Form methods={methods} onSubmit={onSubmit}>
-        <SuccessAlert message='Successfully updated' />
+        {/* <SuccessAlert message='Successfully updated' /> */}
+        <Toaster richColors />
         <div className='space-y-12 bg-white'>
           {/* <div className='border-b border-gray-900/10 pb-8'> */}
           <div className='col-span-full mb-8'>
