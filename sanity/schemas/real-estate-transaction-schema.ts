@@ -144,37 +144,169 @@ export const realEstateTransactionSchema = defineType({
       ],
     }),
 
-    // defineField({
-    //   name: 'newTransactionRegistration',
-    //   title: 'New Transaction Registration',
-    //   type: 'object',
-    //   fields: [
-    //     defineField({
-    //       name: 'transactionType',
-    //       title: 'Transaction Type',
-    //       type: 'string',
-    //     }),
-    //     defineField({
-    //       name: '',
-    //       title: '',
-    //       type: 'string',
-    //     }),
-    //     defineField({
-    //       name: '',
-    //       title: '',
-    //       type: 'string',
-    //     }),
-    //     defineField({
-    //       name: '',
-    //       title: '',
-    //       type: 'string',
-    //     }),
-    //     defineField({
-    //       name: '',
-    //       title: '',
-    //       type: 'string',
-    //     }),
-    //   ],
-    // }),
+    defineField({
+      name: 'transactionRegistration',
+      title: 'Transaction Registration',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+      ],
+    }),
+
+    defineField({
+      name: 'addChange',
+      title: 'Add Change',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+      ],
+    }),
+
+    defineField({
+      name: 'edmDocumentUpload',
+      title: 'EDM Document Upload',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+      ],
+    }),
+
+    defineField({
+      name: 'instructionToPayCommission',
+      title: 'Instruction To Pay Commission',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+      ],
+    }),
+
+    defineField({
+      name: 'commissionDisbursement',
+      title: 'Commission Disbursement',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'transactionType',
+          title: 'Transaction Type',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+        defineField({
+          name: '',
+          title: '',
+          type: 'string',
+        }),
+      ],
+    }),
   ],
 });

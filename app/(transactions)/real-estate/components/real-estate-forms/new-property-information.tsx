@@ -15,6 +15,7 @@ import {
   transactionTypeList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -52,8 +53,11 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
 export type FormSchema = z.infer<typeof formSchema>;
 
 export default function NewPropertyInformationForm() {
+  const router = useRouter();
+
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isNew, setIsNew] = useState(true);
 
   const {
     register,
@@ -62,31 +66,14 @@ export default function NewPropertyInformationForm() {
     resolver: zodResolver(formSchema),
   });
 
-  // toast('test', {
-  //   action: {
-  //     label: 'Undo',
-  //     onClick: () => {
-  //       console.log('undo');
-  //     },
-  //   },
-  // });
-
   // console.log('watch: ', watch('agentAOR'));
   // console.log('watch: ', watch('propertyAddress'));
   const methods = useForm();
 
-  function toastHandler() {
-    console.log('running toast handler');
-    if (success && !loading) {
-      toast.success('Successfully added');
-    } else if (loading && !success) {
-      toast.loading('Loading...');
-    }
-  }
-
   async function onSubmit(data: FieldValues) {
     setLoading(true);
     setSuccess(false);
+    toast.loading('Loading...');
     // TODO: pass agent name, status, and stage
     data = {
       addPropertyInformation: {
@@ -101,7 +88,9 @@ export default function NewPropertyInformationForm() {
 
     setLoading(false);
     setSuccess(true);
-    toastHandler();
+    toast.success('Successfully updated');
+    router.push(`/real-estate/transaction/${1}/?stage=transactionRegistration`);
+    // TODO: add query params to redirect to next page
   }
 
   return (
@@ -224,6 +213,11 @@ export default function NewPropertyInformationForm() {
             type='submit'
             className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
             Save
+          </button>
+          <button
+            type='submit'
+            className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+            Save and Continue
           </button>
         </div>
       </Form>

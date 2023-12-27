@@ -3,7 +3,12 @@
 import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
 // import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import AddChangeForm from '../../../components/real-estate-forms/add-change';
+import CommissionDisbursementForm from '../../../components/real-estate-forms/commission-disbursement';
+import EDMDocumentUploadForm from '../../../components/real-estate-forms/edm-document-upload';
+import InstructionToPayCommissionForm from '../../../components/real-estate-forms/instruction-to-pay-commission';
 import NewPropertyInformationForm from '../../../components/real-estate-forms/new-property-information';
+import TransactionRegistrationForm from '../../../components/real-estate-forms/transaction-registration';
 
 // export const dynanicParams = false;
 // export function generateStaticParams() {
@@ -24,15 +29,15 @@ export default function Page() {
       case 'addPropertyInformation':
         return NewPropertyInformationForm();
       case 'transactionRegistration':
-        return <div>transactionRegistration</div>;
+        return TransactionRegistrationForm();
       case 'addChange':
-        return <div>addChange</div>;
+        return AddChangeForm();
       case 'edmDocumentUpload':
-        return <div>edmDocumentUpload</div>;
+        return EDMDocumentUploadForm();
       case 'instructionToPayCommission':
-        return <div>instructionToPayCommission</div>;
+        return InstructionToPayCommissionForm();
       case 'commissionDisbursement':
-        return <div>commissionDisbursement</div>;
+        return CommissionDisbursementForm();
       default:
         return NewPropertyInformationForm();
     }

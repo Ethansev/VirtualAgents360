@@ -100,3 +100,10 @@ export const agentAOR = [
 
 export type RealEstateTransaction = SanityValues['realEstateTransaction'];
 export type AddPropertyInformation = NonNullable<RealEstateTransaction['addPropertyInformation']>;
+export type TransactionRegistration = NonNullable<RealEstateTransaction['transactionRegistration']>;
+export type AddChange = NonNullable<RealEstateTransaction['addChange']>;
+export type EDMDocumentUpload = NonNullable<RealEstateTransaction['edmDocumentUpload']>;
+export type InstructionToPayCommission = NonNullable<
+  RealEstateTransaction['instructionToPayCommission']
+>;
+export type CommissionDisbursemennt = NonNullable<RealEstateTransaction['commissionDisbursement']>;
