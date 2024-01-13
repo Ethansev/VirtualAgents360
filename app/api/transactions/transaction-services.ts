@@ -49,7 +49,7 @@ export const transactionService = {
       // const transactions: RealEstateTransaction[] = await client.fetch(query);
       const res = await client.create(transaction);
       console.log('here is the sanity response', res);
-      // return transactions;
+      return res;
     } catch (err) {
       console.error(err);
       throw err;

@@ -1,4 +1,4 @@
-import Form from '@/app/global-components/form-components/form';
+import Form from '@/app/components/form-components/form';
 import { Toaster } from '@/components/ui/sonner';
 import { TransactionRegistration } from '@/sanity/schemas/real-estate-transaction.types';
 import { useRouter } from 'next/navigation';

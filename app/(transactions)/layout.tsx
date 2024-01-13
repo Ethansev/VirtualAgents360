@@ -1,5 +1,5 @@
+import NavBar from '@/app/components/nav-bar';
 import '@/app/globals.css';
-import NavBar from '@/app/global-components/nav-bar';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export default function TransactionsModuleLayout({ children }: { children: React.ReactNode }) {

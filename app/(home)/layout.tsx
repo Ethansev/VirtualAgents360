@@ -1,4 +1,4 @@
-import NavBar from '@/app/global-components/nav-bar';
+import NavBar from '@/app/components/nav-bar';
 import '@/app/globals.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 

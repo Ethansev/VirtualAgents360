@@ -16,7 +16,7 @@ export default function HomePage() {
       <HeroSection />
       <SmartBuySection />
       <div>
-        <Link className='border-red-500 bg-red-500 p-2 rounded' href='/admin'>
+        <Link className='rounded border-red-500 bg-red-500 p-2' href='/admin'>
           Admin Tools
         </Link>
       </div>

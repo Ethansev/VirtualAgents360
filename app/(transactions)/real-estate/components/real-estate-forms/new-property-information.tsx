@@ -1,10 +1,11 @@
 'use client';
 
 import { transactionService } from '@/app/api/transactions/transaction-services';
-import Form from '@/app/global-components/form-components/form';
-import SectionHeader from '@/app/global-components/form-components/section-header';
-import SelectField from '@/app/global-components/form-components/select-field';
-import TextInputField from '@/app/global-components/form-components/text-input-field';
+import Form from '@/app/components/form-components/form';
+import SectionHeader from '@/app/components/form-components/section-header';
+import SelectField from '@/app/components/form-components/select-field';
+import TextInputField from '@/app/components/form-components/text-input-field';
+import { test } from '@/app/lib/resend-service';
 import { Toaster } from '@/components/ui/sonner';
 import {
   AddPropertyInformation,
@@ -85,11 +86,13 @@ export default function NewPropertyInformationForm() {
     console.log('submitting');
     const res = await transactionService.postRealEstateTrasaction(data as FormSchema);
     console.log('printing result', res);
+    const resend_response = await test();
+    console.log('printing resend response', resend_response);
 
     setLoading(false);
     setSuccess(true);
     toast.success('Successfully updated');
-    router.push(`/real-estate/transaction/${1}/?stage=transactionRegistration`);
+    // router.push(`/real-estate/transaction/${1}/?stage=transactionRegistration`);
     // TODO: add query params to redirect to next page
   }
 
