@@ -66,6 +66,10 @@ export default function TransactionsTable(props: Props) {
                   </th>
 
                   <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-3'>
+                    <span className='sr-only text-red-500'>Delete</span>
+                  </th>
+
+                  <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-3'>
                     <span className='sr-only'>Edit</span>
                   </th>
                 </tr>
@@ -93,6 +97,16 @@ export default function TransactionsTable(props: Props) {
                       <a href='#' className='text-indigo-600 hover:text-indigo-900'>
                         Edit<span className='sr-only'>, {'edit wtf is this'}</span>
                       </a>
+                    </td>
+                    <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3'>
+                      {/* <a href='#' className='border-red-500 text-red-500'>
+                        Delete<span className='sr-only'>, {'edit wtf is this'}</span>
+                      </a> */}
+                      <button
+                        type='button'
+                        className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'>
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

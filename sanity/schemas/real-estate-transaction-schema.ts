@@ -143,7 +143,7 @@ export const realEstateTransactionSchema = defineType({
         }),
       ],
     }),
-
+    // TODO: figure out how to do the data schema for this nested form
     defineField({
       name: 'transactionRegistration',
       title: 'Transaction Registration',
@@ -154,26 +154,53 @@ export const realEstateTransactionSchema = defineType({
           title: 'Transaction Type',
           type: 'string',
         }),
+
         defineField({
-          name: '',
-          title: '',
-          type: 'string',
+          name: 'newListingSale',
+          title: 'New Listing Sale',
+          type: 'object',
+          fields: [
+            defineField({
+              name: '',
+              title: '',
+              type: '',
+            })
+          ],
         }),
+
         defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
+          name: 'newListingSale',
+          title: 'New Listing Sale',
+          type: 'object',
+          fields: [
+            defineField({
+              name: '',
+              title: '',
+              type: '',
+            })
+          ],
+        })
+
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
       ],
     }),
 
@@ -187,26 +214,26 @@ export const realEstateTransactionSchema = defineType({
           title: 'Transaction Type',
           type: 'string',
         }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
       ],
     }),
 
@@ -220,26 +247,26 @@ export const realEstateTransactionSchema = defineType({
           title: 'Transaction Type',
           type: 'string',
         }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
       ],
     }),
 
@@ -253,26 +280,26 @@ export const realEstateTransactionSchema = defineType({
           title: 'Transaction Type',
           type: 'string',
         }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
       ],
     }),
 
@@ -286,26 +313,26 @@ export const realEstateTransactionSchema = defineType({
           title: 'Transaction Type',
           type: 'string',
         }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
-        defineField({
-          name: '',
-          title: '',
-          type: 'string',
-        }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
+        // defineField({
+        //   name: '',
+        //   title: '',
+        //   type: 'string',
+        // }),
       ],
     }),
   ],
