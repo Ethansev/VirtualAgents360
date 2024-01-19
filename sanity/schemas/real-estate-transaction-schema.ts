@@ -175,13 +175,13 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'listingDate',
                             title: 'Listing Date',
-                            type: 'datetime',
+                            type: 'date',
                         }),
 
                         defineField({
                             name: 'expirationDate',
                             title: 'expirationDate',
-                            type: 'datetime',
+                            type: 'date',
                         }),
 
                         defineField({

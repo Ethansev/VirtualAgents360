@@ -102,7 +102,6 @@ export default function NewPropertyInformationForm() {
                 {/* <SuccessAlert message='Successfully updated' /> */}
                 <Toaster richColors />
                 <div className='space-y-12'>
-                    {/* <div className='border-b border-gray-900/10 pb-8'> */}
                     <div className='col-span-full mb-8'>
                         <SectionHeader text={'LRFO Requirement'} />
                         <SelectField
