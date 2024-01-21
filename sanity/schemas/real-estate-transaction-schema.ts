@@ -46,6 +46,16 @@ export const realEstateTransactionSchema = defineType({
             },
         }),
 
+        // TODO: define the real estate transaction types
+        defineField({
+            name: 'type',
+            title: 'Type',
+            type: 'string',
+            options: {
+                list: [],
+            },
+        }),
+
         defineField({
             name: 'addPropertyInformation',
             title: 'Add Property Information',
