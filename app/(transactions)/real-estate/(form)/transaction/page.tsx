@@ -1,5 +1,6 @@
 'use client';
 
+import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
 import { useSearchParams } from 'next/navigation';
 import NewPropertyInformationForm from '../../components/real-estate-forms/new-property-information';
 import TransactionRegistrationForm from '../../components/real-estate-forms/transaction-registration';
