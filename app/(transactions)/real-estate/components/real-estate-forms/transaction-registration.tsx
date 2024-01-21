@@ -15,7 +15,7 @@ import { z } from 'zod';
 const formSchema: z.ZodType<TransactionRegistration> = z.object({
     transactionType: z.string(),
     newListingSale: z.object({
-        // FIXME: zod date types won't work. might have to parse the strings manually
+        // FIXME: date is set as string in sanity. will have to do extra checks ourselves here
         listingDate: z.string(),
         expirationDate: z.string(),
         mlsNumber: z.number(),
@@ -89,13 +89,13 @@ export default function TransactionRegistrationForm() {
                     <div className='mb-8'>
                         <SectionHeader text='Listing Information' />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            {/* TODO: need a date field component for listing date */}
+                            {/* TODO: update as date field component */}
                             <TextInputField
                                 name={register('newListingSale.listingDate').name}
                                 label={'Listing Date'}
                                 className='col-span-2'
                             />
-                            {/* TODO: need a date field component for expiration date */}
+                            {/* TODO: update as date field component */}
                             <TextInputField
                                 name={register('newListingSale.expirationDate').name}
                                 label={'Expiration Date'}

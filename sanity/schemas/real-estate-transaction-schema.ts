@@ -6,7 +6,7 @@ import {
     transactionType,
 } from './real-estate-transaction.types';
 
-// TODO: check if sanity will give me types for the option list
+// TODO: decide between multiple schemas or tree of the same one?
 // sanity schema
 export const realEstateTransactionSchema = defineType({
     name: 'realEstateTransaction',
@@ -165,7 +165,6 @@ export const realEstateTransactionSchema = defineType({
             ],
         }),
 
-        // TODO: figure out how to do the data schema for this nested form
         defineField({
             name: 'transactionRegistration',
             title: 'Transaction Registration',
