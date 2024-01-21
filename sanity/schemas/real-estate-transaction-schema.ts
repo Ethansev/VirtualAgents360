@@ -47,6 +47,10 @@ export const realEstateTransactionSchema = defineType({
         }),
 
         // TODO: define the real estate transaction types
+        // New Listing Transaction - For Sale
+        // New Listing Transaction - For Lease
+        // Open Escrow Registration - Listing
+        // Open Escrow Registration - Sale
         defineField({
             name: 'type',
             title: 'Type',

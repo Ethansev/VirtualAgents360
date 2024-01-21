@@ -17,36 +17,39 @@ import TransactionRegistrationForm from '../../../components/real-estate-forms/t
 //   return paths;
 // }
 
+// TODO: get the id and fetch data from sanity
+// I think I should pass the entire transaction object to the form <-- yes this.
+// each form checks if it's passed an object and uses that to determine post/patch requests
 export default function Page() {
-  // const res = await transactionService.getRealEstateTransactionById(id);
-  // console.log('printing result of getRealEstateTransactionById', res);
+    // const res = await transactionService.getRealEstateTransactionById(id);
+    // console.log('printing result of getRealEstateTransactionById', res);
 
-  const searchParams = useSearchParams();
-  const stage = searchParams.get('stage') as RealEstateTransactionStage | null;
+    const searchParams = useSearchParams();
+    const stage = searchParams.get('stage') as RealEstateTransactionStage | null;
 
-  function renderForm() {
-    switch (stage) {
-      case 'addPropertyInformation':
-        return NewPropertyInformationForm();
-      case 'transactionRegistration':
-        return TransactionRegistrationForm();
-      case 'addChange':
-        return AddChangeForm();
-      case 'edmDocumentUpload':
-        return EDMDocumentUploadForm();
-      case 'instructionToPayCommission':
-        return InstructionToPayCommissionForm();
-      case 'commissionDisbursement':
-        return CommissionDisbursementForm();
-      default:
-        return NewPropertyInformationForm();
+    function renderForm() {
+        switch (stage) {
+            case 'addPropertyInformation':
+                return NewPropertyInformationForm();
+            case 'transactionRegistration':
+                return TransactionRegistrationForm();
+            case 'addChange':
+                return AddChangeForm();
+            case 'edmDocumentUpload':
+                return EDMDocumentUploadForm();
+            case 'instructionToPayCommission':
+                return InstructionToPayCommissionForm();
+            case 'commissionDisbursement':
+                return CommissionDisbursementForm();
+            default:
+                return NewPropertyInformationForm();
+        }
     }
-  }
 
-  return (
-    <>
-      <p>this is the transaction/[id] page</p>
-      {renderForm()}
-    </>
-  );
+    return (
+        <>
+            <p>this is the transaction/[id] page</p>
+            {renderForm()}
+        </>
+    );
 }
