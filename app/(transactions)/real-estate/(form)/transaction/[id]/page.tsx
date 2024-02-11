@@ -17,7 +17,7 @@ import TransactionRegistrationForm from '../../../components/real-estate-forms/t
 //   return paths;
 // }
 
-// TODO: get the id and fetch data from sanity
+// TODO: use the id to fetch data from sanity
 // I think I should pass the entire transaction object to the form <-- yes this.
 // each form checks if it's passed an object and uses that to determine post/patch requests
 export default function Page() {

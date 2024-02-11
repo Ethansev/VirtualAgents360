@@ -5,7 +5,6 @@ import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import SelectField from '@/app/components/form-components/select-field';
 import TextInputField from '@/app/components/form-components/text-input-field';
-import { test } from '@/app/lib/resend-service';
 import { Toaster } from '@/components/ui/sonner';
 import {
     AddPropertyInformation,
@@ -67,14 +66,12 @@ export default function NewPropertyInformationForm() {
         resolver: zodResolver(formSchema),
     });
 
-    // console.log('watch: ', watch('agentAOR'));
-    // console.log('watch: ', watch('propertyAddress'));
     const methods = useForm();
 
-    async function onSubmit(data: FieldValues) {
+    async function onSave(data: FieldValues) {
         setLoading(true);
         setSuccess(false);
-        toast.loading('Loading...');
+        // toast.loading('Loading...');
         // TODO: pass agent name, status, and stage
         data = {
             addPropertyInformation: {
@@ -84,21 +81,37 @@ export default function NewPropertyInformationForm() {
         };
         console.log('printing data: ', data as AddPropertyInformation);
         console.log('submitting');
-        const res = await transactionService.postRealEstateTrasaction(data as FormSchema);
-        console.log('printing result', res);
-        const resend_response = await test();
-        console.log('printing resend response', resend_response);
+        toast.promise(
+            async () => {
+                const res = await transactionService.postRealEstateTrasaction(data as FormSchema);
+                console.log('printing result', res._id);
+                router.push(`/real-estate/transaction/${res._id}`);
+            },
+            {
+                loading: 'Loading...',
+                success: () => 'Successfully saved!',
+                error: 'Error',
+            },
+        );
+        console.log("I should've gotten the result by now");
+
+        // FIXME: fix resend
+        // const resend_response = await test();
+        // console.log('printing resend response', resend_response);
 
         setLoading(false);
         setSuccess(true);
-        toast.success('Successfully updated');
         // router.push(`/real-estate/transaction/${1}/?stage=transactionRegistration`);
         // TODO: add query params to redirect to next page
     }
 
+    // async function onSaveAndContinue(data: FieldValues) {
+    //     router.push(`/real-estate/transaction/${res._id}/?stage=transactionRegistration`);
+    // }
+
     return (
         <FormProvider {...methods}>
-            <Form methods={methods} onSubmit={onSubmit}>
+            <Form methods={methods} onSubmit={onSave}>
                 {/* <SuccessAlert message='Successfully updated' /> */}
                 <Toaster richColors />
                 <div className='space-y-12'>

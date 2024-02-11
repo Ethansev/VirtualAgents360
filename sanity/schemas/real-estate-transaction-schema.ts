@@ -174,6 +174,7 @@ export const realEstateTransactionSchema = defineType({
             title: 'Transaction Registration',
             type: 'object',
             fields: [
+                // TODO: option of types! make them an enum
                 defineField({
                     name: 'transactionType',
                     title: 'Transaction Type',

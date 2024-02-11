@@ -30,10 +30,5 @@ export default function RealEstateTransactionPage() {
         }
     }
 
-    return (
-        <>
-            <p>not sure if I should keep this page</p>
-            {renderForm()}
-        </>
-    );
+    return <>{renderForm()}</>;
 }
