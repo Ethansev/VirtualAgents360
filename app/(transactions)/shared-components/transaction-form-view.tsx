@@ -2,6 +2,7 @@
 
 import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 type Props = {
     type: 'real-estate' | 'mortgage';
@@ -40,25 +41,27 @@ export default function TransactionFormView({ type, children }: Props) {
     }
 
     return (
-        <div className='mt-16 '>
-            <div className='grid grid-cols-12 gap-x-8'>
-                <div className='col-span-3'>
-                    <div className=' flex flex-row pl-8  '>
-                        <p>Side Form Nav</p>
+        <Suspense fallback={<p>Loading from transaction-form-view.tsx</p>}>
+            <div className='mt-16 '>
+                <div className='grid grid-cols-12 gap-x-8'>
+                    <div className='col-span-3'>
+                        <div className=' flex flex-row pl-8  '>
+                            <p>Side Form Nav</p>
+                        </div>
                     </div>
-                </div>
 
-                <div className='col-span-6'>{children}</div>
+                    <div className='col-span-6'>{children}</div>
 
-                <div className='col-span-3'>
-                    <div className='pl-8'>
-                        <h1>
-                            <p>Important Info & Procedures</p>
-                        </h1>
-                        <div>{renderImportantInfo()}</div>
+                    <div className='col-span-3'>
+                        <div className='pl-8'>
+                            <h1>
+                                <p>Important Info & Procedures</p>
+                            </h1>
+                            <div>{renderImportantInfo()}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Suspense>
     );
 }
