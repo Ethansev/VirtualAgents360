@@ -9,7 +9,7 @@ export default function RealEstateTransactionPage() {
 
     return (
         <Suspense fallback={<p>Loading from real-estate transaction page</p>}>
-            <FormContainer newForm={true} />;
+            <FormContainer />
         </Suspense>
     );
 }

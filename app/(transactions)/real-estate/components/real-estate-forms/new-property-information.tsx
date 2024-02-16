@@ -3,11 +3,10 @@
 import { transactionService } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
-import SelectField from '@/app/components/form-components/select-field';
-import TextInputField from '@/app/components/form-components/text-input-field';
 import { Toaster } from '@/components/ui/sonner';
 import {
     AddPropertyInformation,
+    RealEstateTransactionStage,
     agentAOR,
     propertyType,
     propertyTypeList,
@@ -52,23 +51,68 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
 
 export type FormSchema = z.infer<typeof formSchema>;
 
-export default function NewPropertyInformationForm() {
+type Props = {
+    stage?: RealEstateTransactionStage | null;
+    id?: string;
+};
+
+export default function NewPropertyInformationForm(props: Props) {
+    const { stage, id } = props;
     const router = useRouter();
 
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isNew, setIsNew] = useState(true);
+
+    async function fetchForm(): Promise<FormSchema> {
+        const defaultFormValues: FormSchema = {
+            agentAOR: '',
+            propertyAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            clientEmail: '',
+            clientFirstName: '',
+            clientMiddleName: '',
+            clientLastName: '',
+            propertyType: '',
+            transactionType: '',
+            primaryAgent: '',
+            coopAgent1: '',
+            coopAgent2: '',
+        };
+
+        if (id) {
+            try {
+                const res = await transactionService.getRealEstateTransactionById(id);
+                console.log('printing res...', res);
+                return res.addPropertyInformation
+                    ? { ...defaultFormValues, ...res.addPropertyInformation }
+                    : defaultFormValues;
+            } catch (error) {
+                console.error('error fetching transaction', error);
+                return defaultFormValues;
+            }
+        }
+
+        return defaultFormValues;
+    }
 
     const {
         register,
         formState: { errors },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
+        defaultValues: async () => await fetchForm(),
     });
 
     const methods = useForm();
 
     async function onSave(data: FieldValues) {
+        if (id) {
+            // update transaction
+        } else {
+            // new transaction + reroute!
+        }
         setLoading(true);
         setSuccess(false);
         // toast.loading('Loading...');
@@ -109,6 +153,7 @@ export default function NewPropertyInformationForm() {
     //     router.push(`/real-estate/transaction/${res._id}/?stage=transactionRegistration`);
     // }
 
+    // TODO: I wanted to create components for the input fields but register() doesn't like to work well with formcontext
     return (
         <FormProvider {...methods}>
             <Form methods={methods} onSubmit={onSave}>
@@ -117,105 +162,154 @@ export default function NewPropertyInformationForm() {
                 <div className='space-y-12'>
                     <div className='col-span-full mb-8'>
                         <SectionHeader text={'LRFO Requirement'} />
-                        <SelectField
-                            // pass name like this to keep strict typing
-                            name={register('agentAOR').name}
-                            label='Agent Current AOR'
-                            validation={{ required: true }}
-                            options={agentAOR}
-                        />
+                        <label className={`${errors.agentAOR ? 'ring-red-500' : ''}`}>
+                            Agent Current AOR
+                            <select {...register('agentAOR', { required: true })}>
+                                <option value=''>Please select</option>
+                                {agentAOR.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.title}
+                                    </option>
+                                ))}
+                            </select>
+                            <p className='text-red-500'>{errors?.agentAOR?.message}</p>
+                        </label>
                     </div>
                     <div className='mb-8'>
                         <SectionHeader text={'Transaction Information'} />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            <TextInputField
-                                name={register('propertyAddress', { required: true }).name}
-                                label='Property Address'
-                                // validation={{ required: 'Missing property address' }}
-                                validation={{ required: true }}
-                                className='col-span-full'
-                            />
+                            <label
+                                className={`col-span-full ${errors.propertyAddress ? 'ring-red-500' : ''}`}>
+                                <span>New Property Address</span>
+                                <input
+                                    type='text'
+                                    {...register('propertyAddress', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.propertyAddress?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('city').name}
-                                label='City'
-                                validation={{ required: true }}
-                                className='sm:col-span-2 sm:col-start-1'
-                            />
+                            <label className={`sm:col-span-2 ${errors.city ? 'ring-red-500' : ''}`}>
+                                <span>City</span>
+                                <input type='text' {...register('city', { required: true })} />
+                                <p className='text-red-500'>{errors?.city?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('state').name}
-                                label='State'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.state ? 'ring-red-500' : ''}`}>
+                                <span>State</span>
+                                <input type='text' {...register('state', { required: true })} />
+                                <p className='text-red-500'>{errors?.state?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('zipcode').name}
-                                label='Zipcode'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.zipcode ? 'ring-red-500' : ''}`}>
+                                <span>Zipcode</span>
+                                <input type='text' {...register('zipcode', { required: true })} />
+                                <p className='text-red-500'>{errors?.zipcode?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('clientFirstName').name}
-                                label='Client First Name'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.clientFirstName ? 'ring-red-500' : ''}`}>
+                                <span>Client First Name</span>
+                                <input
+                                    type='text'
+                                    {...register('clientFirstName', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.clientFirstName?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('clientLastName').name}
-                                label='Client Last Name'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.clientLastName ? 'ring-red-500' : ''}`}>
+                                <span>Client Last Name</span>
+                                <input
+                                    type='text'
+                                    {...register('clientLastName', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.clientLastName?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('clientEmail').name}
-                                label='Client Email Address'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
-                            <SelectField
-                                name={register('propertyType').name}
-                                label='Property Type'
-                                options={propertyType}
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.clientLastName ? 'ring-red-500' : ''}`}>
+                                <span>Client Last Name</span>
+                                <input
+                                    type='text'
+                                    {...register('clientLastName', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.clientLastName?.message}</p>
+                            </label>
 
-                            <SelectField
-                                name={register('transactionType').name}
-                                label='Transaction Type'
-                                validation={{ required: true }}
-                                options={transactionType}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.clientEmail ? 'ring-red-500' : ''}`}>
+                                <span>Client Email</span>
+                                <input
+                                    type='text'
+                                    {...register('clientEmail', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.clientEmail?.message}</p>
+                            </label>
+
+                            <label
+                                className={`sm:col-span-2 ${errors.propertyType ? 'ring-red-500' : ''}`}>
+                                <span>Property Type</span>
+                                <select {...register('propertyType', { required: true })}>
+                                    <option value=''>Please select</option>
+                                    {propertyType.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                <p className='text-red-500'>{errors?.propertyType?.message}</p>
+                            </label>
+
+                            <label
+                                className={`sm:col-span-2 ${errors.transactionType ? 'ring-red-500' : ''}`}>
+                                <span>Transaction Type</span>
+                                <select {...register('transactionType', { required: true })}>
+                                    <option value=''>Please select</option>
+                                    {transactionType.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                <p className='text-red-500'>{errors?.transactionType?.message}</p>
+                            </label>
                         </div>
                     </div>
 
                     <div className='mb-8'>
                         <SectionHeader text={'Agent Information'} />{' '}
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            <TextInputField
-                                name={register('primaryAgent').name}
-                                label='Primary Agent'
-                                validation={{ required: true }}
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.primaryAgent ? 'ring-red-500' : ''}`}>
+                                <span>Primary Agent</span>
+                                <input
+                                    type='text'
+                                    {...register('primaryAgent', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.primaryAgent?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('coopAgent1').name}
-                                label='Co-Op Agent'
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.coopAgent1 ? 'ring-red-500' : ''}`}>
+                                <span>Co-Op Agent 1</span>
+                                <input
+                                    type='text'
+                                    {...register('coopAgent1', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.coopAgent1?.message}</p>
+                            </label>
 
-                            <TextInputField
-                                name={register('coopAgent2').name}
-                                label='Co-Op Agent'
-                                className='sm:col-span-2'
-                            />
+                            <label
+                                className={`sm:col-span-2 ${errors.coopAgent2 ? 'ring-red-500' : ''}`}>
+                                <span>Co-Op Agent 2</span>
+                                <input
+                                    type='text'
+                                    {...register('coopAgent2', { required: true })}
+                                />
+                                <p className='text-red-500'>{errors?.coopAgent2?.message}</p>
+                            </label>
                         </div>
                     </div>
                 </div>
