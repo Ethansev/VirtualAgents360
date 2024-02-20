@@ -2,12 +2,10 @@ import Form from '@/app/components/form-components/form';
 import NumberInputField from '@/app/components/form-components/number-input-field';
 import SectionHeader from '@/app/components/form-components/section-header';
 import SelectField from '@/app/components/form-components/select-field';
-import TextInputField from '@/app/components/form-components/text-input-field';
 import { Toaster } from '@/components/ui/sonner';
 import { TransactionRegistration } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -33,8 +31,8 @@ export type FormSchema = z.infer<typeof formSchema>;
 export default function TransactionRegistrationForm() {
     const router = useRouter();
 
-    const [success, setSuccess] = useState(false);
-    const [loading, setLoading] = useState(false);
+    // const [success, setSuccess] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     const methods = useForm();
 
@@ -90,17 +88,17 @@ export default function TransactionRegistrationForm() {
                         <SectionHeader text='Listing Information' />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
                             {/* TODO: update as date field component */}
-                            <TextInputField
-                                name={register('newListingSale.listingDate').name}
-                                label={'Listing Date'}
-                                className='col-span-2'
-                            />
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.listingDate').name} */}
+                            {/*     label={'Listing Date'} */}
+                            {/*     className='col-span-2' */}
+                            {/* /> */}
                             {/* TODO: update as date field component */}
-                            <TextInputField
-                                name={register('newListingSale.expirationDate').name}
-                                label={'Expiration Date'}
-                                className='col-span-2'
-                            />
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.expirationDate').name} */}
+                            {/*     label={'Expiration Date'} */}
+                            {/*     className='col-span-2' */}
+                            {/* /> */}
                             <NumberInputField
                                 name={register('newListingSale.mlsNumber').name}
                                 label='MLS#'
@@ -121,27 +119,27 @@ export default function TransactionRegistrationForm() {
                                 label='Listing Office Comp $'
                                 className='col-span-2'
                             />
-                            <TextInputField
-                                name={register('newListingSale.sellersFirstName').name}
-                                label={"Seller's First Name"}
-                                className='col-span-2'
-                            />
-                            <TextInputField
-                                name={register('newListingSale.sellersLastName').name}
-                                label={"Seller's Last Name"}
-                                className='col-span-2'
-                            />
-                            <TextInputField
-                                name={register('newListingSale.sellersEmailAddress').name}
-                                label={"Seller's Email Address"}
-                                className='col-span-2'
-                            />
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.sellersFirstName').name} */}
+                            {/*     label={"Seller's First Name"} */}
+                            {/*     className='col-span-2' */}
+                            {/* /> */}
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.sellersLastName').name} */}
+                            {/*     label={"Seller's Last Name"} */}
+                            {/*     className='col-span-2' */}
+                            {/* /> */}
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.sellersEmailAddress').name} */}
+                            {/*     label={"Seller's Email Address"} */}
+                            {/*     className='col-span-2' */}
+                            {/* /> */}
                             {/* TODO: update this to be an email validated input field  */}
-                            <TextInputField
-                                name={register('newListingSale.specialInstructions').name}
-                                label={'Special Instructions'}
-                                className='col-span-full'
-                            />
+                            {/* <TextInputField */}
+                            {/*     name={register('newListingSale.specialInstructions').name} */}
+                            {/*     label={'Special Instructions'} */}
+                            {/*     className='col-span-full' */}
+                            {/* /> */}
                         </div>
                     </div>
                 </div>

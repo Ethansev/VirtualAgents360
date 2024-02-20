@@ -6,6 +6,7 @@ import SectionHeader from '@/app/components/form-components/section-header';
 import { Toaster } from '@/components/ui/sonner';
 import {
     AddPropertyInformation,
+    RealEstateTransaction,
     RealEstateTransactionStage,
     agentAOR,
     propertyType,
@@ -43,27 +44,21 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
     coopAgent2: z.string().optional(),
 });
 
-// refine for validations is really nice
-// .refine((data) => data.password === data.confirmPassword, {
-//   message: 'Passwords do not match',
-//   path: ['confirmPassword'],
-// })
-
 export type FormSchema = z.infer<typeof formSchema>;
 
 type Props = {
     stage?: RealEstateTransactionStage | null;
-    id?: string;
+    transactionData?: RealEstateTransaction | null;
 };
 
 export default function NewPropertyInformationForm(props: Props) {
-    const { stage, id } = props;
+    const { stage, transactionData } = props;
     const router = useRouter();
 
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    async function fetchForm(): Promise<FormSchema> {
+    function fetchForm(): FormSchema {
         const defaultFormValues: FormSchema = {
             agentAOR: '',
             propertyAddress: '',
@@ -81,63 +76,67 @@ export default function NewPropertyInformationForm(props: Props) {
             coopAgent2: '',
         };
 
-        if (id) {
-            try {
-                const res = await transactionService.getRealEstateTransactionById(id);
-                console.log('printing res...', res);
-                return res.addPropertyInformation
-                    ? { ...defaultFormValues, ...res.addPropertyInformation }
-                    : defaultFormValues;
-            } catch (error) {
-                console.error('error fetching transaction', error);
-                return defaultFormValues;
-            }
-        }
+        const newData = { ...defaultFormValues, ...transactionData?.addPropertyInformation };
 
-        return defaultFormValues;
+        if (transactionData) {
+            return newData;
+            // return { ...defaultFormValues, ...transactionData.addPropertyInformation };
+        } else {
+            return defaultFormValues;
+        }
     }
 
     const {
         register,
+        handleSubmit,
         formState: { errors },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
-        defaultValues: async () => await fetchForm(),
+        defaultValues: fetchForm(),
     });
 
     const methods = useForm();
 
-    async function onSave(data: FieldValues) {
-        if (id) {
-            // update transaction
-        } else {
-            // new transaction + reroute!
-        }
+    async function onSave(formData: FieldValues) {
+        console.log('printing data from onSave:', formData);
         setLoading(true);
         setSuccess(false);
-        // toast.loading('Loading...');
+
         // TODO: pass agent name, status, and stage
-        data = {
-            addPropertyInformation: {
-                ...data,
-            },
-            // _type: 'addPropertyInformation',
-        };
-        console.log('printing data: ', data as AddPropertyInformation);
-        console.log('submitting');
-        toast.promise(
-            async () => {
-                const res = await transactionService.postRealEstateTrasaction(data as FormSchema);
-                console.log('printing result', res._id);
-                router.push(`/real-estate/transaction/${res._id}`);
-            },
-            {
-                loading: 'Loading...',
-                success: () => 'Successfully saved!',
-                error: 'Error',
-            },
-        );
-        console.log("I should've gotten the result by now");
+
+        if (transactionData) {
+            const data = {
+                ...transactionData,
+                addPropertyInformation: { ...formData } as AddPropertyInformation,
+            };
+            toast.promise(
+                async () => {
+                    const res = await transactionService.updateRealEstateTransaction(data);
+                    console.log('printing res from update', res);
+                },
+                {
+                    loading: 'Loading...',
+                    success: () => 'Successfully saved!',
+                    error: 'Error',
+                },
+            );
+        } else {
+            // TODO: add general transaction data like agent name here
+            // TODO: fix type that we're passing to createRealEstateTransaction
+            toast.promise(
+                async () => {
+                    const res = await transactionService.createRealEstateTransaction(
+                        formData as FormSchema,
+                    );
+                    router.push(`/real-estate/transaction/${res._id}`);
+                },
+                {
+                    loading: 'Loading...',
+                    success: () => 'Successfully saved!',
+                    error: 'Error',
+                },
+            );
+        }
 
         // FIXME: fix resend
         // const resend_response = await test();
@@ -145,8 +144,6 @@ export default function NewPropertyInformationForm(props: Props) {
 
         setLoading(false);
         setSuccess(true);
-        // router.push(`/real-estate/transaction/${1}/?stage=transactionRegistration`);
-        // TODO: add query params to redirect to next page
     }
 
     // async function onSaveAndContinue(data: FieldValues) {
@@ -156,7 +153,7 @@ export default function NewPropertyInformationForm(props: Props) {
     // TODO: I wanted to create components for the input fields but register() doesn't like to work well with formcontext
     return (
         <FormProvider {...methods}>
-            <Form methods={methods} onSubmit={onSave}>
+            <Form methods={methods} onSubmit={handleSubmit(onSave)}>
                 {/* <SuccessAlert message='Successfully updated' /> */}
                 <Toaster richColors />
                 <div className='space-y-12'>

@@ -1,17 +1,15 @@
 import React from 'react';
-import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 type Props = {
     children: React.ReactNode;
-    onSubmit: SubmitHandler<FieldValues>;
+    onSubmit: React.FormEventHandler;
     methods: UseFormReturn<FieldValues>;
 };
 
 export default function Form({ children, onSubmit, methods }: Props) {
-    const { handleSubmit } = methods;
-
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
             {React.Children.map(children, (child) => {
                 if (React.isValidElement(child)) {
                     return child.props.name

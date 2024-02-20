@@ -1,28 +1,30 @@
-import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
+import {
+    RealEstateTransaction,
+    RealEstateTransactionStage,
+} from '@/sanity/schemas/real-estate-transaction.types';
 import NewPropertyInformationForm from './real-estate-forms/new-property-information';
 import TransactionRegistrationForm from './real-estate-forms/transaction-registration';
 
 type Props = {
     stage?: RealEstateTransactionStage | null;
-    id?: string;
+    transactionData?: RealEstateTransaction | null;
 };
 
 export default function FormContainer(props: Props) {
-    const { stage, id } = props;
+    const { stage, transactionData } = props;
 
-    // TODO: Not sure if useSearchParams is useful in this context
-    // const searchParams = useSearchParams();
-
-    console.group('FormContainer');
-    console.log('stage', stage);
-    console.log('id', id);
-    console.groupEnd();
+    // console.group('FormContainer');
+    // console.log('stage', stage);
+    // console.log('transactionData', transactionData);
+    // console.groupEnd();
 
     // TODO: complete this after the forms are done
     function renderForm() {
         switch (stage) {
             case 'addPropertyInformation':
-                return <NewPropertyInformationForm stage={stage} id={id} />;
+                return (
+                    <NewPropertyInformationForm stage={stage} transactionData={transactionData} />
+                );
             case 'transactionRegistration':
                 return <TransactionRegistrationForm />;
             // case 'addChange':
@@ -34,7 +36,9 @@ export default function FormContainer(props: Props) {
             // case 'commissionDisbursement':
             // return <div>Commission Disbursement</div>;
             default:
-                return <NewPropertyInformationForm stage={stage} id={id} />;
+                return (
+                    <NewPropertyInformationForm stage={stage} transactionData={transactionData} />
+                );
         }
     }
 

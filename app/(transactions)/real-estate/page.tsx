@@ -4,8 +4,6 @@ import TransactionsTable from '../shared-components/transactions-table';
 export default async function RealEstateIndexPage() {
     const transactions = await transactionService.getAllRealEstateTransactions();
 
-    console.log('printing transactions', transactions);
-
     return (
         // <Suspense fallback={<p>Loading real-estate/page.tsx</p>}>
         <div>

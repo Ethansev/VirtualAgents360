@@ -107,4 +107,12 @@ export type EDMDocumentUpload = NonNullable<RealEstateTransaction['edmDocumentUp
 export type InstructionToPayCommission = NonNullable<
     RealEstateTransaction['instructionToPayCommission']
 >;
-export type CommissionDisbursemennt = NonNullable<RealEstateTransaction['commissionDisbursement']>;
+export type CommissionDisbursement = NonNullable<RealEstateTransaction['commissionDisbursement']>;
+
+export type RealEstateSubForm =
+    | AddPropertyInformation
+    | TransactionRegistration
+    | AddChange
+    | EDMDocumentUpload
+    | InstructionToPayCommission
+    | CommissionDisbursement;

@@ -1,8 +1,8 @@
-import { NewPropertyInformationFormSchema } from '@/app/(transactions)/real-estate/components/real-estate-forms/new-property-information';
+// import { NewPropertyInformationFormSchema } from '@/app/(transactions)/real-estate/components/real-estate-forms/new-property-information';
 import { FieldErrors, FieldValues, useFormContext } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-type FormSchema = NewPropertyInformationFormSchema;
+// type FormSchema = NewPropertyInformationFormSchema;
 // register: UseFormRegister<TFieldValues>;
 
 type Props = {
