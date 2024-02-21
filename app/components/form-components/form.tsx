@@ -1,13 +1,16 @@
+import { FormSchema } from '@/app/(transactions)/real-estate/components/real-estate-forms/new-property-information';
 import React from 'react';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
+import { UseFormRegister, UseFormReturn } from 'react-hook-form';
 
 type Props = {
     children: React.ReactNode;
     onSubmit: React.FormEventHandler;
-    methods: UseFormReturn<FieldValues>;
+    // methods: UseFormReturn<FieldValues>;
+    methods: UseFormReturn<FormSchema>;
+    register: UseFormRegister<FormSchema>;
 };
 
-export default function Form({ children, onSubmit, methods }: Props) {
+export default function Form({ children, onSubmit, methods, register }: Props) {
     return (
         <form onSubmit={onSubmit}>
             {React.Children.map(children, (child) => {
@@ -16,7 +19,7 @@ export default function Form({ children, onSubmit, methods }: Props) {
                         ? React.createElement(child.type, {
                               ...{
                                   ...child.props,
-                                  register: methods.register,
+                                  register: register,
                                   key: child.props.name,
                               },
                           })
