@@ -9,7 +9,7 @@ export default async function RealEstateIndexPage() {
         <div>
             <h1 className='flex justify-center'>Real Transactions</h1>
             <div className='mt-8'>
-                <TransactionsTable type='real-estate' transactions={transactions} />
+                <TransactionsTable type='real-estate' transactionsList={transactions} />
             </div>
         </div>
         // </Suspense>

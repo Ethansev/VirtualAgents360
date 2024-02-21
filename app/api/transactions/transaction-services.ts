@@ -32,7 +32,9 @@ export const transactionService = {
     createRealEstateTransaction: async (formData: FormSchema) => {
         // also need: agent, subject property, status, stage
         const transaction = {
-            ...formData,
+            addPropertyInformation: {
+                ...formData,
+            },
             _type: 'realEstateTransaction',
         };
 
@@ -47,15 +49,27 @@ export const transactionService = {
         }
     },
 
+    // TODO: add email service and better error handling
     updateRealEstateTransaction: async (formData: RealEstateTransaction) => {
-        console.log('here is the formData from update real estate transaction: ', formData);
-
         try {
-            console.log('printing formData', formData);
-            console.log('here is formdata type: ', typeof formData);
-            // make a request to the sanity endpoint here
             const res = await client.patch(formData._id).set(formData).commit();
             console.log('here is the sanity response', res);
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    },
+
+    deleteRealEstateTransaction: async (id: string) => {
+        try {
+            const res = await client.delete(id);
+            console.log('here is the sanity response', res);
+
+            // TODO: return a success object
+            // if (res.documentIds[0] === id) {
+            //     return true;
+            // }
+            return res;
         } catch (err) {
             console.error(err);
             throw err;

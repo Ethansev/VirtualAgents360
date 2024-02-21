@@ -1,16 +1,53 @@
+'use client';
+
+import { transactionService } from '@/app/api/transactions/transaction-services';
+import { Toaster } from '@/components/ui/sonner';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 type Props = {
-    transactions: RealEstateTransaction[] | MortgageTransaction[];
+    transactionsList: RealEstateTransaction[] | MortgageTransaction[];
     type: 'real-estate' | 'mortgage';
 };
 
 export default function TransactionsTable(props: Props) {
-    const { transactions, type } = props;
+    const { transactionsList, type } = props;
+
+    const [transactions, setTransactions] = useState<
+        RealEstateTransaction[] | MortgageTransaction[]
+    >(transactionsList);
+
+    function handleDelete(id: string): void {
+        console.log('delete');
+
+        toast.promise(
+            async () => {
+                // TODO: refresh table on delete
+                const res = await transactionService.deleteRealEstateTransaction(id);
+                const deletedId = res.documentIds[0];
+
+                const newTransactions = transactions.filter(
+                    (transaction) => transaction._id !== deletedId,
+                ) as RealEstateTransaction[] | MortgageTransaction[];
+
+                setTransactions(newTransactions);
+
+                console.log('printing delete res: ', res);
+            },
+            {
+                loading: 'Loading...',
+                success: () => 'Successfully deleted!',
+                error: 'Error',
+            },
+        );
+    }
+
     return (
         <div className='px-4 sm:px-6 lg:px-8'>
+            <Toaster richColors />
             <div className='sm:flex sm:items-center'>
                 <div className='sm:flex-auto'>
                     <h1 className='text-base font-semibold leading-6 text-gray-900'>
@@ -109,7 +146,8 @@ export default function TransactionsTable(props: Props) {
                                         <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3'>
                                             <button
                                                 type='button'
-                                                className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'>
+                                                className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'
+                                                onClick={() => handleDelete(transaction._id)}>
                                                 Delete
                                             </button>
                                         </td>
