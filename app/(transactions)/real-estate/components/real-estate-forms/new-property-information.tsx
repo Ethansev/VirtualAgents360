@@ -158,7 +158,7 @@ export default function NewPropertyInformationForm(props: Props) {
 
     return (
         <FormProvider {...methods}>
-            <Form methods={methods} register={register} onSubmit={handleSubmit(onSave)}>
+            <Form register={register} onSubmit={handleSubmit(onSave)}>
                 {/* <SuccessAlert message='Successfully updated' /> */}
                 <Toaster richColors />
                 <div className='space-y-12'>

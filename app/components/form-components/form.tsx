@@ -1,16 +1,13 @@
-import { FormSchema } from '@/app/(transactions)/real-estate/components/real-estate-forms/new-property-information';
 import React from 'react';
-import { UseFormRegister, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
-type Props = {
+interface Props<T extends FieldValues> {
     children: React.ReactNode;
     onSubmit: React.FormEventHandler;
-    // methods: UseFormReturn<FieldValues>;
-    methods: UseFormReturn<FormSchema>;
-    register: UseFormRegister<FormSchema>;
-};
+    register: UseFormRegister<T>;
+}
 
-export default function Form({ children, onSubmit, methods, register }: Props) {
+export default function Form<T extends FieldValues>({ children, onSubmit, register }: Props<T>) {
     return (
         <form onSubmit={onSubmit}>
             {React.Children.map(children, (child) => {

@@ -50,7 +50,7 @@ export default function TransactionRegistrationForm() {
 
     return (
         <FormProvider {...methods}>
-            <Form methods={methods} onSubmit={onSubmit}>
+            <Form register={register} onSubmit={onSubmit}>
                 <Toaster richColors />
                 {/* I guess I should do new listing registration - for sale first huh  */}
                 <div className='space-y-12'>

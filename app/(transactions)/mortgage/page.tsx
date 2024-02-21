@@ -4,13 +4,13 @@ import TransactionsTable from '../shared-components/transactions-table';
 // TODO: Add a breadcrumb that goes on the top right
 
 export default async function MortgageIndexPage() {
-  const transactions = await transactionService.getAllMortgageTransactions();
-  return (
-    <div>
-      <h1 className='flex justify-center'>All Mortgage Transactions</h1>
-      <div className='mt-8'>
-        <TransactionsTable type='mortgage' transactions={transactions} />
-      </div>
-    </div>
-  );
+    const transactions = await transactionService.getAllMortgageTransactions();
+    return (
+        <div>
+            <h1 className='flex justify-center'>All Mortgage Transactions</h1>
+            <div className='mt-8'>
+                <TransactionsTable type='mortgage' transactionsList={transactions} />
+            </div>
+        </div>
+    );
 }

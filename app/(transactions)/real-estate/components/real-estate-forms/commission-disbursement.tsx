@@ -11,24 +11,25 @@ const formSchema: z.ZodType<TransactionRegistration> = z.object({});
 export type FormSchema = z.infer<typeof formSchema>;
 
 export default function CommissionDisbursementForm() {
-  const router = useRouter();
+    const router = useRouter();
 
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-  const methods = useForm();
+    const { register } = useForm();
+    const methods = useForm();
 
-  function onSubmit() {
-    toast.loading('Loading...');
+    function onSubmit() {
+        toast.loading('Loading...');
 
-    toast.success('Successfully updated');
-  }
+        toast.success('Successfully updated');
+    }
 
-  return (
-    <FormProvider {...methods}>
-      <Form methods={methods} onSubmit={onSubmit}>
-        <Toaster richColors />
-      </Form>
-    </FormProvider>
-  );
+    return (
+        <FormProvider {...methods}>
+            <Form register={register} onSubmit={onSubmit}>
+                <Toaster richColors />
+            </Form>
+        </FormProvider>
+    );
 }
