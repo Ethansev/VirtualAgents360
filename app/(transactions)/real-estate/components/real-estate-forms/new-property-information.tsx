@@ -4,6 +4,7 @@ import { transactionService } from '@/app/api/transactions/transaction-services'
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import TextInputField from '@/app/components/form-components/text-input-field';
+import { stringWithMinLength } from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
     AddPropertyInformation,
@@ -22,9 +23,6 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-function stringWithMinLength(message: string = 'This field is required') {
-    return z.string().min(1, { message });
-}
 const formSchema: z.ZodType<AddPropertyInformation> = z.object({
     agentAOR: stringWithMinLength(),
     propertyAddress: stringWithMinLength(),
