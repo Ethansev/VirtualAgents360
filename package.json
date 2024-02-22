@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
-    "@esbuild/linux-x64": "^0.20.0",
+    "esbuild": "^0.20.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.3.4",
