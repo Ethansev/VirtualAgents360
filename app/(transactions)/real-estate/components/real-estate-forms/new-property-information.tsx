@@ -3,6 +3,7 @@
 import { transactionService } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
+import SelectInputField from '@/app/components/form-components/select-input-field';
 import TextInputField from '@/app/components/form-components/text-input-field';
 import { stringWithMinLength } from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
@@ -35,10 +36,10 @@ const formSchema: z.ZodType<AddPropertyInformation> = z.object({
     clientMiddleName: z.string().optional(),
     clientLastName: stringWithMinLength(),
     propertyType: z.enum(propertyTypeList, {
-        errorMap: () => ({ message: 'Please select one' }),
+        errorMap: () => ({ message: 'This field is required' }),
     }),
     transactionType: z.enum(transactionTypeList, {
-        errorMap: () => ({ message: 'Please select one' }),
+        errorMap: () => ({ message: 'This field is required' }),
     }),
     primaryAgent: stringWithMinLength(),
     coopAgent1: z.string().optional(),
@@ -165,20 +166,14 @@ export default function NewPropertyInformationForm(props: Props) {
                     <div className='col-span-full mb-8'>
                         <SectionHeader text={'LRFO Requirement'} />
 
-                        <label>
-                            Agent Current AOR
-                            <select
-                                {...register('agentAOR', { required: true })}
-                                className={`${errors.agentAOR ? 'ring-1 ring-red-500' : ''}`}>
-                                <option value=''>Please select</option>
-                                {agentAOR.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.title}
-                                    </option>
-                                ))}
-                            </select>
-                            <p className='text-red-500'>{errors?.agentAOR?.message}</p>
-                        </label>
+                        <SelectInputField
+                            name='agentAOR'
+                            label='Agent Current AOR'
+                            control={control}
+                            error={errors.agentAOR}
+                            className='col-span-full'
+                            options={agentAOR}
+                        />
                     </div>
                     <div className='mb-8'>
                         <SectionHeader text={'Transaction Information'} />
@@ -191,142 +186,100 @@ export default function NewPropertyInformationForm(props: Props) {
                                 className='col-span-full'
                             />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>City</span>
-                                <input
-                                    type='text'
-                                    {...register('city', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.city?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='city'
+                                label='City'
+                                control={control}
+                                error={errors.city}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>State</span>
-                                <input
-                                    type='text'
-                                    {...register('state', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.state?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='state'
+                                label='State'
+                                control={control}
+                                error={errors.state}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Zipcode</span>
-                                <input
-                                    type='text'
-                                    {...register('zipcode', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.zipcode?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='zipcode'
+                                label='Zipcode'
+                                control={control}
+                                error={errors.zipcode}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Client First Name</span>
-                                <input
-                                    type='text'
-                                    {...register('clientFirstName', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.clientFirstName?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='clientFirstName'
+                                label='Client First Name'
+                                control={control}
+                                error={errors.clientFirstName}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Client Last Name</span>
-                                <input
-                                    type='text'
-                                    {...register('clientLastName', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.clientLastName?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='clientLastName'
+                                label='Client Last Name'
+                                control={control}
+                                error={errors.clientLastName}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Client Last Name</span>
-                                <input
-                                    type='text'
-                                    {...register('clientLastName', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.clientLastName?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='clientEmail'
+                                label='Client Email'
+                                control={control}
+                                error={errors.clientEmail}
+                                className='sm:col-span-2'
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Client Email</span>
-                                <input
-                                    type='text'
-                                    {...register('clientEmail', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.clientEmail?.message}</p>
-                            </label>
+                            <SelectInputField
+                                name='propertyType'
+                                label='Property Type'
+                                control={control}
+                                error={errors.propertyType}
+                                className='sm:col-span-3'
+                                options={propertyType}
+                            />
 
-                            <label className={'sm:col-span-2'}>
-                                <span>Property Type</span>
-                                <select
-                                    {...register('propertyType', { required: true })}
-                                    className={`${errors.city ? 'ring-1 ring-red-500' : ''}`}>
-                                    <option value=''>Please select</option>
-                                    {propertyType.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.title}
-                                        </option>
-                                    ))}
-                                </select>
-                                <p className='text-red-500'>{errors?.propertyType?.message}</p>
-                            </label>
-
-                            <label className={'sm:col-span-2'}>
-                                <span>Transaction Type</span>
-                                {/* TODO: figure out where else required is applying */}
-                                <select
-                                    {...register('transactionType')}
-                                    // FIXME: why doesn't this work
-                                    className={`${errors.transactionType ? 'ring-1 ring-red-500' : ''}`}>
-                                    <option value=''>Please select</option>
-                                    {transactionType.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.title}
-                                        </option>
-                                    ))}
-                                </select>
-                                <p className='text-red-500'>{errors?.transactionType?.message}</p>
-                            </label>
+                            <SelectInputField
+                                name='transactionType'
+                                label='Transaction Type'
+                                control={control}
+                                error={errors.transactionType}
+                                className='sm:col-span-3'
+                                options={transactionType}
+                            />
                         </div>
                     </div>
 
                     <div className='mb-8'>
                         <SectionHeader text={'Agent Information'} />{' '}
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            <label className='sm:col-span-2'>
-                                <span>Primary Agent</span>
-                                <input
-                                    type='text'
-                                    {...register('primaryAgent', { required: true })}
-                                    className={`${errors.primaryAgent ? 'ring-1 ring-red-500' : ''}`}
-                                />
-                                <p className='text-red-500'>{errors?.primaryAgent?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='primaryAgent'
+                                label='Primary Agent'
+                                control={control}
+                                error={errors.primaryAgent}
+                                className='sm:col-span-2'
+                            />
 
-                            <label
-                                className={`sm:col-span-2 ${errors.coopAgent1 ? 'ring-red-500' : ''}`}>
-                                <span>Co-Op Agent 1</span>
-                                <input
-                                    type='text'
-                                    {...register('coopAgent1', { required: true })}
-                                />
-                                <p className='text-red-500'>{errors?.coopAgent1?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='coopAgent1'
+                                label='Co-Op Agent 1'
+                                control={control}
+                                error={errors.coopAgent1}
+                                className='sm:col-span-2'
+                            />
 
-                            <label
-                                className={`sm:col-span-2 ${errors.coopAgent2 ? 'ring-red-500' : ''}`}>
-                                <span>Co-Op Agent 2</span>
-                                <input
-                                    type='text'
-                                    {...register('coopAgent2', { required: true })}
-                                />
-                                <p className='text-red-500'>{errors?.coopAgent2?.message}</p>
-                            </label>
+                            <TextInputField
+                                name='coopAgent2'
+                                label='Co-Op Agent 2'
+                                control={control}
+                                error={errors.coopAgent2}
+                                className='sm:col-span-2'
+                            />
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,6 @@
 import Form from '@/app/components/form-components/form';
 import NumberInputField from '@/app/components/form-components/number-input-field';
 import SectionHeader from '@/app/components/form-components/section-header';
-import SelectField from '@/app/components/form-components/select-field';
 import { Toaster } from '@/components/ui/sonner';
 import { TransactionRegistration } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -57,30 +56,30 @@ export default function TransactionRegistrationForm() {
                     <div className='mb-8'>
                         <SectionHeader text='Smart-Buy Combo Questionnaire' />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            <SelectField
-                                name='smart-buy-1'
-                                label='Is your client interested in assistance with home financing?'
-                                options={[]}
-                                className='col-span-full'
-                            />
-                            <SelectField
-                                name='smart-buy-2'
-                                label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?'
-                                options={[]}
-                                className='col-span-full'
-                            />
-                            <SelectField
-                                name='smart-buy-3'
-                                label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?'
-                                options={[]}
-                                className='col-span-full'
-                            />
-                            <SelectField
-                                name='smart-buy-4'
-                                label='In your opinion, what are the benefits of closing both real estate and mortage transactions under one roof?'
-                                options={[]}
-                                className='col-span-full'
-                            />
+                            {/* <SelectInputField */}
+                            {/*     name='smart-buy-1' */}
+                            {/*     label='Is your client interested in assistance with home financing?' */}
+                            {/*     options={[]} */}
+                            {/*     className='col-span-full' */}
+                            {/* /> */}
+                            {/* <SelectInputField */}
+                            {/*     name='smart-buy-2' */}
+                            {/*     label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?' */}
+                            {/*     options={[]} */}
+                            {/*     className='col-span-full' */}
+                            {/* /> */}
+                            {/* <SelectField */}
+                            {/*     name='smart-buy-3' */}
+                            {/*     label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?' */}
+                            {/*     options={[]} */}
+                            {/*     className='col-span-full' */}
+                            {/* /> */}
+                            {/* <SelectField */}
+                            {/*     name='smart-buy-4' */}
+                            {/*     label='In your opinion, what are the benefits of closing both real estate and mortage transactions under one roof?' */}
+                            {/*     options={[]} */}
+                            {/*     className='col-span-full' */}
+                            {/* /> */}
                         </div>
                     </div>
 

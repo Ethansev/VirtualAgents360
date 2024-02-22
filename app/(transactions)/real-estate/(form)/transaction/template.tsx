@@ -21,8 +21,8 @@ export default function RealEstateTemplate({ children }: { children: React.React
 
     return (
         <section>
-            {/* <NavBar /> */}
-            <Suspense fallback={<p>Loading from real estate transaction template</p>}>
+            {/* TODO: Add skeleton loading for the form */}
+            <Suspense fallback={<p>Loading form...</p>}>
                 <TransactionFormLayout type='real-estate'>{children}</TransactionFormLayout>
             </Suspense>
         </section>
