@@ -72,8 +72,7 @@ export default function TransactionRegistrationForm() {
                             {/*     name='smart-buy-3' */}
                             {/*     label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?' */}
                             {/*     options={[]} */}
-                            {/*     className='col-span-full' */}
-                            {/* /> */}
+                            {/*     className='col-span-full' */} {/* /> */}
                             {/* <SelectField */}
                             {/*     name='smart-buy-4' */}
                             {/*     label='In your opinion, what are the benefits of closing both real estate and mortage transactions under one roof?' */}

@@ -3,7 +3,7 @@
 import { Metadata } from 'next';
 import { usePathname } from 'next/navigation';
 import { Suspense } from 'react';
-import TransactionsViewComponent from '../../shared-components/transaction-form-view';
+import TransactionsViewComponent from '../../shared-components/transaction-form-layout';
 
 export const metadata: Metadata = {
     title: 'Home Page',

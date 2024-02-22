@@ -57,6 +57,7 @@ export default function NewPropertyInformationForm(props: Props) {
     const { stage, transactionData } = props;
     const router = useRouter();
 
+    // TODO: prevent form from being submitted when loading
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -80,12 +81,7 @@ export default function NewPropertyInformationForm(props: Props) {
 
         const newData = { ...defaultFormValues, ...transactionData?.addPropertyInformation };
 
-        if (transactionData) {
-            return newData;
-            // return { ...defaultFormValues, ...transactionData.addPropertyInformation };
-        } else {
-            return defaultFormValues;
-        }
+        return transactionData ? newData : defaultFormValues;
     }
 
     const {
@@ -94,8 +90,6 @@ export default function NewPropertyInformationForm(props: Props) {
         control,
         formState: { errors },
     } = useForm<FormSchema>({
-        // mode: 'onBlur',
-        // reValidateMode: 'onBlur',
         resolver: zodResolver(formSchema),
         defaultValues: fetchForm(),
     });
@@ -103,12 +97,6 @@ export default function NewPropertyInformationForm(props: Props) {
     const methods = useForm<FormSchema>();
 
     async function onSave(formData: FieldValues) {
-        console.log('printing data from onSave:', formData);
-        setLoading(true);
-        setSuccess(false);
-
-        // TODO: pass agent name, status, and stage
-
         if (transactionData) {
             const data = {
                 ...transactionData,
@@ -126,15 +114,17 @@ export default function NewPropertyInformationForm(props: Props) {
                 },
             );
         } else {
-            // TODO: add general transaction data like agent name here
-            // TODO: fix type that we're passing to createRealEstateTransaction
-            // const data = { addPropertyInformation: { ...formData } as AddPropertyInformation };
+            // TODO: add general transaction data like agent name, status, and stage here
             toast.promise(
                 async () => {
                     const res = await transactionService.createRealEstateTransaction(
                         formData as AddPropertyInformation,
                     );
-                    router.push(`/real-estate/transaction/${res._id}`);
+
+                    router.push(
+                        `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
+                    );
+                    // router.push(`/real-estate/transaction/${res._id}`);
                 },
                 {
                     loading: 'Loading...',
@@ -143,19 +133,7 @@ export default function NewPropertyInformationForm(props: Props) {
                 },
             );
         }
-
-        // FIXME: fix resend
-        // const resend_response = await test();
-        // console.log('printing resend response', resend_response);
-
-        setLoading(false);
-        setSuccess(true);
     }
-
-    // async function onSaveAndContinue(data: FieldValues) {
-    //     router.push(`/real-estate/transaction/${res._id}/?stage=transactionRegistration`);
-    // }
-    console.log('printing errors: ', errors);
 
     return (
         <FormProvider {...methods}>

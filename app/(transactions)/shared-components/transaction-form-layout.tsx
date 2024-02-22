@@ -1,19 +1,18 @@
 'use client';
 
 import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
-import { useSearchParams } from 'next/navigation';
 
 type Props = {
     type: 'real-estate' | 'mortgage';
+    stage: RealEstateTransactionStage | null;
     children: React.ReactNode;
 };
 
 // used for both real estate and mortgage transactions
-export default function TransactionFormView({ type, children }: Props) {
-    const searchParams = useSearchParams();
-    const stage = searchParams.get('stage') as RealEstateTransactionStage | null;
-
+export default function TransactionFormLayout({ type, stage, children }: Props) {
     function renderImportantInfo() {
+        console.log('printing transaction type: ', type);
+        console.log('printing transaction stage: ', stage);
         if (type === 'real-estate') {
             switch (stage) {
                 case 'addPropertyInformation':
