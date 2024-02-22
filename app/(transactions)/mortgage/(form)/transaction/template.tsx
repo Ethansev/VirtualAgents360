@@ -1,7 +1,6 @@
 'use client';
 
 import { Metadata } from 'next';
-import { usePathname } from 'next/navigation';
 import { Suspense } from 'react';
 import TransactionsViewComponent from '../../../shared-components/transaction-form-layout';
 
@@ -11,28 +10,29 @@ export const metadata: Metadata = {
 };
 
 export default function MortgageTemplate({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
+    // const pathname = usePathname();
 
-    function renderImportantInfo() {
-        // TODO: render each each component and handle dynamic transaction-ids
-        switch (pathname) {
-            case '/mortgage':
-                return <div>Mortgage General</div>;
-            case '/mortgage/new-property-info':
-                return <div>New Property Info</div>;
-            case '/mortgage/transaction-registration':
-                return <div>New Transaction Registration</div>;
-            case '/mortgage/add-change':
-                return <div>Add/Change</div>;
-            case '/mortgage/edm-document':
-                return <div>EDM Document Upload</div>;
-            case '/mortgage/instruction-to-pay-commission':
-                return <div>Instruction to Pay Commission</div>;
-            case '/mortgage/commission-disbursement':
-                return <div>Commission Disbursement</div>;
-        }
-    }
-    console.log('printing usePathname', pathname);
+    // function renderImportantInfo() {
+    //     // TODO: render each each component and handle dynamic transaction-ids
+    //     switch (pathname) {
+    //         case '/mortgage':
+    //             return <div>Mortgage General</div>;
+    //         case '/mortgage/new-property-info':
+    //             return <div>New Property Info</div>;
+    //         case '/mortgage/transaction-registration':
+    //             return <div>New Transaction Registration</div>;
+    //         case '/mortgage/add-change':
+    //             return <div>Add/Change</div>;
+    //         case '/mortgage/edm-document':
+    //             return <div>EDM Document Upload</div>;
+    //         case '/mortgage/instruction-to-pay-commission':
+    //             return <div>Instruction to Pay Commission</div>;
+    //         case '/mortgage/commission-disbursement':
+    //             return <div>Commission Disbursement</div>;
+    //     }
+    // }
+    // console.log('printing usePathname', pathname);
+
     return (
         <section className='mx-16'>
             {/* <NavBar /> */}

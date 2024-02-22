@@ -2,19 +2,19 @@
 // move forms into their own directory/components
 
 export default function MortgageTransactionPage() {
-  return (
-    // <div className='mx-24 mt-8'>
-    // <div className='grid grid-cols-10 gap-x-8'>
-    // <div className='col-span-2'>
-    // <div>Side Form Nav</div>
-    // <div>
-    // <h1>Important Info & Procedures</h1>
-    // </div>
-    // </div>
+    return (
+        // <div className='mx-24 mt-8'>
+        // <div className='grid grid-cols-10 gap-x-8'>
+        // <div className='col-span-2'>
+        // <div>Side Form Nav</div>
+        // <div>
+        // <h1>Important Info & Procedures</h1>
+        // </div>
+        // </div>
 
-    // <div className='col-span-8'>
-    <form>
-      {/* <div className='space-y-12 bg-white'>
+        // <div className='col-span-8'>
+        <form>
+            {/* <div className='space-y-12 bg-white'>
         <div className='border-b border-gray-900/10 pb-12'>
           <h2 className='text-base font-semibold leading-7 text-gray-900'>Profile</h2>
           <p className='mt-1 text-sm leading-6 text-gray-600'>
@@ -301,9 +301,9 @@ export default function MortgageTransactionPage() {
           Save
         </button>
       </div> */}
-    </form>
-    //     </div>
-    //   </div>
-    // </div>
-  );
+        </form>
+        //     </div>
+        //   </div>
+        // </div>
+    );
 }

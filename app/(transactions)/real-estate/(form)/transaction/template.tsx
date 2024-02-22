@@ -1,9 +1,5 @@
-'use client';
-
-import { useSearchParams } from 'next/navigation';
 // import NavBar from '../../global-components/nav-bar';
 import TransactionFormLayout from '@/app/(transactions)/shared-components/transaction-form-layout';
-import { RealEstateTransactionStage } from '@/sanity/schemas/real-estate-transaction.types';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -13,16 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function RealEstateTemplate({ children }: { children: React.ReactNode }) {
-    const searchParams = useSearchParams();
-    const stage = searchParams.get('stage') as RealEstateTransactionStage | null;
-
     return (
         <section>
             {/* TODO: Add skeleton loading for the form */}
             <Suspense fallback={<p>Loading form...</p>}>
-                <TransactionFormLayout type='real-estate' stage={stage}>
-                    {children}
-                </TransactionFormLayout>
+                <TransactionFormLayout type='real-estate'>{children}</TransactionFormLayout>
             </Suspense>
         </section>
     );
