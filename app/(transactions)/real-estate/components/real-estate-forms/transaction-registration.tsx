@@ -1,147 +1,162 @@
-import Form from '@/app/components/form-components/form';
-import NumberInputField from '@/app/components/form-components/number-input-field';
+'use client';
+
+import { transactionService } from '@/app/api/transactions/transaction-services';
 import SectionHeader from '@/app/components/form-components/section-header';
+import SelectInputField from '@/app/components/form-components/select-input-field';
 import { Toaster } from '@/components/ui/sonner';
-import { TransactionRegistration } from '@/sanity/schemas/real-estate-transaction.types';
+import {
+    AddPropertyInformation,
+    RealEstateTransaction,
+    RealEstateTransactionStage,
+    TransactionRegistration,
+    transactionRegistrationTypeList,
+} from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import OpenEscrowListingForm from './trasaction-registration/open-escrow-listing';
 
+// FIXME: date is set as string in sanity. will have to do extra checks ourselves here
 const formSchema: z.ZodType<TransactionRegistration> = z.object({
-    transactionType: z.string(),
-    newListingSale: z.object({
-        // FIXME: date is set as string in sanity. will have to do extra checks ourselves here
-        listingDate: z.string(),
-        expirationDate: z.string(),
-        mlsNumber: z.number(),
-        listingPrice: z.number(),
-        listingOfficeCompPercentage: z.number(),
-        listingOfficeCompAmount: z.number(),
-        sellersFirstName: z.string(),
-        sellersLastName: z.string(),
-        sellersEmailAddress: z.string(),
-        specialInstructions: z.string(),
-    }),
+    transactionRegistrationType: z.enum(
+        ['newListingSale', 'newListingLease', 'openEscrowSale', 'openEscrowListing'],
+        {
+            errorMap: () => ({ message: 'This field is required' }),
+        },
+    ),
+    // newListingSale: z.object({
+    //     listingDate: z.string(),
+    //     expirationDate: z.string(),
+    //     mlsNumber: z.number(),
+    //     listingPrice: z.number(),
+    //     listingOfficeCompPercentage: z.number(),
+    //     listingOfficeCompAmount: z.number(),
+    //     sellersFirstName: z.string(),
+    //     sellersLastName: z.string(),
+    //     sellersEmailAddress: z.string(),
+    //     specialInstructions: z.string(),
+    // }),
+    // newListingLease: z.object({
+    //     listingDate: z.string(),
+    //     expirationDate: z.string(),
+    //     hello: z.string(),
+    // }),
 });
+
 export type FormSchema = z.infer<typeof formSchema>;
 
-export default function TransactionRegistrationForm() {
+type Props = {
+    stage?: RealEstateTransactionStage | null;
+    transactionData: RealEstateTransaction;
+};
+
+export default function TransactionRegistrationForm(props: Props) {
+    const { stage, transactionData } = props;
     const router = useRouter();
 
-    // const [success, setSuccess] = useState(false);
-    // const [loading, setLoading] = useState(false);
+    // TODO: prevent form from being submitted when loading
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const methods = useForm();
+    function fetchForm(): FormSchema {
+        const defaultFormValues: FormSchema = {
+            transactionRegistrationType: undefined,
+            // agentAOR: '',
+            // propertyAddress: '',
+            // city: '',
+            // state: '',
+            // zipcode: '',
+            // clientEmail: '',
+            // clientFirstName: '',
+            // clientMiddleName: '',
+            // clientLastName: '',
+            // propertyType: '',
+            // transactionType: '',
+            // primaryAgent: '',
+            // coopAgent1: '',
+            // coopAgent2: '',
+        };
+
+        const newData = { ...defaultFormValues, ...transactionData?.addPropertyInformation };
+
+        return transactionData ? newData : defaultFormValues;
+    }
 
     const {
         register,
+        handleSubmit,
+        control,
+        watch,
         formState: { errors },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
+        defaultValues: fetchForm(),
     });
 
-    function onSubmit() {
-        toast.loading('Loading...');
-        toast.success('Successfully updated');
+    const methods = useForm<FormSchema>();
+
+    const transactionRegistrationType = watch('transactionRegistrationType');
+
+    async function onSave(formData: FieldValues) {
+        if (transactionData) {
+            const data = {
+                ...transactionData,
+                addPropertyInformation: { ...formData } as AddPropertyInformation,
+            };
+            toast.promise(
+                async () => {
+                    const res = await transactionService.updateRealEstateTransaction(data);
+                    console.log('printing res from update', res);
+                },
+                {
+                    loading: 'Loading...',
+                    success: () => 'Successfully saved!',
+                    error: 'Error',
+                },
+            );
+        } else {
+            // TODO: add general transaction data like agent name, status, and stage here
+            toast.promise(
+                async () => {
+                    const res = await transactionService.createRealEstateTransaction(
+                        formData as AddPropertyInformation,
+                    );
+
+                    router.push(
+                        `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
+                    );
+                    // router.push(`/real-estate/transaction/${res._id}`);
+                },
+                {
+                    loading: 'Loading...',
+                    success: () => 'Successfully saved!',
+                    error: 'Error',
+                },
+            );
+        }
     }
 
     return (
-        <FormProvider {...methods}>
-            <Form register={register} onSubmit={onSubmit}>
-                <Toaster richColors />
-                {/* I guess I should do new listing registration - for sale first huh  */}
-                <div className='space-y-12'>
-                    <div className='mb-8'>
-                        <SectionHeader text='Smart-Buy Combo Questionnaire' />
-                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            {/* <SelectInputField */}
-                            {/*     name='smart-buy-1' */}
-                            {/*     label='Is your client interested in assistance with home financing?' */}
-                            {/*     options={[]} */}
-                            {/*     className='col-span-full' */}
-                            {/* /> */}
-                            {/* <SelectInputField */}
-                            {/*     name='smart-buy-2' */}
-                            {/*     label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?' */}
-                            {/*     options={[]} */}
-                            {/*     className='col-span-full' */}
-                            {/* /> */}
-                            {/* <SelectField */}
-                            {/*     name='smart-buy-3' */}
-                            {/*     label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?' */}
-                            {/*     options={[]} */}
-                            {/*     className='col-span-full' */} {/* /> */}
-                            {/* <SelectField */}
-                            {/*     name='smart-buy-4' */}
-                            {/*     label='In your opinion, what are the benefits of closing both real estate and mortage transactions under one roof?' */}
-                            {/*     options={[]} */}
-                            {/*     className='col-span-full' */}
-                            {/* /> */}
-                        </div>
-                    </div>
-
-                    <div className='mb-8'>
-                        <SectionHeader text='Listing Information' />
-                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
-                            {/* TODO: update as date field component */}
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.listingDate').name} */}
-                            {/*     label={'Listing Date'} */}
-                            {/*     className='col-span-2' */}
-                            {/* /> */}
-                            {/* TODO: update as date field component */}
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.expirationDate').name} */}
-                            {/*     label={'Expiration Date'} */}
-                            {/*     className='col-span-2' */}
-                            {/* /> */}
-                            <NumberInputField
-                                name={register('newListingSale.mlsNumber').name}
-                                label='MLS#'
-                                className='col-span-2'
-                            />
-                            <NumberInputField
-                                name={register('newListingSale.listingPrice').name}
-                                label='Listing Price'
-                                className='col-span-2'
-                            />
-                            <NumberInputField
-                                name={register('newListingSale.listingOfficeCompPercentage').name}
-                                label='Listing Office Comp %'
-                                className='col-span-2'
-                            />
-                            <NumberInputField
-                                name={register('newListingSale.listingOfficeCompAmount').name}
-                                label='Listing Office Comp $'
-                                className='col-span-2'
-                            />
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.sellersFirstName').name} */}
-                            {/*     label={"Seller's First Name"} */}
-                            {/*     className='col-span-2' */}
-                            {/* /> */}
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.sellersLastName').name} */}
-                            {/*     label={"Seller's Last Name"} */}
-                            {/*     className='col-span-2' */}
-                            {/* /> */}
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.sellersEmailAddress').name} */}
-                            {/*     label={"Seller's Email Address"} */}
-                            {/*     className='col-span-2' */}
-                            {/* /> */}
-                            {/* TODO: update this to be an email validated input field  */}
-                            {/* <TextInputField */}
-                            {/*     name={register('newListingSale.specialInstructions').name} */}
-                            {/*     label={'Special Instructions'} */}
-                            {/*     className='col-span-full' */}
-                            {/* /> */}
-                        </div>
-                    </div>
+        <>
+            <Toaster richColors />
+            <div className='space-y-12'>
+                <div className='col-span-full mb-8'>
+                    <SectionHeader text={'Transaction Type'} />
+                    <SelectInputField
+                        name={'transactionRegistrationType'}
+                        label={'Transaction Registration Type'}
+                        control={control}
+                        error={errors.transactionRegistrationType}
+                        options={transactionRegistrationTypeList}
+                    />
                 </div>
-            </Form>
-        </FormProvider>
+            </div>
+            {transactionRegistrationType == 'openEscrowListing' && (
+                <OpenEscrowListingForm transactionData={transactionData} />
+            )}
+        </>
     );
 }

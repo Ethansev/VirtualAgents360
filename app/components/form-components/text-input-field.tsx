@@ -40,6 +40,3 @@ export default function TextInputField<T extends FieldValues>(props: Props<T>) {
         </div>
     );
 }
-
-// TextInputField.displayName = 'TextInputField';
-// export default TextInputField;
