@@ -46,20 +46,6 @@ export const realEstateTransactionSchema = defineType({
             },
         }),
 
-        // TODO: define the real estate transaction types
-        // New Listing Transaction - For Sale
-        // New Listing Transaction - For Lease
-        // Open Escrow Registration - Listing
-        // Open Escrow Registration - Sale
-        defineField({
-            name: 'type',
-            title: 'Type',
-            type: 'string',
-            options: {
-                list: [],
-            },
-        }),
-
         defineField({
             name: 'addPropertyInformation',
             title: 'Add Property Information',
@@ -173,18 +159,107 @@ export const realEstateTransactionSchema = defineType({
             name: 'transactionRegistration',
             title: 'Transaction Registration',
             type: 'object',
+            groups: [
+                {
+                    name: 'newListingSale',
+                    title: 'New Listing Sale',
+                    hidden: ({ value }) => value?.transactionRegistrationType !== 'newListingSale',
+                },
+                {
+                    name: 'newListingLease',
+                    title: 'New Listing Lease',
+                    hidden: ({ value }) => value?.transactionRegistrationType !== 'newListingLease',
+                },
+                {
+                    name: 'openEscrowListing',
+                    title: 'Open Escrow Listing',
+                    hidden: ({ value }) =>
+                        value?.transactionRegistrationType !== 'openEscrowListing',
+                },
+                {
+                    name: 'openEscrowSale',
+                    title: 'Open Escrow Sale',
+                    hidden: ({ value }) => value?.transactionRegistrationType !== 'openEscrowSale',
+                },
+            ],
             fields: [
-                // TODO: option of types! make them an enum
+                // TODO: define the real estate transaction types
                 defineField({
-                    name: 'transactionType',
-                    title: 'Transaction Type',
+                    name: 'transactionRegistrationType',
+                    title: 'Transaction Registration Type',
                     type: 'string',
+                    // validation: (Rule) =>
+                    //     Rule.required().error('Transaction Registration type is required'),
+                    group: [
+                        'newListingSale',
+                        'newListingLease',
+                        'openEscrowListing',
+                        'openEscrowSale',
+                    ],
+                    options: {
+                        // TODO: move this list of types to the types file
+                        list: [
+                            {
+                                title: 'New Listing Transaction - For Sale',
+                                value: 'newListingSale',
+                            },
+                            {
+                                title: 'New Listing Transaction - For Lease',
+                                value: 'newListingLease',
+                            },
+                            {
+                                title: 'Open Escrow Registration - Listing',
+                                value: 'openEscrowListing',
+                            },
+                            { title: 'Open Escrow Registration - Sale', value: 'openEscrowSale' },
+                        ],
+                    },
                 }),
 
                 defineField({
                     name: 'newListingSale',
                     title: 'New Listing Sale',
                     type: 'object',
+                    group: 'newListingSale',
+                    hidden: ({ parent }) =>
+                        parent?.transactionRegistrationType !== 'newListingSale',
+                    fields: [
+                        defineField({
+                            name: 'listingDate',
+                            title: 'Listing Date',
+                            type: 'date',
+                            validation: (Rule) => Rule.required().error('Listing Date is required'),
+                        }),
+
+                        defineField({
+                            name: 'expirationDate',
+                            title: 'expirationDate',
+                            type: 'date',
+                        }),
+
+                        defineField({
+                            name: 'mlsNumber',
+                            title: 'MLS Number',
+                            type: 'number',
+                        }),
+                    ],
+                }),
+
+                defineField({
+                    name: 'newListingLease',
+                    title: 'New Listing Lease',
+                    type: 'object',
+                    group: 'newListingLease',
+                    hidden: ({ parent }) =>
+                        parent?.transactionRegistrationType !== 'newListingLease',
+                    // validation: (Rule) =>
+                    //     Rule.custom((newListingLease, context) => {
+                    //         if (context?.document?.transactionRegistration === 'newListingLease') {
+                    //             return 'New Listing Lease is required';
+                    //         }
+                    //
+                    //         return true;
+                    //     }),
                     fields: [
                         defineField({
                             name: 'listingDate',
@@ -203,84 +278,79 @@ export const realEstateTransactionSchema = defineType({
                             title: 'MLS Number',
                             type: 'number',
                         }),
+                    ],
+                }),
+                defineField({
+                    name: 'openEscrowSale',
+                    title: 'Open Escrow Sale',
+                    type: 'object',
+                    group: 'openEscrowSale',
+                    hidden: ({ parent }) =>
+                        parent?.transactionRegistrationType !== 'openEscrowSale',
+                    // validation: (Rule) =>
+                    //     Rule.custom((newListingLease, context) => {
+                    //         if (context?.document?.transactionRegistration === 'newListingLease') {
+                    //             return 'New Listing Lease is required';
+                    //         }
+                    //
+                    //         return true;
+                    //     }),
+                    fields: [
+                        defineField({
+                            name: 'listingDate',
+                            title: 'Listing Date',
+                            type: 'date',
+                        }),
 
                         defineField({
-                            name: 'listingPrice',
-                            title: 'Listing Price',
+                            name: 'expirationDate',
+                            title: 'expirationDate',
+                            type: 'date',
+                        }),
+
+                        defineField({
+                            name: 'mlsNumber',
+                            title: 'MLS Number',
                             type: 'number',
-                        }),
-
-                        defineField({
-                            name: 'listingOfficeCompPercentage',
-                            title: 'Listing Office Comp % ',
-                            type: 'number',
-                        }),
-
-                        defineField({
-                            name: 'listingOfficeCompAmount',
-                            title: 'Listing Office Comp $',
-                            type: 'number',
-                        }),
-
-                        defineField({
-                            name: 'sellersFirstName',
-                            title: "Seller's First Name",
-                            type: 'string',
-                        }),
-
-                        defineField({
-                            name: 'sellersLastName',
-                            title: "Seller's Last Name",
-                            type: 'string',
-                        }),
-
-                        defineField({
-                            name: 'sellersEmailAddress',
-                            title: "Seller's Email Address",
-                            type: 'string',
-                        }),
-
-                        defineField({
-                            name: 'specialInstructions',
-                            title: 'Special Instructions',
-                            type: 'string',
                         }),
                     ],
                 }),
 
-                // defineField({
-                //   name: 'newListingLease',
-                //   title: 'New Listing Lease',
-                //   type: 'object',
-                //   fields: [
-                //     defineField({
-                //       name: '',
-                //       title: '',
-                //       type: '',
-                //     }),
-                //   ],
-                // }),
+                defineField({
+                    name: 'openEscrowListing',
+                    title: 'Open Escrow Listing',
+                    type: 'object',
+                    group: 'openEscrowListing',
+                    hidden: ({ parent }) =>
+                        parent?.transactionRegistrationType !== 'openEscrowListing',
+                    // validation: (Rule) =>
+                    //     Rule.custom((newListingLease, context) => {
+                    //         if (context?.document?.transactionRegistration === 'newListingLease') {
+                    //             return 'New Listing Lease is required';
+                    //         }
+                    //
+                    //         return true;
+                    //     }),
+                    fields: [
+                        defineField({
+                            name: 'listingDate',
+                            title: 'Listing Date',
+                            type: 'date',
+                        }),
 
-                // defineField({
-                //   name: '',
-                //   title: '',
-                //   type: 'string',
-                // }),
-                // defineField({
-                //   name: '',
-                //   title: '',
-                //   type: 'string',
-                // }),
-                // defineField({
-                //   name: '',
-                //   title: '',
-                //   type: 'string',
-                // }),
-                // defineField({
-                //   name: '',
-                //   title: '',
-                //   type: 'string',
-                // }),
+                        defineField({
+                            name: 'expirationDate',
+                            title: 'expirationDate',
+                            type: 'date',
+                        }),
+
+                        defineField({
+                            name: 'mlsNumber',
+                            title: 'MLS Number',
+                            type: 'number',
+                        }),
+                    ],
+                }),
             ],
         }),
 

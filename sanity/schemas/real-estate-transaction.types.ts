@@ -99,9 +99,23 @@ export const agentAOR = [
     { value: 'Other', title: 'Other' },
 ];
 
+export const transactionRegistrationTypeList = [
+    { title: 'New Listing Sale', value: 'newListingSale' },
+    { title: 'New Listing Lease', value: 'newListingLease' },
+    { title: 'Open Escrow Sale', value: 'openEscrowSale' },
+    { title: 'Open Escrow Listing', value: 'openEscrowListing' },
+];
+
 export type RealEstateTransaction = SanityValues['realEstateTransaction'];
 export type AddPropertyInformation = NonNullable<RealEstateTransaction['addPropertyInformation']>;
+//
+// TODO: finish typings for all types of transaction registration
 export type TransactionRegistration = NonNullable<RealEstateTransaction['transactionRegistration']>;
+export type NewListingSale = NonNullable<TransactionRegistration['newListingSale']>;
+export type NewListingLease = NonNullable<TransactionRegistration['newListingLease']>;
+export type OpenEscrowSale = NonNullable<TransactionRegistration['openEscrowSale']>;
+export type OpenEscrowListing = NonNullable<TransactionRegistration['openEscrowListing']>;
+
 export type AddChange = NonNullable<RealEstateTransaction['addChange']>;
 export type EDMDocumentUpload = NonNullable<RealEstateTransaction['edmDocumentUpload']>;
 export type InstructionToPayCommission = NonNullable<
