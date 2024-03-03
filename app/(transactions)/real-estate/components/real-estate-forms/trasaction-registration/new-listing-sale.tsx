@@ -1,23 +1,69 @@
 import { transactionService } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
+import SelectInputField from '@/app/components/form-components/select-input-field';
 import TextInputField from '@/app/components/form-components/text-input-field';
+import {
+    numberValidation,
+    percentageValidation,
+    priceValidation,
+    stringWithMinLength,
+} from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
     NewListingSale,
     RealEstateTransaction,
     RealEstateTransactionStage,
     TransactionRegistration,
+    smartBuyComboOptions,
+    smartBuyFourthOptions,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+// export const propertyTypeList = [
+//     'sfr',
+//     'condo',
+//     'pud',
+//     'townHome',
+//     '2-4Units',
+//     'residentialIncome',
+//     'highRiseCondo',
+//     'commercial',
+//     'manufactured',
+//     'vacantLot',
+//     'other',
+// ] as const;
+
+const smartBuyList = ['yes', 'no'] as const;
+
 const formSchema: z.ZodType<NewListingSale> = z.object({
-    listingDate: z.string(),
-    expirationDate: z.string(),
-    mlsNumber: z.number(),
+    smartBuyCombo: z.object({
+        first: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        second: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        third: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        fourth: z.enum(['one', 'two', 'three', 'four'], {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+    }),
+    listingDate: stringWithMinLength(),
+    expirationDate: stringWithMinLength(),
+    mlsNumber: numberValidation(),
+    listingPrice: priceValidation(),
+    listingOfficeCompPercentage: percentageValidation(),
+    listingOfficeCompAmount: priceValidation(),
+    sellerFirstName: stringWithMinLength(),
+    sellerLastName: stringWithMinLength(),
+    sellerEmail: stringWithMinLength(),
+    specialInstructions: z.string(),
 });
 
 export type FormSchema = z.infer<typeof formSchema>;
@@ -43,14 +89,34 @@ export default function NewListingSaleForm(props: Props) {
     const methods = useForm<FormSchema>();
 
     function fetchForm(): FormSchema {
-        return {
+        const defaultFormValues = {
+            // Not sure why I have to do it like this? Maybe because due to nesting object
+            smartBuyCombo: {
+                first: '' as 'Yes' | 'No',
+                second: '' as 'Yes' | 'No',
+                third: '' as 'Yes' | 'No',
+                fourth: '' as 'one' | 'two' | 'three' | 'four',
+            },
             listingDate: '',
             expirationDate: '',
-            mlsNumber: undefined,
+            mlsNumber: '',
+            listingPrice: '',
+            listingOfficeCompPercentage: '',
+            listingOfficeCompAmount: '',
+            sellerFirstName: '',
+            sellerLastName: '',
+            sellerEmail: '',
+            specialInstructions: '',
         };
+
+        const newData = {
+            ...defaultFormValues,
+            ...transactionData?.transactionRegistration?.newListingSale,
+        };
+
+        return transactionData ? newData : defaultFormValues;
     }
 
-    // TODO: pass this to parent callback so we could save
     async function onSave(formData: FieldValues) {
         console.log('trying to save...');
         const data = {
@@ -80,16 +146,54 @@ export default function NewListingSaleForm(props: Props) {
                 <Toaster richColors />
                 <div className='space-y-12'>
                     <div className='mb-8'>
-                        <SectionHeader text={'New Listing Sale'} />
+                        {/* <SectionHeader text={'New Listing Sale'} /> */}
+                        <SectionHeader text={'Smart-Buy Combo Questionnaire'} />
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+                            <SelectInputField
+                                name='smartBuyCombo.first'
+                                label='Is your client interested in assistance with home financing?'
+                                control={control}
+                                error={errors.smartBuyCombo?.first}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.second'
+                                label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?'
+                                control={control}
+                                error={errors.smartBuyCombo?.second}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.third'
+                                label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?'
+                                control={control}
+                                error={errors.smartBuyCombo?.third}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.fourth'
+                                label='In your opinion, what are the benefits of closing both real estate and mortgage transactions under one roof?'
+                                control={control}
+                                error={errors.smartBuyCombo?.fourth}
+                                className='col-span-full'
+                                options={smartBuyFourthOptions}
+                            />
+                        </div>
+                    </div>
+
+                    <div className='mb-8'>
+                        <SectionHeader text={'Listing Information'} />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
                             <TextInputField
                                 name='listingDate'
                                 label='Listing Date'
                                 control={control}
                                 error={errors.listingDate}
-                                className='col-span-full'
+                                className='col-span-2'
                             />
-
                             <TextInputField
                                 name='expirationDate'
                                 label='Expiration Date'
@@ -97,13 +201,65 @@ export default function NewListingSaleForm(props: Props) {
                                 error={errors.expirationDate}
                                 className='sm:col-span-2'
                             />
-
                             <TextInputField
                                 name='mlsNumber'
                                 label='MLS Number'
                                 control={control}
                                 error={errors.mlsNumber}
                                 className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingPrice'
+                                label='Listing Price'
+                                control={control}
+                                error={errors.listingPrice}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingOfficeCompPercentage'
+                                label='Listing Office Compensation %'
+                                control={control}
+                                error={errors.listingOfficeCompPercentage}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingOfficeCompAmount'
+                                label='Listing Office Compensation $'
+                                control={control}
+                                error={errors.listingOfficeCompAmount}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='sellerFirstName'
+                                label="Seller's First Name"
+                                control={control}
+                                error={errors.sellerFirstName}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='sellerLastName'
+                                label="Seller's Last Name"
+                                control={control}
+                                error={errors.sellerLastName}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='sellerEmail'
+                                label="Seller's Email Address"
+                                control={control}
+                                error={errors.sellerEmail}
+                                className='sm:col-span-2'
+                            />
+
+                            {/* "A signed listing agreement has been obtained by agent and forwarded to ASC (checkbox)" */}
+                            {/* Listing Agreement (file upload) */}
+
+                            <TextInputField
+                                name='specialInstructions'
+                                label='Special Instructions'
+                                control={control}
+                                error={errors.specialInstructions}
+                                className='col-span-full'
                             />
                         </div>
                     </div>

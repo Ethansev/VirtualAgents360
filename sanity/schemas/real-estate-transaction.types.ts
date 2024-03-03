@@ -106,6 +106,31 @@ export const transactionRegistrationTypeList = [
     { title: 'Open Escrow Listing', value: 'openEscrowListing' },
 ];
 
+// Smart Buy Combo
+export const smartBuyComboOptions = [
+    { title: 'Yes', value: 'yes' },
+    { title: 'No', value: 'no' },
+];
+
+export const smartBuyFourthOptions = [
+    {
+        title: 'The ability to manage and control existing real estate transactions',
+        value: 'one',
+    },
+    {
+        title: 'Additional Compensation',
+        value: 'two',
+    },
+    {
+        title: 'Higher retention of clients by being able to offer refinance and equity loan services',
+        value: 'three',
+    },
+    {
+        title: 'All of the above',
+        value: 'four',
+    },
+];
+
 export type RealEstateTransaction = SanityValues['realEstateTransaction'];
 export type AddPropertyInformation = NonNullable<RealEstateTransaction['addPropertyInformation']>;
 //

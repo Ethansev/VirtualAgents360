@@ -54,6 +54,7 @@ export const transactionService = {
         try {
             const res = await client.patch(formData._id).set(formData).commit();
             console.log('here is the sanity response', res);
+            return res;
         } catch (err) {
             console.error(err);
             throw err;

@@ -1,11 +1,9 @@
 'use client';
 
-import { transactionService } from '@/app/api/transactions/transaction-services';
 import SectionHeader from '@/app/components/form-components/section-header';
 import SelectInputField from '@/app/components/form-components/select-input-field';
 import { Toaster } from '@/components/ui/sonner';
 import {
-    AddPropertyInformation,
     RealEstateTransaction,
     RealEstateTransactionStage,
     TransactionRegistration,
@@ -14,36 +12,23 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import NewListingLeaseForm from './trasaction-registration/new-listing-lease';
+import NewListingSaleForm from './trasaction-registration/new-listing-sale';
 import OpenEscrowListingForm from './trasaction-registration/open-escrow-listing';
+import OpenEscrowSaleForm from './trasaction-registration/open-escrow-sale';
 
-// FIXME: date is set as string in sanity. will have to do extra checks ourselves here
+const transactionRegistrationTypes = [
+    'newListingSale',
+    'newListingLease',
+    'openEscrowSale',
+    'openEscrowListing',
+] as const;
 const formSchema: z.ZodType<TransactionRegistration> = z.object({
-    transactionRegistrationType: z.enum(
-        ['newListingSale', 'newListingLease', 'openEscrowSale', 'openEscrowListing'],
-        {
-            errorMap: () => ({ message: 'This field is required' }),
-        },
-    ),
-    // newListingSale: z.object({
-    //     listingDate: z.string(),
-    //     expirationDate: z.string(),
-    //     mlsNumber: z.number(),
-    //     listingPrice: z.number(),
-    //     listingOfficeCompPercentage: z.number(),
-    //     listingOfficeCompAmount: z.number(),
-    //     sellersFirstName: z.string(),
-    //     sellersLastName: z.string(),
-    //     sellersEmailAddress: z.string(),
-    //     specialInstructions: z.string(),
-    // }),
-    // newListingLease: z.object({
-    //     listingDate: z.string(),
-    //     expirationDate: z.string(),
-    //     hello: z.string(),
-    // }),
+    transactionRegistrationType: z.enum(transactionRegistrationTypes, {
+        errorMap: () => ({ message: 'This field is required' }),
+    }),
 });
 
 export type FormSchema = z.infer<typeof formSchema>;
@@ -62,25 +47,13 @@ export default function TransactionRegistrationForm(props: Props) {
     const [loading, setLoading] = useState(false);
 
     function fetchForm(): FormSchema {
+        console.log('printing transaction data: ', transactionData);
         const defaultFormValues: FormSchema = {
-            transactionRegistrationType: undefined,
-            // agentAOR: '',
-            // propertyAddress: '',
-            // city: '',
-            // state: '',
-            // zipcode: '',
-            // clientEmail: '',
-            // clientFirstName: '',
-            // clientMiddleName: '',
-            // clientLastName: '',
-            // propertyType: '',
-            // transactionType: '',
-            // primaryAgent: '',
-            // coopAgent1: '',
-            // coopAgent2: '',
+            // @ts-ignore
+            transactionRegistrationType: '',
         };
 
-        const newData = { ...defaultFormValues, ...transactionData?.addPropertyInformation };
+        const newData = { ...defaultFormValues, ...transactionData?.transactionRegistration };
 
         return transactionData ? newData : defaultFormValues;
     }
@@ -100,42 +73,55 @@ export default function TransactionRegistrationForm(props: Props) {
 
     const transactionRegistrationType = watch('transactionRegistrationType');
 
-    async function onSave(formData: FieldValues) {
-        if (transactionData) {
-            const data = {
-                ...transactionData,
-                addPropertyInformation: { ...formData } as AddPropertyInformation,
-            };
-            toast.promise(
-                async () => {
-                    const res = await transactionService.updateRealEstateTransaction(data);
-                    console.log('printing res from update', res);
-                },
-                {
-                    loading: 'Loading...',
-                    success: () => 'Successfully saved!',
-                    error: 'Error',
-                },
-            );
-        } else {
-            // TODO: add general transaction data like agent name, status, and stage here
-            toast.promise(
-                async () => {
-                    const res = await transactionService.createRealEstateTransaction(
-                        formData as AddPropertyInformation,
-                    );
+    // async function onSave(formData: FieldValues) {
+    //     if (transactionData) {
+    //         const data = {
+    //             ...transactionData,
+    //             addPropertyInformation: { ...formData } as AddPropertyInformation,
+    //         };
+    //         toast.promise(
+    //             async () => {
+    //                 const res = await transactionService.updateRealEstateTransaction(data);
+    //                 console.log('printing res from update', res);
+    //             },
+    //             {
+    //                 loading: 'Loading...',
+    //                 success: () => 'Successfully saved!',
+    //                 error: 'Error',
+    //             },
+    //         );
+    //     } else {
+    //         // TODO: add general transaction data like agent name, status, and stage here
+    //         toast.promise(
+    //             async () => {
+    //                 const res = await transactionService.createRealEstateTransaction(
+    //                     formData as AddPropertyInformation,
+    //                 );
+    //
+    //                 router.push(
+    //                     `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
+    //                 );
+    //                 // router.push(`/real-estate/transaction/${res._id}`);
+    //             },
+    //             {
+    //                 loading: 'Loading...',
+    //                 success: () => 'Successfully saved!',
+    //                 error: 'Error',
+    //             },
+    //         );
+    //     }
+    // }
 
-                    router.push(
-                        `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
-                    );
-                    // router.push(`/real-estate/transaction/${res._id}`);
-                },
-                {
-                    loading: 'Loading...',
-                    success: () => 'Successfully saved!',
-                    error: 'Error',
-                },
-            );
+    function renderForm() {
+        switch (transactionRegistrationType) {
+            case 'newListingSale':
+                return <NewListingSaleForm transactionData={transactionData} />;
+            case 'newListingLease':
+                return <NewListingLeaseForm transactionData={transactionData} />;
+            case 'openEscrowListing':
+                return <OpenEscrowListingForm transactionData={transactionData} />;
+            case 'openEscrowSale':
+                return <OpenEscrowSaleForm transactionData={transactionData} />;
         }
     }
 
@@ -154,9 +140,7 @@ export default function TransactionRegistrationForm(props: Props) {
                     />
                 </div>
             </div>
-            {transactionRegistrationType == 'openEscrowListing' && (
-                <OpenEscrowListingForm transactionData={transactionData} />
-            )}
+            {renderForm()}
         </>
     );
 }

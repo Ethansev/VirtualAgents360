@@ -2,6 +2,12 @@ import { transactionService } from '@/app/api/transactions/transaction-services'
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import TextInputField from '@/app/components/form-components/text-input-field';
+import {
+    numberValidation,
+    percentageValidation,
+    priceValidation,
+    stringWithMinLength,
+} from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
     NewListingLease,
@@ -14,7 +20,19 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema: z.ZodType<NewListingLease> = z.object({});
+const formSchema: z.ZodType<NewListingLease> = z.object({
+    listingDate: stringWithMinLength(),
+    expirationDate: stringWithMinLength(),
+    mlsNumber: numberValidation(),
+    listingPrice: priceValidation(),
+    listingOfficeCompPercentage: percentageValidation(),
+    listingOfficeCompAmount: priceValidation(),
+    ownerFirstName: stringWithMinLength(),
+    ownerLastName: stringWithMinLength(),
+    ownerEmail: stringWithMinLength(),
+    receivedListingAgreement: z.boolean(),
+    specialInstructions: z.string(),
+});
 
 export type FormSchema = z.infer<typeof formSchema>;
 
@@ -38,11 +56,26 @@ export default function NewListingLeaseForm(props: Props) {
     const methods = useForm<FormSchema>();
 
     function fetchForm(): FormSchema {
-        return {
+        const defaultFormValues = {
             listingDate: '',
             expirationDate: '',
-            mlsNumber: undefined,
+            mlsNumber: '',
+            listingPrice: '',
+            listingOfficeCompPercentage: '',
+            listingOfficeCompAmount: '',
+            ownerFirstName: '',
+            ownerLastName: '',
+            ownerEmail: '',
+            receivedListingAgreement: false,
+            specialInstructions: '',
         };
+
+        const newData = {
+            ...defaultFormValues,
+            ...transactionData?.transactionRegistration?.newListingLease,
+        };
+
+        return transactionData ? newData : defaultFormValues;
     }
     //
     // TODO: pass this to parent callback so we could save
@@ -94,7 +127,7 @@ export default function NewListingLeaseForm(props: Props) {
                                 label='Listing Date'
                                 control={control}
                                 error={errors.listingDate}
-                                className='col-span-full'
+                                className='sm:col-span-2'
                             />
 
                             <TextInputField
@@ -111,6 +144,56 @@ export default function NewListingLeaseForm(props: Props) {
                                 control={control}
                                 error={errors.mlsNumber}
                                 className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingPrice'
+                                label='Listing Price'
+                                control={control}
+                                error={errors.listingPrice}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingOfficeCompPercentage'
+                                label='Listing Office Comp %'
+                                control={control}
+                                error={errors.listingOfficeCompPercentage}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='listingOfficeCompAmount'
+                                label='Listing Office Comp $'
+                                control={control}
+                                error={errors.listingOfficeCompAmount}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='ownerFirstName'
+                                label="Owner's First Name"
+                                control={control}
+                                error={errors.ownerFirstName}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='ownerLastName'
+                                label="Owner's Last Name"
+                                control={control}
+                                error={errors.ownerLastName}
+                                className='sm:col-span-2'
+                            />
+                            <TextInputField
+                                name='ownerEmail'
+                                label="Owner's Email Address"
+                                control={control}
+                                error={errors.ownerEmail}
+                                className='sm:col-span-2'
+                            />
+                            {/* TODO: receivedListingAgreement boolean checkbox should go here */}
+                            <TextInputField
+                                name='specialInstructions'
+                                label='Special Instructions'
+                                control={control}
+                                error={errors.specialInstructions}
+                                className='col-span-full'
                             />
                         </div>
                     </div>

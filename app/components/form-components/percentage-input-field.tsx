@@ -14,10 +14,9 @@ interface Props<T extends FieldValues> extends UseControllerProps<T> {
     label: string;
     className?: string;
     control: Control<T>;
-    type: price | integer;
 }
 
-export default function NumberInputField<T extends FieldValues>(props: Props<T>) {
+export default function PercentageInputField<T extends FieldValues>(props: Props<T>) {
     const { name, error, label, className, control } = props;
 
     return (
@@ -29,8 +28,11 @@ export default function NumberInputField<T extends FieldValues>(props: Props<T>)
                 render={({ field }) => (
                     <input
                         type='number'
+                        step='0.01'
+                        min='0'
+                        max='100'
                         {...field}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
                         className={twMerge(
                             error ? 'ring-red-500' : 'ring-gray-300',
                             'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',

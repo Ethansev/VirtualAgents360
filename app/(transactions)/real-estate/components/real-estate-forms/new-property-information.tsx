@@ -106,6 +106,9 @@ export default function NewPropertyInformationForm(props: Props) {
                 async () => {
                     const res = await transactionService.updateRealEstateTransaction(data);
                     console.log('printing res from update', res);
+                    router.push(
+                        `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
+                    );
                 },
                 {
                     loading: 'Loading...',
