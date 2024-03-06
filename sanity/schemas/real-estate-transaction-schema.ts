@@ -526,11 +526,11 @@ export const realEstateTransactionSchema = defineType({
                                         ],
                                     },
                                 }),
-                                defineField({
-                                    name: 'fifth',
-                                    title: 'If representing both the seller and the buyere, select "Dual Representation"',
-                                    type: 'boolean',
-                                }),
+                                // defineField({
+                                //     name: 'fifth',
+                                //     title: 'If representing both the seller and the buyere, select "Dual Representation"',
+                                //     type: 'boolean',
+                                // }),
                             ],
                         }),
 
@@ -703,21 +703,21 @@ export const realEstateTransactionSchema = defineType({
                                     name: 'first',
                                     title: 'Is your client interested in assistance with home financing?',
                                     type: 'string',
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'second',
                                     title: 'Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?',
                                     type: 'string',
                                     // TODO: update this options list
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'third',
                                     title: 'Are you aware that the Smart-Buy-Combo program offers the benefit of additional compensation?',
                                     type: 'string',
                                     // TODO: update this options list
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'fourth',
@@ -725,31 +725,14 @@ export const realEstateTransactionSchema = defineType({
                                     type: 'string',
                                     // TODO: update this options list
                                     options: {
-                                        list: [
-                                            {
-                                                title: 'The ability to manage and control existing real estate transactions',
-                                                value: 'one',
-                                            },
-                                            {
-                                                title: 'Additional Compensation',
-                                                value: 'two',
-                                            },
-                                            {
-                                                title: 'Higher retention of clients by being able to offer refinance and equity loan services',
-                                                value: 'three',
-                                            },
-                                            {
-                                                title: 'All of the above',
-                                                value: 'fourth',
-                                            },
-                                        ],
+                                        list: smartBuyFourthOptions,
                                     },
                                 }),
-                                defineField({
-                                    name: 'fifth',
-                                    title: 'If representing both the seller and the buyere, select "Dual Representation"',
-                                    type: 'boolean',
-                                }),
+                                // defineField({
+                                //     name: 'fifth',
+                                //     title: 'If representing both the seller and the buyer, select "Dual Representation"',
+                                //     type: 'string',
+                                // }),
                             ],
                         }),
 
@@ -767,7 +750,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'salePrice',
                             title: 'Sale Price $',
-                            type: 'number',
+                            type: 'string',
                         }),
 
                         defineField({
@@ -788,7 +771,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'sellingPhone',
                             title: 'Telephone',
-                            type: 'number',
+                            type: 'string',
                         }),
 
                         defineField({
@@ -809,7 +792,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'escrowPhone',
                             title: 'Telephone',
-                            type: 'number',
+                            type: 'string',
                         }),
 
                         defineField({
@@ -830,7 +813,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'titlePhone',
                             title: 'Telephone',
-                            type: 'number',
+                            type: 'string',
                         }),
                         defineField({
                             name: 'specialInstructions',

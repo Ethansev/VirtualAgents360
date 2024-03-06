@@ -14,7 +14,7 @@ interface Props<T extends FieldValues> extends UseControllerProps<T> {
     label: string;
     className?: string;
     control: Control<T>;
-    type: price | integer;
+    // type: price | integer;
 }
 
 export default function NumberInputField<T extends FieldValues>(props: Props<T>) {

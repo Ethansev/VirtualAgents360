@@ -107,6 +107,8 @@ export const transactionRegistrationTypeList = [
 ];
 
 // Smart Buy Combo
+export const smartBuyList = ['yes', 'no'] as const;
+
 export const smartBuyComboOptions = [
     { title: 'Yes', value: 'yes' },
     { title: 'No', value: 'no' },

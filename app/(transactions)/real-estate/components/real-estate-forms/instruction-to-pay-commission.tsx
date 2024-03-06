@@ -1,13 +1,13 @@
 import Form from '@/app/components/form-components/form';
 import { Toaster } from '@/components/ui/sonner';
-import { TransactionRegistration } from '@/sanity/schemas/real-estate-transaction.types';
+import { InstructionToPayCommission } from '@/sanity/schemas/real-estate-transaction.types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema: z.ZodType<TransactionRegistration> = z.object({});
+const formSchema: z.ZodType<InstructionToPayCommission> = z.object({});
 export type FormSchema = z.infer<typeof formSchema>;
 
 export default function InstructionToPayCommissionForm() {

@@ -17,6 +17,7 @@ import {
     TransactionRegistration,
     smartBuyComboOptions,
     smartBuyFourthOptions,
+    smartBuyList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
@@ -36,8 +37,6 @@ import { z } from 'zod';
 //     'vacantLot',
 //     'other',
 // ] as const;
-
-const smartBuyList = ['yes', 'no'] as const;
 
 const formSchema: z.ZodType<NewListingSale> = z.object({
     smartBuyCombo: z.object({

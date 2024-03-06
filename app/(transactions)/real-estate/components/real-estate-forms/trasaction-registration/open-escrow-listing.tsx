@@ -2,16 +2,16 @@
 
 import { transactionService } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
-import NumberInputField from '@/app/components/form-components/number-input-field';
 import SectionHeader from '@/app/components/form-components/section-header';
-import TextInputField from '@/app/components/form-components/text-input-field';
-import { stringWithMinLength } from '@/app/utils/utils';
+import SelectInputField from '@/app/components/form-components/select-input-field';
+import { numberValidation, stringWithMinLength } from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
     OpenEscrowListing,
     RealEstateTransaction,
     RealEstateTransactionStage,
     TransactionRegistration,
+    smartBuyList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -20,12 +20,36 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema: z.ZodType<OpenEscrowListing> = z.object({
-    listingDate: stringWithMinLength(),
-    expirationDate: stringWithMinLength(),
-    mlsNumber: z.number({
-        // required_error: 'bro what are you doing',
-        // invalid_type_error: 'Hello this is an invalid type error',
+    smartBuyCombo: z.object({
+        first: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        second: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        third: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        fourth: z.enum(['one', 'two', 'three', 'four'], {
+            errorMap: () => ({ message: 'Required' }),
+        }),
     }),
+    openEscrowDate: stringWithMinLength(),
+    estimatedClosingDate: stringWithMinLength(),
+    salePrice: numberValidation(),
+    sellingOffice: stringWithMinLength(),
+    sellingAgent: stringWithMinLength(),
+    sellingEmail: stringWithMinLength(),
+    sellingPhone: stringWithMinLength(), // TODO: create phone validation util
+    escrowCompany: stringWithMinLength(),
+    escrowOfficer: stringWithMinLength(),
+    escrowEmail: stringWithMinLength(),
+    escrowPhone: stringWithMinLength(),
+    titleCompany: stringWithMinLength(),
+    titleOfficer: stringWithMinLength(),
+    titleEmail: stringWithMinLength(),
+    titlePhone: stringWithMinLength(),
+    specialInstructions: stringWithMinLength(),
 });
 
 export type FormSchema = z.infer<typeof formSchema>;
@@ -53,12 +77,32 @@ export default function OpenEscrowListingForm(props: Props) {
 
     // TODO: fetch the form data from the transactionData
     function fetchForm() {
-        return {
-            listingData: '',
+        const defaultFormValues = {
+            // Not sure why I have to do it like this? Maybe because due to nesting object
+            smartBuyCombo: {
+                first: '' as 'Yes' | 'No',
+                second: '' as 'Yes' | 'No',
+                third: '' as 'Yes' | 'No',
+                fourth: '' as 'one' | 'two' | 'three' | 'four',
+            },
+            listingDate: '',
             expirationDate: '',
-            mlsNumber: undefined,
+            mlsNumber: '',
+            listingPrice: '',
+            listingOfficeCompPercentage: '',
+            listingOfficeCompAmount: '',
+            sellerFirstName: '',
+            sellerLastName: '',
+            sellerEmail: '',
+            specialInstructions: '',
         };
-        // fetch the form here
+
+        const newData = {
+            ...defaultFormValues,
+            ...transactionData?.transactionRegistration?.openEscrowListing,
+        };
+
+        return transactionData ? newData : defaultFormValues;
     }
 
     // TODO: pass this to parent callback so we could save
@@ -90,35 +134,43 @@ export default function OpenEscrowListingForm(props: Props) {
                 <Toaster richColors />
                 <div className='space-y-12'>
                     <div className='col-span-full mb-8'>
-                        <SectionHeader text={'LRFO Requirement'} />
-                        <TextInputField
-                            name='listingDate'
-                            label='Listing Date'
+                        <SectionHeader text={'Smart Buy Combo'} />
+                        <SelectInputField
+                            name='smartBuyCombo.first'
+                            label='Is your client interested in assistance with home financing?'
                             control={control}
-                            error={errors.listingDate}
+                            error={errors.smartBuyCombo?.first}
                             className='col-span-full'
-                        />
-
-                        <TextInputField
-                            name='expirationDate'
-                            label='Expiration Date'
-                            control={control}
-                            error={errors.expirationDate}
-                            className='sm:col-span-2'
-                        />
-
-                        <NumberInputField
-                            name='mlsNumber'
-                            label='MLS Number'
-                            control={control}
-                            error={errors.mlsNumber}
-                            className='sm:col-span-2'
+                            options={[]}
                         />
                     </div>
-                    {/* <div className='mb-8'> */}
-                    {/*     <SectionHeader text={'Agent Information'} />{' '} */}
-                    {/*     <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'></div> */}
-                    {/* </div> */}
+
+                    <div className='col-span-full mb-8'>
+                        <SectionHeader text={'LRFO Requirement'} />
+                        {/* <TextInputField */}
+                        {/*     name='listingDate' */}
+                        {/*     label='Listing Date' */}
+                        {/*     control={control} */}
+                        {/*     error={errors.listingDate} */}
+                        {/*     className='col-span-full' */}
+                        {/* /> */}
+                        {/**/}
+                        {/* <TextInputField */}
+                        {/*     name='expirationDate' */}
+                        {/*     label='Expiration Date' */}
+                        {/*     control={control} */}
+                        {/*     error={errors.expirationDate} */}
+                        {/*     className='sm:col-span-2' */}
+                        {/* /> */}
+                        {/**/}
+                        {/* <NumberInputField */}
+                        {/*     name='mlsNumber' */}
+                        {/*     label='MLS Number' */}
+                        {/*     control={control} */}
+                        {/*     error={errors.mlsNumber} */}
+                        {/*     className='sm:col-span-2' */}
+                        {/* /> */}
+                    </div>
                 </div>
 
                 <div className='mt-6 flex items-center justify-end gap-x-6'>
