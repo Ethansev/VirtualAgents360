@@ -1,6 +1,9 @@
 'use client';
 
-import { transactionService } from '@/app/api/transactions/transaction-services';
+import {
+    createRealEstateTransaction,
+    updateRealEstateTransaction,
+} from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import SelectInputField from '@/app/components/form-components/select-input-field';
@@ -104,7 +107,7 @@ export default function NewPropertyInformationForm(props: Props) {
             };
             toast.promise(
                 async () => {
-                    const res = await transactionService.updateRealEstateTransaction(data);
+                    const res = await updateRealEstateTransaction(data);
                     console.log('printing res from update', res);
                     router.push(
                         `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
@@ -120,19 +123,21 @@ export default function NewPropertyInformationForm(props: Props) {
             // TODO: add general transaction data like agent name, status, and stage here
             toast.promise(
                 async () => {
-                    const res = await transactionService.createRealEstateTransaction(
-                        formData as AddPropertyInformation,
-                    );
+                    try {
+                        const res = await createRealEstateTransaction(newTransaction);
 
-                    router.push(
-                        `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
-                    );
+                        router.push(
+                            `/real-estate/transaction/${res._id}/?stage=transactionRegistration`,
+                        );
+                    } catch (err) {
+                        console.log('Error during createRealEstateTransaction request: ', err);
+                    }
                     // router.push(`/real-estate/transaction/${res._id}`);
                 },
                 {
                     loading: 'Loading...',
                     success: () => 'Successfully saved!',
-                    error: 'Error',
+                    error: 'Error occurred while creating the new transaction',
                 },
             );
         }

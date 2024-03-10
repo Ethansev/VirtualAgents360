@@ -1,6 +1,6 @@
 'use client';
 
-import { transactionService } from '@/app/api/transactions/transaction-services';
+import { updateRealEstateTransaction } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import SelectInputField from '@/app/components/form-components/select-input-field';
@@ -117,7 +117,7 @@ export default function OpenEscrowListingForm(props: Props) {
         };
         toast.promise(
             async () => {
-                const res = await transactionService.updateRealEstateTransaction(data);
+                const res = await updateRealEstateTransaction(data);
                 console.log('printing res from update', res);
             },
             {

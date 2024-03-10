@@ -1,4 +1,4 @@
-import { transactionService } from '@/app/api/transactions/transaction-services';
+import { updateRealEstateTransaction } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
 import TextInputField from '@/app/components/form-components/text-input-field';
@@ -90,7 +90,7 @@ export default function NewListingLeaseForm(props: Props) {
         };
         toast.promise(
             async () => {
-                const res = await transactionService.updateRealEstateTransaction(data);
+                const res = await updateRealEstateTransaction(data);
                 console.log('printing res from update', res);
             },
             {
