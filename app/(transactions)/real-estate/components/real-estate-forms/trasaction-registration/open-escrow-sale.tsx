@@ -3,14 +3,17 @@
 import { updateRealEstateTransaction } from '@/app/api/transactions/transaction-services';
 import Form from '@/app/components/form-components/form';
 import SectionHeader from '@/app/components/form-components/section-header';
-import { numberValidation, stringWithMinLength } from '@/app/utils/utils';
+import SelectInputField from '@/app/components/form-components/select-input-field';
+import TextInputField from '@/app/components/form-components/text-input-field';
+import { numberValidation, priceValidation, stringWithMinLength } from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
-    OpenEscrowListing,
     OpenEscrowSale,
     RealEstateTransaction,
     RealEstateTransactionStage,
     TransactionRegistration,
+    smartBuyComboOptions,
+    smartBuyFourthOptions,
     smartBuyList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +22,7 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema: z.ZodType<OpenEscrowListing> = z.object({
+const formSchema: z.ZodType<OpenEscrowSale> = z.object({
     smartBuyCombo: z.object({
         first: z.enum(smartBuyList, {
             errorMap: () => ({ message: 'Required' }),
@@ -34,21 +37,38 @@ const formSchema: z.ZodType<OpenEscrowListing> = z.object({
             errorMap: () => ({ message: 'Required' }),
         }),
     }),
+    dateReceived: stringWithMinLength(),
+    receivedFrom: stringWithMinLength(),
+    amount1: numberValidation(),
+    formOfReceipt: z.enum(['Personal Check', "Cashier's Check", 'Cash', 'Other']),
+
+    // Trust Fund Registration - Disbursement of Funds
+    disbursementDate: stringWithMinLength(),
+    amount2: numberValidation(),
+    escrowCompany: stringWithMinLength(),
+    methodOfDisbursement: z.enum(
+        ['Funds forwarded to escrow', 'Funds returned to buyer', 'Other'],
+        {
+            errorMap: () => ({ message: 'Required' }),
+        },
+    ),
+
+    // Escrow Information
     openEscrowDate: stringWithMinLength(),
     estimatedClosingDate: stringWithMinLength(),
-    salePrice: numberValidation(),
-    sellingOffice: stringWithMinLength(),
-    sellingAgent: stringWithMinLength(),
-    sellingEmail: stringWithMinLength(),
-    sellingPhone: stringWithMinLength(), // TODO: create phone validation util
-    escrowCompany: stringWithMinLength(),
+    salePrice: priceValidation(),
+    listingOffice: stringWithMinLength(),
+    listingAgent: stringWithMinLength(),
+    listingEmail: stringWithMinLength(),
+    listingPhone: numberValidation(),
+    escrowCompany2: stringWithMinLength(),
     escrowOfficer: stringWithMinLength(),
     escrowEmail: stringWithMinLength(),
-    escrowPhone: stringWithMinLength(),
+    escrowPhone: numberValidation(),
     titleCompany: stringWithMinLength(),
     titleOfficer: stringWithMinLength(),
     titleEmail: stringWithMinLength(),
-    titlePhone: stringWithMinLength(),
+    titlePhone: numberValidation(),
     specialInstructions: stringWithMinLength(),
 });
 
@@ -134,35 +154,109 @@ export default function OpenEscrowSaleForm(props: Props) {
                 <Toaster richColors />
                 <div className='space-y-12'>
                     <div className='col-span-full mb-8'>
-                        <SectionHeader text={'LRFO Requirement'} />
-                        {/* <TextInputField */}
-                        {/*     name='listingDate' */}
-                        {/*     label='Listing Date' */}
-                        {/*     control={control} */}
-                        {/*     error={errors.listingDate} */}
-                        {/*     className='col-span-full' */}
-                        {/* /> */}
-                        {/**/}
-                        {/* <TextInputField */}
-                        {/*     name='expirationDate' */}
-                        {/*     label='Expiration Date' */}
-                        {/*     control={control} */}
-                        {/*     error={errors.expirationDate} */}
-                        {/*     className='sm:col-span-2' */}
-                        {/* /> */}
-                        {/**/}
-                        {/* <NumberInputField */}
-                        {/*     name='mlsNumber' */}
-                        {/*     label='MLS Number' */}
-                        {/*     control={control} */}
-                        {/*     error={errors.mlsNumber} */}
-                        {/*     className='sm:col-span-2' */}
-                        {/* /> */}
+                        <SectionHeader text={'Smart Buy Combo Questionnaire'} />
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+                            <SelectInputField
+                                name='smartBuyCombo.first'
+                                label='Is your client interested in assistance with home financing?'
+                                control={control}
+                                error={errors.smartBuyCombo?.first}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.second'
+                                label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?'
+                                control={control}
+                                error={errors.smartBuyCombo?.second}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.third'
+                                label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?'
+                                control={control}
+                                error={errors.smartBuyCombo?.third}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.fourth'
+                                label='In your opinion, what are the benefits of closing both real estate and mortgage transactions under one roof?'
+                                control={control}
+                                error={errors.smartBuyCombo?.fourth}
+                                className='col-span-full'
+                                options={smartBuyFourthOptions}
+                            />
+                        </div>
                     </div>
-                    {/* <div className='mb-8'> */}
-                    {/*     <SectionHeader text={'Agent Information'} />{' '} */}
-                    {/*     <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'></div> */}
-                    {/* </div> */}
+
+                    <div className='mb-8'>
+                        <SectionHeader text={'Trust Fund Registration - Receipt of Funds'} />
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+                            <TextInputField
+                                name='dateReceived'
+                                label='Date Received'
+                                control={control}
+                                error={errors.dateReceived}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='receivedFrom'
+                                label='Received From'
+                                control={control}
+                                error={errors.receivedFrom}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='amount1'
+                                label='Amount 1'
+                                control={control}
+                                error={errors.amount1}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='formOfReceipt'
+                                label='Form of Receipt'
+                                control={control}
+                                error={errors.formOfReceipt}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='disbursementDate'
+                                label='Disbursement Date'
+                                control={control}
+                                error={errors.disbursementDate}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='amount2'
+                                label='Amount 2'
+                                control={control}
+                                error={errors.amount2}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='escrowCompany'
+                                label='Escrow Company'
+                                control={control}
+                                error={errors.escrowCompany}
+                                className='col-span-2'
+                            />
+                            <TextInputField
+                                name='methodOfDisbursement'
+                                label='Method of Disbursement'
+                                control={control}
+                                error={errors.methodOfDisbursement}
+                                className='col-span-2'
+                            />
+                        </div>
+                    </div>
+
+                    <div className='mb-8'>
+                        <SectionHeader text={'Trust Fund Registration - Disbursement of Funds'} />
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'></div>
+                    </div>
                 </div>
 
                 <div className='mt-6 flex items-center justify-end gap-x-6'>

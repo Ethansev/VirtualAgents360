@@ -14,14 +14,18 @@ interface Props<T extends FieldValues> extends UseControllerProps<T> {
     label: string;
     className?: string;
     control: Control<T>;
+    required?: boolean;
 }
 
 export default function TextInputField<T extends FieldValues>(props: Props<T>) {
-    const { name, error, label, className, control } = props;
+    const { name, error, label, className, control, required } = props;
 
     return (
         <div className={twMerge('', className)}>
-            <label className='block text-sm font-medium leading-6 text-gray-900'>{label}</label>
+            <label className='block text-sm font-medium leading-6 text-gray-900'>
+                {label}
+                {required && <span className='text-red-500'> *</span>}
+            </label>
             <Controller
                 control={control}
                 name={name}

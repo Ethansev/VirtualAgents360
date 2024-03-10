@@ -4,42 +4,43 @@ import { Toaster } from '@/components/ui/sonner';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
     transactionsList: RealEstateTransaction[] | MortgageTransaction[];
     type: 'real-estate' | 'mortgage';
+    deleteTransactions: (id: string) => Promise<RealEstateTransaction[] | MortgageTransaction[]>;
 };
 
 export default function TransactionsTable(props: Props) {
-    const { transactionsList, type } = props;
-
+    const { transactionsList, type, deleteTransactions } = props;
     const [transactions, setTransactions] = useState<
         RealEstateTransaction[] | MortgageTransaction[]
-    >(transactionsList);
+    >([]);
 
-    function handleDelete(id: string): void {
-        console.log('delete');
+    useEffect(() => {
+        console.log('printing transactionsList: ', transactionsList);
+        setTransactions(transactionsList);
+    }, [transactionsList]);
 
+    async function handleDelete(id: string) {
+        // FIXME: handle error
         toast.promise(
             async () => {
-                // TODO: refresh table on delete
-                const res = await transactionService.deleteRealEstateTransaction(id);
-                const deletedId = res.documentIds[0];
-
-                const newTransactions = transactions.filter(
-                    (transaction) => transaction._id !== deletedId,
-                ) as RealEstateTransaction[] | MortgageTransaction[];
-
-                setTransactions(newTransactions);
-
-                console.log('printing delete res: ', res);
+                // I can return the deleted transaction and output the subject property in success
+                const res = await deleteTransactions(id);
+                console.log('printing res after handleDelete', res);
+                if (!res) {
+                    toast.error('Error while trying to delete transaction. Try again. ');
+                } else {
+                    setTransactions(res);
+                }
             },
             {
-                loading: 'Loading...',
-                success: () => 'Successfully deleted!',
-                error: 'Error',
+                loading: 'Deleting transaction...',
+                success: () => `Successfully deleted`,
+                error: 'Error deleting transaction',
             },
         );
     }

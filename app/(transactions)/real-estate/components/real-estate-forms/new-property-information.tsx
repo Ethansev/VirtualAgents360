@@ -11,7 +11,7 @@ import TextInputField from '@/app/components/form-components/text-input-field';
 import { stringWithMinLength } from '@/app/utils/utils';
 import { Toaster } from '@/components/ui/sonner';
 import {
-    AddPropertyInformation,
+    PropertyInformation,
     RealEstateTransaction,
     RealEstateTransactionStage,
     agentAOR,
@@ -27,7 +27,7 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema: z.ZodType<AddPropertyInformation> = z.object({
+const formSchema: z.ZodType<PropertyInformation> = z.object({
     agentAOR: stringWithMinLength(),
     propertyAddress: stringWithMinLength(),
     city: stringWithMinLength(),
@@ -82,7 +82,7 @@ export default function NewPropertyInformationForm(props: Props) {
             coopAgent2: '',
         };
 
-        const newData = { ...defaultFormValues, ...transactionData?.addPropertyInformation };
+        const newData = { ...defaultFormValues, ...transactionData?.propertyInformation };
 
         return transactionData ? newData : defaultFormValues;
     }
@@ -103,7 +103,7 @@ export default function NewPropertyInformationForm(props: Props) {
         if (transactionData) {
             const data = {
                 ...transactionData,
-                addPropertyInformation: { ...formData } as AddPropertyInformation,
+                addPropertyInformation: { ...formData } as PropertyInformation,
             };
             toast.promise(
                 async () => {
@@ -121,6 +121,15 @@ export default function NewPropertyInformationForm(props: Props) {
             );
         } else {
             // TODO: add general transaction data like agent name, status, and stage here
+            const newTransaction: Partial<RealEstateTransaction> = {
+                propertyInformation: {
+                    ...formData,
+                } as PropertyInformation,
+                subjectProperty: 'subjectPropertyTest',
+                agent: 'agentNameTest',
+                stage: 'addPropertyInformation',
+                status: 'pending',
+            };
             toast.promise(
                 async () => {
                     try {
@@ -143,6 +152,10 @@ export default function NewPropertyInformationForm(props: Props) {
         }
     }
 
+    function handleCancel() {
+        router.push('/real-estate');
+    }
+
     return (
         <FormProvider {...methods}>
             <Form register={register} onSubmit={handleSubmit(onSave)}>
@@ -159,6 +172,7 @@ export default function NewPropertyInformationForm(props: Props) {
                             error={errors.agentAOR}
                             className='col-span-full'
                             options={agentAOR}
+                            required={true}
                         />
                     </div>
                     <div className='mb-8'>
@@ -170,6 +184,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.propertyAddress}
                                 className='col-span-full'
+                                required={true}
                             />
 
                             <TextInputField
@@ -178,6 +193,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.city}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -186,6 +202,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.state}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -194,6 +211,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.zipcode}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -202,6 +220,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.clientFirstName}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -210,6 +229,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.clientLastName}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -218,6 +238,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.clientEmail}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <SelectInputField
@@ -227,6 +248,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 error={errors.propertyType}
                                 className='sm:col-span-3'
                                 options={propertyType}
+                                required={true}
                             />
 
                             <SelectInputField
@@ -236,6 +258,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 error={errors.transactionType}
                                 className='sm:col-span-3'
                                 options={transactionType}
+                                required={true}
                             />
                         </div>
                     </div>
@@ -249,6 +272,7 @@ export default function NewPropertyInformationForm(props: Props) {
                                 control={control}
                                 error={errors.primaryAgent}
                                 className='sm:col-span-2'
+                                required={true}
                             />
 
                             <TextInputField
@@ -271,7 +295,10 @@ export default function NewPropertyInformationForm(props: Props) {
                 </div>
 
                 <div className='mt-6 flex items-center justify-end gap-x-6'>
-                    <button type='button' className='text-sm font-semibold leading-6 text-gray-900'>
+                    <button
+                        type='button'
+                        onClick={handleCancel}
+                        className='text-sm font-semibold leading-6 text-gray-900'>
                         Cancel
                     </button>
                     <button

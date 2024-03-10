@@ -49,9 +49,18 @@ export const realEstateTransactionSchema = defineType({
         }),
 
         defineField({
-            name: 'addPropertyInformation',
-            title: 'Add Property Information',
+            name: 'propertyInformation',
+            title: 'Property Information',
             type: 'object',
+            // validation: (Rule) => Rule.required().error('Agent is required'),
+            validation: (Rule) =>
+                Rule.custom((duration, context) => {
+                    return true;
+                    // if (context?.document?.stage === 'addProperyInformation') {
+                    //     return 'Property Information is required';
+                    // }
+                    // return true;
+                }),
             fields: [
                 defineField({
                     name: 'agentAOR',
@@ -484,21 +493,21 @@ export const realEstateTransactionSchema = defineType({
                                     name: 'first',
                                     title: 'Is your client interested in assistance with home financing?',
                                     type: 'string',
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'second',
                                     title: 'Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?',
                                     type: 'string',
                                     // TODO: update this options list
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'third',
                                     title: 'Are you aware that the Smart-Buy-Combo program offers the benefit of additional compensation?',
                                     type: 'string',
                                     // TODO: update this options list
-                                    options: { list: ['Yes', 'No'] },
+                                    options: { list: smartBuyComboOptions },
                                 }),
                                 defineField({
                                     name: 'fourth',
@@ -506,24 +515,7 @@ export const realEstateTransactionSchema = defineType({
                                     type: 'string',
                                     // TODO: update this options list
                                     options: {
-                                        list: [
-                                            {
-                                                title: 'The ability to manage and control existing real estate transactions',
-                                                value: 'one',
-                                            },
-                                            {
-                                                title: 'Additional Compensation',
-                                                value: 'two',
-                                            },
-                                            {
-                                                title: 'Higher retention of clients by being able to offer refinance and equity loan services',
-                                                value: 'three',
-                                            },
-                                            {
-                                                title: 'All of the above',
-                                                value: 'fourth',
-                                            },
-                                        ],
+                                        list: smartBuyFourthOptions,
                                     },
                                 }),
                                 // defineField({
@@ -550,7 +542,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'amount1',
                             title: 'Amount',
-                            type: 'number',
+                            type: 'string',
                         }),
                         // TODO: move options list to types
                         defineField({
@@ -571,7 +563,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'amount2',
                             title: 'Amount',
-                            type: 'number',
+                            type: 'string',
                         }),
                         defineField({
                             name: 'escrowCompany',
@@ -601,12 +593,12 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'estimatedClosingDate',
                             title: 'Estimated Closing date',
-                            type: 'datetime',
+                            type: 'date',
                         }),
                         defineField({
                             name: 'salePrice',
                             title: 'Sale Price $',
-                            type: 'number',
+                            type: 'string',
                         }),
                         defineField({
                             name: 'listingOffice',
@@ -626,7 +618,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'listingPhone',
                             title: 'Listing Telephoe',
-                            type: 'number',
+                            type: 'string',
                         }),
 
                         defineField({
@@ -647,7 +639,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'escrowPhone',
                             title: 'Escrow Phone',
-                            type: 'number',
+                            type: 'string',
                         }),
 
                         defineField({
@@ -656,7 +648,7 @@ export const realEstateTransactionSchema = defineType({
                             type: 'string',
                         }),
                         defineField({
-                            name: 'titleOfficier',
+                            name: 'titleOfficer',
                             title: 'Title officer/AE Officer',
                             type: 'string',
                         }),
@@ -668,7 +660,7 @@ export const realEstateTransactionSchema = defineType({
                         defineField({
                             name: 'titlePhone',
                             title: 'Title Telephone Number',
-                            type: 'number',
+                            type: 'string',
                         }),
                         defineField({
                             name: 'specialInstructions',

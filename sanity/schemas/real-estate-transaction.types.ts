@@ -134,8 +134,7 @@ export const smartBuyFourthOptions = [
 ];
 
 export type RealEstateTransaction = SanityValues['realEstateTransaction'];
-export type AddPropertyInformation = NonNullable<RealEstateTransaction['addPropertyInformation']>;
-//
+export type PropertyInformation = NonNullable<RealEstateTransaction['propertyInformation']>;
 // TODO: finish typings for all types of transaction registration
 export type TransactionRegistration = NonNullable<RealEstateTransaction['transactionRegistration']>;
 export type NewListingSale = NonNullable<TransactionRegistration['newListingSale']>;
@@ -151,7 +150,7 @@ export type InstructionToPayCommission = NonNullable<
 export type CommissionDisbursement = NonNullable<RealEstateTransaction['commissionDisbursement']>;
 
 export type RealEstateSubForm =
-    | AddPropertyInformation
+    | PropertyInformation
     | TransactionRegistration
     | AddChange
     | EDMDocumentUpload
