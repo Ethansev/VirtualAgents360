@@ -5,8 +5,11 @@ import {
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import TransactionsTable from '../shared-components/transactions-table';
 
+// FIXME: transactions not refetching from form page and this one
+// client probably isn't requesting data due to nextjs caching or some wonky behavior
 export const dynamic = 'force-dynamic';
 export const revalidate = 1;
+
 export default async function RealEstateIndexPage() {
     const transactions = await getAllRealEstateTransactions();
 
