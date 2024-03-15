@@ -11,7 +11,6 @@ import {
     SquaresPlusIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -58,7 +57,7 @@ function classNames(...classes: any[]) {
 }
 
 export default function Example() {
-    const { data: session } = useSession();
+    // const { data: session } = useSession();
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -170,24 +169,24 @@ export default function Example() {
                         General Office
                     </a>
                 </Popover.Group>
-                <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-                    {session?.user?.name ? (
-                        <Link
-                            href='#'
-                            onClick={() => signOut()}
-                            className='text-sm font-semibold leading-6 text-gray-900'>
-                            Log Out <span aria-hidden='true'>&rarr;</span>
-                        </Link>
-                    ) : (
-                        <Link
-                            href=''
-                            // href='/api/auth/signin'
-                            onClick={() => signIn()}
-                            className='text-sm font-semibold leading-6 text-gray-900'>
-                            Log in <span aria-hidden='true'>&rarr;</span>
-                        </Link>
-                    )}
-                </div>
+                {/* <div className='hidden lg:flex lg:flex-1 lg:justify-end'> */}
+                {/*     {session?.user?.name ? ( */}
+                {/*         <Link */}
+                {/*             href='#' */}
+                {/*             onClick={() => signOut()} */}
+                {/*             className='text-sm font-semibold leading-6 text-gray-900'> */}
+                {/*             Log Out <span aria-hidden='true'>&rarr;</span> */}
+                {/*         </Link> */}
+                {/*     ) : ( */}
+                {/*         <Link */}
+                {/*             href='' */}
+                {/*             // href='/api/auth/signin' */}
+                {/*             onClick={() => signIn()} */}
+                {/*             className='text-sm font-semibold leading-6 text-gray-900'> */}
+                {/*             Log in <span aria-hidden='true'>&rarr;</span> */}
+                {/*         </Link> */}
+                {/*     )} */}
+                {/* </div> */}
             </nav>
 
             <Dialog
@@ -263,21 +262,21 @@ export default function Example() {
                                     Company
                                 </a>
                             </div>
-                            <div className='py-6'>
-                                {session?.user?.name ? (
-                                    <Link
-                                        href='#'
-                                        className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'>
-                                        Current Logged In
-                                    </Link>
-                                ) : (
-                                    <Link
-                                        href='/login'
-                                        className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'>
-                                        Log In
-                                    </Link>
-                                )}
-                            </div>
+                            {/* <div className='py-6'> */}
+                            {/*     {session?.user?.name ? ( */}
+                            {/*         <Link */}
+                            {/*             href='#' */}
+                            {/*             className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'> */}
+                            {/*             Current Logged In */}
+                            {/*         </Link> */}
+                            {/*     ) : ( */}
+                            {/*         <Link */}
+                            {/*             href='/login' */}
+                            {/*             className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'> */}
+                            {/*             Log In */}
+                            {/*         </Link> */}
+                            {/*     )} */}
+                            {/* </div> */}
                         </div>
                     </div>
                 </Dialog.Panel>

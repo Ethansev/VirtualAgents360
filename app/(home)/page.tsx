@@ -1,6 +1,5 @@
 // import { Transactions } from '@/sanity/schema.types';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import HeroSection from './components/hero-section';
 import SmartBuySection from './components/smart-buy-section';
 
@@ -15,9 +14,9 @@ export default function HomePage() {
             <HeroSection />
             <SmartBuySection />
             <div>
-                <Link className='rounded border-red-500 bg-red-500 p-2' href='/admin'>
-                    Admin Tools
-                </Link>
+                {/* <Link className='rounded border-red-500 bg-red-500 p-2' href='/admin'> */}
+                {/*     Admin Tools */}
+                {/* </Link> */}
             </div>
         </main>
     );
