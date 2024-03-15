@@ -12,7 +12,7 @@ export default function ProfileClient() {
         <div>
             this is the user/profile page
             {/* <Image className='h-24 w-auto' src={user.picture!} alt={user.name!} width={6} height={6} /> */}
-            {/* <h2>{user.name}</h2> */}
+            {/* <h2>{user.name}</h2> /}
             {/* <p>{user.email}</p> */}
         </div>
     );
