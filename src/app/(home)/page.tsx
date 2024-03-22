@@ -1,6 +1,9 @@
 // import { Transactions } from '@/sanity/schema.types';
 import { Metadata } from 'next';
+import CTASection from './components/cta-section';
 import HeroSection from './components/hero-section';
+import MortgageSection from './components/mortgage-section';
+import RealEstateSection from './components/real-estate-section';
 import SmartBuySection from './components/smart-buy-section';
 
 export const metadata: Metadata = {
@@ -10,14 +13,12 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
     return (
-        <main className='space-y-4'>
+        <main className='w-full space-y-4'>
             <HeroSection />
             <SmartBuySection />
-            <div>
-                {/* <Link className='rounded border-red-500 bg-red-500 p-2' href='/admin'> */}
-                {/*     Admin Tools */}
-                {/* </Link> */}
-            </div>
+            <RealEstateSection />
+            <MortgageSection />
+            <CTASection />
         </main>
     );
 }
