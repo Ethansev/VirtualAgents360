@@ -16,6 +16,7 @@ import {
 import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
 
 const products = [
@@ -61,6 +62,7 @@ function classNames(...classes: any[]) {
 
 export default function NavBar() {
     // const { data: session } = useSession();
+    const router = useRouter();
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
@@ -80,9 +82,15 @@ export default function NavBar() {
         setLoadingUser(false);
     }, []);
 
-    function handleSignOut() {
-        clientSignOut();
-        setUser(null);
+    async function handleSignOut() {
+        const error = await clientSignOut();
+        if (error === null) {
+            setUser(null);
+            router.push('/');
+            router.refresh();
+        } else {
+            // TODO: handle error
+        }
     }
 
     return (

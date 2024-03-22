@@ -32,4 +32,11 @@ export async function getUserClient(): Promise<AuthUserResponse> {
 export async function clientSignOut() {
     const supabase = createClientInBrowser();
     const { error } = await supabase.auth.signOut();
+    console.log('printing error on client sign out: ', error);
+    return error;
+    // if (!error) {
+    //     redirect('');
+    // } else {
+    //     return error;
+    // }
 }

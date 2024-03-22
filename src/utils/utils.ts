@@ -9,7 +9,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Zod Utilities
-// maybe move into lib?
 // export function stringWithMinLength(message: string = 'This field is required') {
 //     return z.string().min(1, { message });
 // }
