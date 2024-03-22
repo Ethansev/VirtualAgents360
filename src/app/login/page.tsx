@@ -1,23 +1,21 @@
 'use client';
-import { createClient } from '@/services/supabase/client';
+import { clientSignOut, createClientInBrowser } from '@/services/supabase/auth-client-utils';
 import { login, signup } from './actions';
 
 export default function LoginPage() {
-    function handleSignOut() {
-        console.log('handling sign out...');
-        const supabase = createClient();
-        supabase.auth.signOut();
-    }
-
     function handleGoogleLogin() {
         console.log('handling log in...');
-        const supabase = createClient();
+        const supabase = createClientInBrowser();
         supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
                 redirectTo: location.origin + '/auth/callback',
             },
         });
+    }
+
+    function handleSignOut() {
+        clientSignOut();
     }
 
     return (

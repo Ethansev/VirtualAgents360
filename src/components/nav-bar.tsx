@@ -1,5 +1,7 @@
 'use client';
 
+import { clientSignOut } from '@/services/supabase/auth-client-utils';
+import { getUserServer } from '@/services/supabase/auth-server-utils';
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid';
 import {
@@ -11,9 +13,10 @@ import {
     SquaresPlusIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 const products = [
     {
@@ -56,10 +59,31 @@ function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function NavBar() {
     // const { data: session } = useSession();
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+    const [loadingUser, setLoadingUser] = useState(false);
+
+    useEffect(() => {
+        setLoadingUser(true);
+        async function getUser() {
+            const data = await getUserServer();
+            console.log('printing data from navbar', data);
+            if ('user' in data && data.user) {
+                setUser(data.user);
+            }
+        }
+
+        getUser();
+        setLoadingUser(false);
+    }, []);
+
+    function handleSignOut() {
+        clientSignOut();
+        setUser(null);
+    }
 
     return (
         <header className='bg-white'>
@@ -169,24 +193,26 @@ export default function Example() {
                         General Office
                     </a>
                 </Popover.Group>
-                {/* <div className='hidden lg:flex lg:flex-1 lg:justify-end'> */}
-                {/*     {session?.user?.name ? ( */}
-                {/*         <Link */}
-                {/*             href='#' */}
-                {/*             onClick={() => signOut()} */}
-                {/*             className='text-sm font-semibold leading-6 text-gray-900'> */}
-                {/*             Log Out <span aria-hidden='true'>&rarr;</span> */}
-                {/*         </Link> */}
-                {/*     ) : ( */}
-                {/*         <Link */}
-                {/*             href='' */}
-                {/*             // href='/api/auth/signin' */}
-                {/*             onClick={() => signIn()} */}
-                {/*             className='text-sm font-semibold leading-6 text-gray-900'> */}
-                {/*             Log in <span aria-hidden='true'>&rarr;</span> */}
-                {/*         </Link> */}
-                {/*     )} */}
-                {/* </div> */}
+                <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
+                    {user !== null && !loadingUser && (
+                        <Link
+                            href=''
+                            onClick={() => handleSignOut()}
+                            className='text-sm font-semibold leading-6 text-gray-900'>
+                            Log Out <span aria-hidden='true'>&rarr;</span>
+                        </Link>
+                    )}
+                    {user === null && !loadingUser && (
+                        <Link
+                            href='/login'
+                            // href='/api/auth/signin'
+                            // onClick={() => signIn()}
+                            className='text-sm font-semibold leading-6 text-gray-900'>
+                            Log in <span aria-hidden='true'>&rarr;</span>
+                        </Link>
+                    )}
+                    {loadingUser && 'Loading user...'}
+                </div>
             </nav>
 
             <Dialog

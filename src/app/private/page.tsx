@@ -1,9 +1,8 @@
+import { createClientInBrowser } from '@/services/supabase/auth-client-utils';
 import { redirect } from 'next/navigation';
 
-import { createClient } from '@/services/supabase/server';
-
 export default async function PrivatePage() {
-    const supabase = createClient();
+    const supabase = createClientInBrowser();
 
     const { data, error } = await supabase.auth.getUser();
     if (error || !data?.user) {

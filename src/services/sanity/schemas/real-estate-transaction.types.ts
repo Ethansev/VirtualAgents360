@@ -1,5 +1,5 @@
 // TODO: update tsconfig for this alias
-import { SanityValues } from '../../../../sanity.config';
+import { SanityValues } from '@/root/sanity.config';
 
 // TODO: move this and mortgage to separate transaction types
 export type RealEstateTransactionStage =

@@ -1,7 +1,10 @@
+'use server';
+
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { AuthUserResponse } from './types';
 
-export function createClient() {
+export async function createClientInServer() {
     const cookieStore = cookies();
 
     return createServerClient(
@@ -33,4 +36,24 @@ export function createClient() {
             },
         },
     );
+}
+
+/**
+ * @description Fetches User object on the server from supabase and parses the response
+ *
+ * @returns UserResponse with either a User or error.
+ * */
+export async function getUserServer(): Promise<AuthUserResponse> {
+    try {
+        const supabase = await createClientInServer();
+        const { data, error } = await supabase.auth.getUser();
+        if (error || !data?.user) {
+            // redirect('/');
+            return { error: error };
+        }
+        return data;
+    } catch (err) {
+        console.error('Error while getting user from supabase: ', err);
+        return { error: err };
+    }
 }

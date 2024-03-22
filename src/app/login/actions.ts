@@ -1,13 +1,12 @@
 'use server';
+import { createClientInServer } from '@/services/supabase/auth-server-utils';
 // server actions go here
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { createClient } from '@/services/supabase/server';
-
 export async function login(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClientInServer();
 
     // type-casting here for convenience
     // in practice, you should validate your inputs
@@ -27,7 +26,7 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClientInServer();
 
     // TODO: validate with zod
     const data = {

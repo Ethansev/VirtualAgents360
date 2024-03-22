@@ -23,7 +23,7 @@
       // "@/*": ["./*"],
       "@/*": ["src/*"],
       "@/app*": ["src/app*"],
-      "@/root*": ["./*"],
+      "@/root*": [".*"],
       "@/components*": ["src/components/*"],
       "@/utils*": ["src/utils/*"],
       "@/sanity*": ["src/services/sanity/*"]

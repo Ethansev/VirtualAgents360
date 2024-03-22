@@ -3,6 +3,7 @@ import {
     getAllRealEstateTransactions,
 } from '@/app/api/transactions/transaction-services';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
+import { createClientInServer } from '@/services/supabase/auth-server-utils';
 import TransactionsTable from '../shared-components/transactions-table';
 
 // FIXME: transactions not refetching from form page and this one
@@ -11,6 +12,17 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 1;
 
 export default async function RealEstateIndexPage() {
+    const supabase = await createClientInServer();
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
+        return (
+            <>
+                <h1>Please be logged in</h1>
+            </>
+        );
+        // redirect('/');
+    }
+
     const transactions = await getAllRealEstateTransactions();
 
     async function deleteTransactions(id: string): Promise<RealEstateTransaction[]> {
