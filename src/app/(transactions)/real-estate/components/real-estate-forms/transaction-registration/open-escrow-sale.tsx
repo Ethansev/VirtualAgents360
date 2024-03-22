@@ -1,11 +1,11 @@
 'use client';
 
-import { updateRealEstateTransaction } from '@/app/api/transactions/transaction-services';
 import Form from '@/components/form-components/form';
 import SectionHeader from '@/components/form-components/section-header';
 import SelectInputField from '@/components/form-components/select-input-field';
 import TextInputField from '@/components/form-components/text-input-field';
 import { Toaster } from '@/components/ui/sonner';
+import { updateRealEstateTransaction } from '@/lib/transaction/transaction-services';
 import {
     OpenEscrowSale,
     RealEstateTransaction,

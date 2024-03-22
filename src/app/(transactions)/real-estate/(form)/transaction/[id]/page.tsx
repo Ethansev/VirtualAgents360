@@ -1,5 +1,5 @@
 // import { useRouter } from 'next/navigation';
-import { getRealEstateTransactionById } from '@/app/api/transactions/transaction-services';
+import { getRealEstateTransactionById } from '@/lib/transaction/transaction-services';
 import { Suspense } from 'react';
 import FormContainer from '../../../components/form-container';
 

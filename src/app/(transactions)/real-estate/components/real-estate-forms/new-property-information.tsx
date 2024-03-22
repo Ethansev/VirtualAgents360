@@ -1,14 +1,14 @@
 'use client';
 
-import {
-    createRealEstateTransaction,
-    updateRealEstateTransaction,
-} from '@/app/api/transactions/transaction-services';
 import Form from '@/components/form-components/form';
 import SectionHeader from '@/components/form-components/section-header';
 import SelectInputField from '@/components/form-components/select-input-field';
 import TextInputField from '@/components/form-components/text-input-field';
 import { Toaster } from '@/components/ui/sonner';
+import {
+    createRealEstateTransaction,
+    updateRealEstateTransaction,
+} from '@/lib/transaction/transaction-services';
 import {
     PropertyInformation,
     RealEstateTransaction,
@@ -19,10 +19,12 @@ import {
     transactionType,
     transactionTypeList,
 } from '@/sanity/schemas/real-estate-transaction.types';
+import { getUserClient } from '@/services/supabase/auth-client-utils';
 import { stringWithMinLength } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -63,6 +65,18 @@ export default function NewPropertyInformationForm(props: Props) {
     // TODO: prevent form from being submitted when loading
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        async function getUser() {
+            const res = await getUserClient();
+            if ('user' in res && res.user !== null) {
+                setUser(res.user);
+            }
+        }
+
+        getUser();
+    }, []);
 
     function fetchForm(): FormSchema {
         const defaultFormValues: FormSchema = {
@@ -126,7 +140,7 @@ export default function NewPropertyInformationForm(props: Props) {
                     ...formData,
                 } as PropertyInformation,
                 subjectProperty: 'subjectPropertyTest',
-                agent: 'agentNameTest',
+                agent: user?.user_metadata.name,
                 stage: 'addPropertyInformation',
                 status: 'pending',
             };

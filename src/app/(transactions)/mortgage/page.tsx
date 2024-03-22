@@ -2,7 +2,7 @@ import {
     deleteRealEstateTransaction,
     getAllMortgageTransactions,
     getAllRealEstateTransactions,
-} from '@/app/api/transactions/transaction-services';
+} from '@/lib/transaction/transaction-services';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import TransactionsTable from '../shared-components/transactions-table';
 // TODO: Add filters by user and LRU (last recently updated)

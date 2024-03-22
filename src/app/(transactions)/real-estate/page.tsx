@@ -1,7 +1,7 @@
 import {
     deleteRealEstateTransaction,
     getAllRealEstateTransactions,
-} from '@/app/api/transactions/transaction-services';
+} from '@/lib/transaction/transaction-services';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import { getUserServer } from '@/services/supabase/auth-server-utils';
 import TransactionsTable from '../shared-components/transactions-table';

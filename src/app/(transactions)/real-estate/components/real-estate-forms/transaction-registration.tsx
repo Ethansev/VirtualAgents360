@@ -14,10 +14,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import NewListingLeaseForm from './trasaction-registration/new-listing-lease';
-import NewListingSaleForm from './trasaction-registration/new-listing-sale';
-import OpenEscrowListingForm from './trasaction-registration/open-escrow-listing';
-import OpenEscrowSaleForm from './trasaction-registration/open-escrow-sale';
+import NewListingLeaseForm from './transaction-registration/new-listing-lease';
+import NewListingSaleForm from './transaction-registration/new-listing-sale';
+import OpenEscrowListingForm from './transaction-registration/open-escrow-listing';
+import OpenEscrowSaleForm from './transaction-registration/open-escrow-sale';
 
 const transactionRegistrationTypes = [
     'newListingSale',

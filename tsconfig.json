@@ -26,6 +26,7 @@
       "@/root*": [".*"],
       "@/components*": ["src/components/*"],
       "@/utils*": ["src/utils/*"],
+      "@/lib*": ["src/lib/*"],
       "@/sanity*": ["src/services/sanity/*"]
     }
   },

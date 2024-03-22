@@ -1,13 +1,17 @@
-import { updateRealEstateTransaction } from '@/app/api/transactions/transaction-services';
 import Form from '@/components/form-components/form';
 import SectionHeader from '@/components/form-components/section-header';
+import SelectInputField from '@/components/form-components/select-input-field';
 import TextInputField from '@/components/form-components/text-input-field';
 import { Toaster } from '@/components/ui/sonner';
+import { updateRealEstateTransaction } from '@/lib/transaction/transaction-services';
 import {
-    NewListingLease,
+    NewListingSale,
     RealEstateTransaction,
     RealEstateTransactionStage,
     TransactionRegistration,
+    smartBuyComboOptions,
+    smartBuyFourthOptions,
+    smartBuyList,
 } from '@/sanity/schemas/real-estate-transaction.types';
 import {
     numberValidation,
@@ -20,17 +24,44 @@ import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema: z.ZodType<NewListingLease> = z.object({
+// export const propertyTypeList = [
+//     'sfr',
+//     'condo',
+//     'pud',
+//     'townHome',
+//     '2-4Units',
+//     'residentialIncome',
+//     'highRiseCondo',
+//     'commercial',
+//     'manufactured',
+//     'vacantLot',
+//     'other',
+// ] as const;
+
+const formSchema: z.ZodType<NewListingSale> = z.object({
+    smartBuyCombo: z.object({
+        first: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        second: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        third: z.enum(smartBuyList, {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+        fourth: z.enum(['one', 'two', 'three', 'four'], {
+            errorMap: () => ({ message: 'Required' }),
+        }),
+    }),
     listingDate: stringWithMinLength(),
     expirationDate: stringWithMinLength(),
     mlsNumber: numberValidation(),
     listingPrice: priceValidation(),
     listingOfficeCompPercentage: percentageValidation(),
     listingOfficeCompAmount: priceValidation(),
-    ownerFirstName: stringWithMinLength(),
-    ownerLastName: stringWithMinLength(),
-    ownerEmail: stringWithMinLength(),
-    receivedListingAgreement: z.boolean(),
+    sellerFirstName: stringWithMinLength(),
+    sellerLastName: stringWithMinLength(),
+    sellerEmail: stringWithMinLength(),
     specialInstructions: z.string(),
 });
 
@@ -41,8 +72,9 @@ type Props = {
     transactionData: RealEstateTransaction;
 };
 
-export default function NewListingLeaseForm(props: Props) {
+export default function NewListingSaleForm(props: Props) {
     const { stage, transactionData } = props;
+
     const {
         register,
         handleSubmit,
@@ -57,35 +89,40 @@ export default function NewListingLeaseForm(props: Props) {
 
     function fetchForm(): FormSchema {
         const defaultFormValues = {
+            // Not sure why I have to do it like this? Maybe because due to nesting object
+            smartBuyCombo: {
+                first: '' as 'Yes' | 'No',
+                second: '' as 'Yes' | 'No',
+                third: '' as 'Yes' | 'No',
+                fourth: '' as 'one' | 'two' | 'three' | 'four',
+            },
             listingDate: '',
             expirationDate: '',
             mlsNumber: '',
             listingPrice: '',
             listingOfficeCompPercentage: '',
             listingOfficeCompAmount: '',
-            ownerFirstName: '',
-            ownerLastName: '',
-            ownerEmail: '',
-            receivedListingAgreement: false,
+            sellerFirstName: '',
+            sellerLastName: '',
+            sellerEmail: '',
             specialInstructions: '',
         };
 
         const newData = {
             ...defaultFormValues,
-            ...transactionData?.transactionRegistration?.newListingLease,
+            ...transactionData?.transactionRegistration?.newListingSale,
         };
 
         return transactionData ? newData : defaultFormValues;
     }
-    //
-    // TODO: pass this to parent callback so we could save
+
     async function onSave(formData: FieldValues) {
         console.log('trying to save...');
         const data = {
             ...transactionData,
             transactionRegistration: {
-                transactionRegistrationType: 'newListingLease',
-                newListingLease: { ...formData } as NewListingLease,
+                transactionRegistrationType: 'newListingSale',
+                newListingSale: { ...formData } as NewListingSale,
             } as TransactionRegistration,
         };
         toast.promise(
@@ -107,29 +144,55 @@ export default function NewListingLeaseForm(props: Props) {
                 {/* <SuccessAlert message='Successfully updated' /> */}
                 <Toaster richColors />
                 <div className='space-y-12'>
-                    <div className='col-span-full mb-8'>
-                        {/* <SectionHeader text={'LRFO Requirement'} /> */}
-                        {/**/}
-                        {/* <SelectInputField */}
-                        {/*     name='' */}
-                        {/*     label='Agent Current AOR' */}
-                        {/*     control={control} */}
-                        {/*     error={errors.agentAOR} */}
-                        {/*     className='col-span-full' */}
-                        {/*     options={agentAOR} */}
-                        {/* /> */}
-                    </div>
                     <div className='mb-8'>
-                        <SectionHeader text={'Transaction Information'} />
+                        {/* <SectionHeader text={'New Listing Sale'} /> */}
+                        <SectionHeader text={'Smart-Buy Combo Questionnaire'} />
+                        <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+                            <SelectInputField
+                                name='smartBuyCombo.first'
+                                label='Is your client interested in assistance with home financing?'
+                                control={control}
+                                error={errors.smartBuyCombo?.first}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.second'
+                                label='Would you like to team up with an in-house Mortgage Loan Originator (MLO) to pre-qualify your client and assist with the loan application?'
+                                control={control}
+                                error={errors.smartBuyCombo?.second}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.third'
+                                label='Are you aware that the Smart-Buy Combo program offers the benefit of additional compensation?'
+                                control={control}
+                                error={errors.smartBuyCombo?.third}
+                                className='col-span-full'
+                                options={smartBuyComboOptions}
+                            />
+                            <SelectInputField
+                                name='smartBuyCombo.fourth'
+                                label='In your opinion, what are the benefits of closing both real estate and mortgage transactions under one roof?'
+                                control={control}
+                                error={errors.smartBuyCombo?.fourth}
+                                className='col-span-full'
+                                options={smartBuyFourthOptions}
+                            />
+                        </div>
+                    </div>
+
+                    <div className='mb-8'>
+                        <SectionHeader text={'Listing Information'} />
                         <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
                             <TextInputField
                                 name='listingDate'
                                 label='Listing Date'
                                 control={control}
                                 error={errors.listingDate}
-                                className='sm:col-span-2'
+                                className='col-span-2'
                             />
-
                             <TextInputField
                                 name='expirationDate'
                                 label='Expiration Date'
@@ -137,7 +200,6 @@ export default function NewListingLeaseForm(props: Props) {
                                 error={errors.expirationDate}
                                 className='sm:col-span-2'
                             />
-
                             <TextInputField
                                 name='mlsNumber'
                                 label='MLS Number'
@@ -154,40 +216,43 @@ export default function NewListingLeaseForm(props: Props) {
                             />
                             <TextInputField
                                 name='listingOfficeCompPercentage'
-                                label='Listing Office Comp %'
+                                label='Listing Office Compensation %'
                                 control={control}
                                 error={errors.listingOfficeCompPercentage}
                                 className='sm:col-span-2'
                             />
                             <TextInputField
                                 name='listingOfficeCompAmount'
-                                label='Listing Office Comp $'
+                                label='Listing Office Compensation $'
                                 control={control}
                                 error={errors.listingOfficeCompAmount}
                                 className='sm:col-span-2'
                             />
                             <TextInputField
-                                name='ownerFirstName'
-                                label="Owner's First Name"
+                                name='sellerFirstName'
+                                label="Seller's First Name"
                                 control={control}
-                                error={errors.ownerFirstName}
+                                error={errors.sellerFirstName}
                                 className='sm:col-span-2'
                             />
                             <TextInputField
-                                name='ownerLastName'
-                                label="Owner's Last Name"
+                                name='sellerLastName'
+                                label="Seller's Last Name"
                                 control={control}
-                                error={errors.ownerLastName}
+                                error={errors.sellerLastName}
                                 className='sm:col-span-2'
                             />
                             <TextInputField
-                                name='ownerEmail'
-                                label="Owner's Email Address"
+                                name='sellerEmail'
+                                label="Seller's Email Address"
                                 control={control}
-                                error={errors.ownerEmail}
+                                error={errors.sellerEmail}
                                 className='sm:col-span-2'
                             />
-                            {/* TODO: receivedListingAgreement boolean checkbox should go here */}
+
+                            {/* "A signed listing agreement has been obtained by agent and forwarded to ASC (checkbox)" */}
+                            {/* Listing Agreement (file upload) */}
+
                             <TextInputField
                                 name='specialInstructions'
                                 label='Special Instructions'
