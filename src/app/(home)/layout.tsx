@@ -1,8 +1,6 @@
-import '@/app/globals.css';
 import NavBar from '@/components/nav-bar';
-// import { UserProvider } from '@auth0/nextjs-auth0/client';
 
-export default function TransactionsModuleLayout({ children }: { children: React.ReactNode }) {
+export default async function HomeLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <NavBar />
