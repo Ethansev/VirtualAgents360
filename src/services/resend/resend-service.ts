@@ -1,9 +1,9 @@
+import EmailTemplate from '@/components/email/email-template';
 import { Resend } from 'resend';
-import EmailTemplate from '../../components/email/email-template';
 
 export async function test() {
     const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
-    console.log('printinng resend', resend);
+    console.log('printing resend', resend);
 
     try {
         console.log('trying to send an email now...');
@@ -13,8 +13,7 @@ export async function test() {
             // to: ['delivered@resend.dev'],
             to: ['sevadus98@gmail.com'],
             subject: 'Hello world',
-            // react: EmailTemplate({ firstName: 'John' }),
-            react: EmailTemplate(),
+            react: EmailTemplate({ firstName: 'John' }),
         });
 
         if (error) {
