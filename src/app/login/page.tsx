@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Toaster, toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -45,23 +46,34 @@ export default function LoginPage() {
 
     async function handleLogin(formData: FormSchema) {
         // basic email and password login here
-        console.log('printing formData: ', formData);
-        const supabase = createClientInBrowser();
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: formData.email,
-            password: formData.password,
-        });
+        toast.promise(
+            async () => {
+                const supabase = createClientInBrowser();
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: formData.email,
+                    password: formData.password,
+                });
 
-        if (!error && data.user) {
-            router.refresh();
-            router.push('/');
-        }
-        console.log('printing data: ', data);
-        console.log('printing error: ', error);
+                if (!error && data.user) {
+                    router.refresh();
+                    router.push('/');
+                    return Promise.resolve();
+                }
+                console.log('printing data: ', data);
+                console.log('printing error: ', error);
+                return Promise.reject();
+            },
+            {
+                loading: 'Loading...',
+                success: () => 'Successfully logged in!',
+                error: 'Error occurred while logging in',
+            },
+        );
     }
 
     return (
         <div className='flex min-h-full w-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8'>
+            <Toaster richColors />
             <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
                 <div className='bg-white px-6 py-12 sm:rounded-lg sm:px-12'>
                     <div className='mb-16 sm:mx-auto sm:w-full sm:max-w-md'>
