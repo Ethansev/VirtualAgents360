@@ -22,9 +22,21 @@ export const realEstateTransactionSchema = defineType({
         }),
 
         defineField({
-            name: 'agent',
-            title: 'Agent',
-            type: 'string',
+            name: 'agentInfo',
+            title: 'Agent Info',
+            type: 'object',
+            fields: [
+                defineField({
+                    name: 'agentID',
+                    title: 'Agent ID',
+                    type: 'string',
+                }),
+                defineField({
+                    name: 'agentName',
+                    title: 'Agent Name',
+                    type: 'string',
+                }),
+            ],
             validation: (Rule) => Rule.required().error('Agent is required'),
         }),
 
@@ -192,6 +204,12 @@ export const realEstateTransactionSchema = defineType({
                     title: 'Open Escrow Sale',
                     hidden: ({ value }) => value?.transactionRegistrationType !== 'openEscrowSale',
                 },
+                {
+                    name: 'openEscrowReferral',
+                    title: 'Open Escrow Referral',
+                    hidden: ({ value }) =>
+                        value?.transactionRegistrationType !== 'openEscrowReferral',
+                },
             ],
             fields: [
                 // TODO: define the real estate transaction types
@@ -223,7 +241,14 @@ export const realEstateTransactionSchema = defineType({
                                 title: 'Open Escrow Registration - Listing',
                                 value: 'openEscrowListing',
                             },
-                            { title: 'Open Escrow Registration - Sale', value: 'openEscrowSale' },
+                            {
+                                title: 'Open Escrow Registration - Sale',
+                                value: 'openEscrowSale',
+                            },
+                            {
+                                title: 'Open Escrow Registration - Referral',
+                                value: 'openEscrowReferral',
+                            },
                         ],
                     },
                 }),

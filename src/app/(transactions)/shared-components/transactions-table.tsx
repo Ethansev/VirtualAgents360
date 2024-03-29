@@ -24,17 +24,18 @@ export default function TransactionsTable(props: Props) {
         setTransactions(transactionsList);
     }, [transactionsList]);
 
-    async function handleDelete(id: string) {
+    async function handleDelete(transaction: RealEstateTransaction | MortgageTransaction) {
         // FIXME: handle error
         toast.promise(
             async () => {
-                // I can return the deleted transaction and output the subject property in success
-                const res = await deleteTransactions(id);
+                // FIXME: update to return an ok or error and handle appropriately since we're revalidating the route on the server
+                const res = await deleteTransactions(transaction._id);
                 console.log('printing res after handleDelete', res);
                 if (!res) {
                     toast.error('Error while trying to delete transaction. Try again. ');
                 } else {
-                    setTransactions(res);
+                    // transactions.filter((t) => t !== transaction);
+                    // setTransactions(res);
                 }
             },
             {
@@ -125,7 +126,7 @@ export default function TransactionsTable(props: Props) {
                                             {transaction._createdAt}
                                         </td>
                                         <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
-                                            {transaction.agent}
+                                            {transaction.agentInfo?.agentName}
                                         </td>
                                         <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
                                             {transaction.stage}
@@ -147,7 +148,7 @@ export default function TransactionsTable(props: Props) {
                                             <button
                                                 type='button'
                                                 className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'
-                                                onClick={() => handleDelete(transaction._id)}>
+                                                onClick={() => handleDelete(transaction)}>
                                                 Delete
                                             </button>
                                         </td>

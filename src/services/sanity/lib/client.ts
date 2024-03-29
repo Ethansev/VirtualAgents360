@@ -8,4 +8,5 @@ export const client = createClient({
     token,
     useCdn,
     ignoreBrowserTokenWarning: true,
+    perspective: 'published',
 });

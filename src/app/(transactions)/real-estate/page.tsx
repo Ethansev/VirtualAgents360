@@ -1,9 +1,12 @@
 import {
     deleteRealEstateTransaction,
     getAllRealEstateTransactions,
+    getRealEstateTransactionsByUserId,
 } from '@/lib/transaction/transaction-services';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import { getUserServer } from '@/services/supabase/auth-server-utils';
+import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import TransactionsTable from '../shared-components/transactions-table';
 
 // FIXME: transactions not refetching from form page and this one
@@ -12,23 +15,16 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 1;
 
 export default async function RealEstateIndexPage() {
-    // const supabase = await createClientInServer();
-    // const { data, error } = await supabase.auth.getUser();
-    // if (error || !data?.user) {
-    //     return (
-    //         <>
-    //             <h1>Please be logged in</h1>
-    //         </>
-    //     );
-    //     // redirect('/');
-    // }
-    //
+    cookies(); // opt into dynamic rendering
+
     const res = await getUserServer();
     console.log('printing res asap: ', res);
+    let user;
     if ('user' in res && res.user !== null) {
-        const user = res.user;
+        user = res.user;
     } else {
         console.log('printing res: ', res);
+        user = null;
         return (
             <>
                 <h1>Please be logged in!</h1>
@@ -36,7 +32,9 @@ export default async function RealEstateIndexPage() {
         );
     }
 
-    const transactions = await getAllRealEstateTransactions();
+    // const transactions = await getAllRealEstateTransactions();
+    const transactions = await getRealEstateTransactionsByUserId(user.id);
+    // console.log('printing transactions by user id... ', transactions);
 
     async function deleteTransactions(id: string): Promise<RealEstateTransaction[]> {
         'use server';
@@ -56,7 +54,8 @@ export default async function RealEstateIndexPage() {
 
             console.log('printing delete res: ', res);
             // TODO: return success and error types
-            // toast.success('Transaction has been deleted');
+
+            revalidatePath('/real-estate');
 
             const updatedTransactions = await getAllRealEstateTransactions();
             return updatedTransactions;
@@ -68,7 +67,7 @@ export default async function RealEstateIndexPage() {
     }
 
     return (
-        <div>
+        <div className='w-full'>
             <h1 className='flex justify-center'>Real Transactions</h1>
             <div className='mt-8'>
                 <TransactionsTable

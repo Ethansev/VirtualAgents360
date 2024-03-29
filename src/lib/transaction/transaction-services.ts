@@ -1,6 +1,8 @@
+'use server';
 import { client } from '@/sanity/lib/client';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
+import { revalidateTag } from 'next/cache';
 
 // TODO: create a function that returns transactions of a particular user
 
@@ -22,7 +24,35 @@ export const getAllRealEstateTransactions = async () => {
     }
 };
 
-export async function getRealEstateTransactionById(id: string) {
+/**
+ * @description Returns all real estate transactions by user_id
+ * @params User ID from supabase
+ * @returns Array of RealEstate TransactionObjects
+ * */
+export const getRealEstateTransactionsByUserId = async (userID: string) => {
+    console.log('running on server...');
+    // console.log('printing userID: ', userID);
+    // const query = `*[_type == "realEstateTransaction" && agentInfo.agentID == $userID | order(_updatedAt desc)]`;
+    try {
+        // const transactions: RealEstateTransaction[] = await client.fetch(query, { userID });
+        const transactions: RealEstateTransaction[] = await client.fetch(
+            `*[_type == "realEstateTransaction" && agentInfo.agentID == "${userID}"] | order(_updatedAt desc)`,
+            {},
+            {
+                next: {
+                    revalidate: 1,
+                    tags: ['realEstateTransactions'],
+                },
+            },
+        );
+        return transactions;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
+export const getRealEstateTransactionById = async (id: string) => {
     const query = `*[_type == "realEstateTransaction" && _id == $id]`;
     try {
         const transactions: RealEstateTransaction[] = await client.fetch(query, { id });
@@ -31,7 +61,7 @@ export async function getRealEstateTransactionById(id: string) {
         console.error(err);
         throw err;
     }
-}
+};
 
 // TODO: remove FormSchema and find a better way to type this
 // TODO: add resend service here
@@ -45,6 +75,7 @@ export async function createRealEstateTransaction(formData: Partial<RealEstateTr
     try {
         const res = await client.create(transaction);
         console.log('here is the sanity response', res);
+        revalidateTag('realEstateTransactions');
         return res;
     } catch (err) {
         console.error(err);
@@ -57,6 +88,7 @@ export async function updateRealEstateTransaction(formData: RealEstateTransactio
     try {
         const res = await client.patch(formData._id).set(formData).commit();
         console.log('here is the sanity response', res);
+        revalidateTag('realEstateTransactions');
         return res;
     } catch (err) {
         console.error(err);
@@ -73,6 +105,7 @@ export async function deleteRealEstateTransaction(id: string) {
         // if (res.documentIds[0] === id) {
         //     return true;
         // }
+        // revalidateTag('realEstateTransactions');
         return res;
     } catch (err) {
         console.error(err);

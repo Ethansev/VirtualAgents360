@@ -68,6 +68,7 @@ export default function NewPropertyInformationForm(props: Props) {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
+        // TODO: middleware to redirct if no user
         async function getUser() {
             const res = await getUserClient();
             if ('user' in res && res.user !== null) {
@@ -140,7 +141,10 @@ export default function NewPropertyInformationForm(props: Props) {
                     ...formData,
                 } as PropertyInformation,
                 subjectProperty: 'subjectPropertyTest',
-                agent: user?.user_metadata.name,
+                agentInfo: {
+                    agentID: user?.id,
+                    agentName: user?.user_metadata.fullName,
+                },
                 stage: 'addPropertyInformation',
                 status: 'pending',
             };
