@@ -185,7 +185,7 @@ export default function NavBar() {
 
                     <Link
                         href='/real-estate'
-                        prefetch={true}
+                        // prefetch={true}
                         className='text-sm font-semibold leading-6 text-gray-900'>
                         Real Estate Center
                     </Link>

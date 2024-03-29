@@ -1,9 +1,9 @@
 'use client';
-import EmailInputField from '@/components/form-components/email-input-field';
 import Form from '@/components/form-components/form';
 import PasswordInputField from '@/components/form-components/password-input-field';
+import TextInputField from '@/components/form-components/text-input-field';
 import { createClientInBrowser } from '@/services/supabase/auth-client-utils';
-import { stringWithMinLength } from '@/utils/utils';
+import { emailValidation, stringWithMinLength } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,7 @@ import { Toaster, toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-    email: stringWithMinLength(),
+    email: emailValidation(),
     password: stringWithMinLength(),
 });
 
@@ -28,7 +28,10 @@ export default function LoginPage() {
         formState: { errors },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
-        // defaultValues: fetchForm(),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
     });
 
     const methods = useForm<FormSchema>();
@@ -142,7 +145,7 @@ export default function LoginPage() {
                                     register={register}
                                     onSubmit={handleSubmit(handleLogin)}
                                     className='space-y-6'>
-                                    <EmailInputField
+                                    <TextInputField
                                         name='email'
                                         label='Email'
                                         control={control}

@@ -9,11 +9,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Zod Utilities
-// export function stringWithMinLength(message: string = 'This field is required') {
-//     return z.string().min(1, { message });
-// }
 export function stringWithMinLength(message: string = 'Required') {
     return z.string().min(1, { message });
+}
+
+export function emailValidation(message: string = 'Invalid email') {
+    return z.string().min(1, { message: 'Required' }).email({ message });
 }
 
 // I have to type the values as strings due to the way sanity does types and react-hook-form's defaultValue's need to be a string

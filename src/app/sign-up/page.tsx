@@ -1,10 +1,9 @@
 'use client';
-import EmailInputField from '@/components/form-components/email-input-field';
 import Form from '@/components/form-components/form';
 import PasswordInputField from '@/components/form-components/password-input-field';
 import TextInputField from '@/components/form-components/text-input-field';
 import { createClientInBrowser } from '@/services/supabase/auth-client-utils';
-import { stringWithMinLength } from '@/utils/utils';
+import { emailValidation, stringWithMinLength } from '@/utils/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,7 +12,7 @@ import { Toaster, toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-    email: stringWithMinLength(),
+    email: emailValidation(),
     password: stringWithMinLength(),
     firstName: stringWithMinLength(),
     lastName: stringWithMinLength(),
@@ -30,7 +29,12 @@ export default function SignUpPage() {
         formState: { errors },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
-        // defaultValues: fetchForm(),
+        defaultValues: {
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+        },
     });
 
     const methods = useForm<FormSchema>();
@@ -46,20 +50,24 @@ export default function SignUpPage() {
         });
     }
 
+    // TODO: handle action if we want user to confirm their email before logging in
     async function handleSignUp(formData: FormSchema) {
         // basic email and password login here
         console.log('printing formData: ', formData);
         const supabase = createClientInBrowser();
-        // data contains a user object and sesion.
+        // data contains a user object and session.
         toast.promise(
             async () => {
+                // TODO: probably work moving this to a separate file
                 const { data, error } = await supabase.auth.signUp({
                     email: formData.email,
                     password: formData.password,
                     options: {
                         emailRedirectTo: `${location.origin}/auth/callback`,
                         data: {
-                            agentName: `${formData.firstName} ${formData.lastName}`,
+                            fullName: `${formData.firstName} ${formData.lastName}`,
+                            firstName: formData.firstName,
+                            lastName: formData.lastName,
                         },
                     },
                 });
@@ -156,7 +164,7 @@ export default function SignUpPage() {
                                     register={register}
                                     onSubmit={handleSubmit(handleSignUp)}
                                     className='space-y-6'>
-                                    <EmailInputField
+                                    <TextInputField
                                         name='email'
                                         label='Email'
                                         control={control}
