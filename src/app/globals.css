@@ -12,9 +12,9 @@
         @apply text-2xl;
     }
 
-    li{
-        @apply list-disc list-inside;
-    }
+    /* li{ */
+    /*     @apply list-disc list-inside; */
+    /* } */
 
     label{
         @apply block text-sm font-medium leading-6 text-gray-900;

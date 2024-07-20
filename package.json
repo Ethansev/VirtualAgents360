@@ -16,6 +16,7 @@
     "@portabletext/react": "^3.0.11",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-slot": "^1.0.2",
     "@sanity-typed/client": "^3.1.1",
     "@sanity-typed/types": "^6.3.2",

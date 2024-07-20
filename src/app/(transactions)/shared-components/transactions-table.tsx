@@ -1,9 +1,17 @@
 'use client';
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Toaster } from '@/components/ui/sonner';
 import { MortgageTransaction } from '@/sanity/schemas/mortgage-transaction.types';
 import { RealEstateTransaction } from '@/sanity/schemas/real-estate-transaction.types';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -14,6 +22,7 @@ type Props = {
 };
 
 export default function TransactionsTable(props: Props) {
+    const router = useRouter();
     const { transactionsList, type, deleteTransactions } = props;
     const [transactions, setTransactions] = useState<
         RealEstateTransaction[] | MortgageTransaction[]
@@ -106,9 +115,9 @@ export default function TransactionsTable(props: Props) {
                                         Status
                                     </th>
 
-                                    <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-3'>
-                                        <span className='sr-only text-red-500'>Delete</span>
-                                    </th>
+                                    {/* <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-3'> */}
+                                    {/*     <span className='sr-only text-red-500'>Delete</span> */}
+                                    {/* </th> */}
 
                                     <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-3'>
                                         <span className='sr-only'>Edit</span>
@@ -135,23 +144,49 @@ export default function TransactionsTable(props: Props) {
                                             {transaction.status}
                                         </td>
                                         <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3'>
-                                            <Link
-                                                href={`/real-estate/transaction/${transaction._id}`}
-                                                className='text-indigo-600 hover:text-indigo-900'>
-                                                Edit
-                                                <span className='sr-only'>
-                                                    , {'edit wtf is this'}
-                                                </span>
-                                            </Link>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger>Edit</DropdownMenuTrigger>
+                                                <DropdownMenuContent>
+                                                    {/* <DropdownMenuLabel> */}
+                                                    {/*     My Account */}
+                                                    {/* </DropdownMenuLabel> */}
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/real-estate/transaction/${transaction._id}`,
+                                                            )
+                                                        }>
+                                                        View
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem>Approve</DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem>Reject</DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'
+                                                        onClick={() => handleDelete(transaction)}>
+                                                        Delete
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                            {/* <Link */}
+                                            {/*     href={`/real-estate/transaction/${transaction._id}`} */}
+                                            {/*     className='text-indigo-600 hover:text-indigo-900'> */}
+                                            {/*     Edit */}
+                                            {/*     <span className='sr-only'> */}
+                                            {/*         , {'edit wtf is this'} */}
+                                            {/*     </span> */}
+                                            {/* </Link> */}
                                         </td>
-                                        <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3'>
-                                            <button
-                                                type='button'
-                                                className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white'
-                                                onClick={() => handleDelete(transaction)}>
-                                                Delete
-                                            </button>
-                                        </td>
+                                        {/* <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3'> */}
+                                        {/*     <button */}
+                                        {/*         type='button' */}
+                                        {/*         className='rounded-md border-2 bg-red-500 px-2 text-sm leading-6 text-white' */}
+                                        {/*         onClick={() => handleDelete(transaction)}> */}
+                                        {/*         Delete */}
+                                        {/*     </button> */}
+                                        {/* </td> */}
                                     </tr>
                                 ))}
                             </tbody>

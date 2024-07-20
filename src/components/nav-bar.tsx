@@ -102,13 +102,14 @@ export default function NavBar() {
                     <Link href='/' className='-m-1.5 p-1.5'>
                         <span className='sr-only'>VirtualAgents360</span>
                         <div>
-                            <Image
-                                className='h-8 w-auto'
-                                src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                                alt=''
-                                width={32}
-                                height={32}
-                            />
+                            Logo
+                            {/* <Image */}
+                            {/*     className='h-8 w-auto' */}
+                            {/*     src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600' */}
+                            {/*     alt='' */}
+                            {/*     width={32} */}
+                            {/*     height={32} */}
+                            {/* /> */}
                         </div>
                     </Link>
                 </div>
